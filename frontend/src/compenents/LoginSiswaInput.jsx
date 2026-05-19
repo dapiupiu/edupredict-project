@@ -1,7 +1,7 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 
-function FormLoginSiswa() {
+function LoginSiswaInput() {
     return (
         <div className="mx-auto w-150 h-180 m-10 px-8 pt-10 pb-10 bg-white rounded-3xl border-2 border-gray-100 shadow-lg">
             <div className="flex items-center gap-3">
@@ -20,7 +20,7 @@ function FormLoginSiswa() {
             </div>
             <p className="mt-4 font-light">NISN terdiri dari 8 digit angka</p>
             <div className="mt-8 flex flex-col gap-y-4">
-                <button className="bg-blue-900 text-white py-3 rounded-xl hover:bg-stone-900"><i class="ri-search-line"></i>Lihat Progres Belajar</button>
+                <button className="bg-blue-900 text-white py-3 rounded-xl hover:bg-stone-900"><i class="ri-search-line"></i> Lihat Progres Belajar</button>
                  {/* atau */}
                 <div className="flex items-center gap-3 w-full">
                     <div className="flex-1 h-px bg-gray-300"></div>
@@ -34,4 +34,4 @@ function FormLoginSiswa() {
     )
 }
 
-export default FormLoginSiswa;
+export default LoginSiswaInput;

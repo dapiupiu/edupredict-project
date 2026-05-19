@@ -1,7 +1,7 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 
-function FormLoginGuru() {
+function LoginGuruInput() {
     return (
         <div className="mx-auto w-150 h-210 m-10 px-8 pt-10 pb-10 bg-white rounded-3xl border-2 border-gray-100 shadow-lg">
             <div className="flex items-center gap-3">
@@ -27,10 +27,10 @@ function FormLoginGuru() {
                     <input type="checkbox" id="remember"/>
                     <label className="ml-2 font-medium text-base" for="remember">Ingat saya</label>
                 </div>
-                <button className="font-medium text-base text-blue-500">Lupa password?</button>
+                <NavLink to="/lupa-password" className="font-medium text-base text-blue-500">Lupa password?</NavLink>
             </div>
             <div className="mt-8 flex flex-col gap-y-4">
-                <button className="bg-blue-900 text-white py-3 rounded-xl hover:bg-stone-900"><i class="ri-login-box-line"></i>Masuk sebagai Guru</button>
+                <button className="bg-blue-900 text-white py-3 rounded-xl hover:bg-stone-900"><i class="ri-login-box-line"></i> Masuk sebagai Guru</button>
                 <div className="flex-1 h-px bg-gray-900"></div>
                 {/* atau */}
                 <div className="flex items-center gap-3 w-full">
@@ -39,14 +39,14 @@ function FormLoginGuru() {
                     <div className="flex-1 h-px bg-gray-300"></div>
                 </div>
                  {/* atau */}
-                <NavLink to="/login-siswa" className="text-center border-2 border-blue-900 text-blue-900 py-3 rounded-xl hover:bg-blue-50"><i class="ri-user-line"></i>Masuk sebagai Siswa</NavLink>
+                <NavLink to="/login-siswa" className="text-center border-2 border-blue-900 text-blue-900 py-3 rounded-xl hover:bg-blue-50"><i class="ri-user-line"></i> Masuk sebagai Siswa</NavLink>
                 <div className="mt-4 flex justify-between items-center">
-                    <p  className="ml-2 font-medium text-base">Belum punya akun?</p>
-                    <p className="font-medium text-base text-blue-500">Daftar sekarang</p>
+                    <p className="ml-2 font-medium text-base">Belum punya akun?</p>
+                    <NavLink to="/registrasi" className="font-medium text-base text-blue-500">Daftar sekarang</NavLink>
                 </div>
             </div>
         </div>
     )
 }
 
-export default FormLoginGuru;
+export default LoginGuruInput;

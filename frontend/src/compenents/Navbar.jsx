@@ -30,13 +30,13 @@ function Navbar() {
                 <div className="navbar-box flex items-center justify-between py-2">
                     <div className="logo-box flex items-center gap-3">
                         <i className="ri-brain-fill ri-2x leading-none text-sky-600"></i>
-                        <h1 className="text-2xl font-bold">Edu Predict</h1>
+                        <h1 className="text-2xl font-bold text-blue-900">Edu Predict</h1>
                     </div>
                     <div className={`Nav-items flex lg:gap-12 gap-8 absolute md:static left-1/2 -translate-x-1/2 md:left-0 md:-translate-x-0 flex-col md:flex-row w-full text-center ${menuActive ? "top-16 opacity-100" : "-top-72 opacity-0"} md:w-auto py-10 md:py-0 transition-all md:transition-none bg-blue-100 md:opacity-100 items-center`}>
-                        <button onClick={() => scrollTo('beranda')}>Beranda</button>
-                        <button onClick={() => scrollTo('tentang')}>Tentang</button>
-                        <button onClick={() => scrollTo('panduan')}>Panduan Penggunaan</button>
-                        <NavLink to="/team">Team</NavLink>
+                        <button onClick={() => scrollTo('beranda')} className="relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-blue-900 after:transition-all after:duration-300 hover:after:w-full">Beranda</button>
+                        <button onClick={() => scrollTo('fitur')} className="relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-blue-900 after:transition-all after:duration-300 hover:after:w-full">Fitur</button>
+                        <button onClick={() => scrollTo('panduan')} className="relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-blue-900 after:transition-all after:duration-300 hover:after:w-full">Panduan Penggunaan</button>
+                        <button onClick={() => scrollTo('tim')} className="relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-blue-900 after:transition-all after:duration-300 hover:after:w-full">Tim</button>
                         <div className="relative">
                             <button onClick={() => setDropdownOpen(!dropdownOpen)} className="bg-blue-900 text-white px-5 py-1 rounded-lg text-sm hover:bg-stone-900">
                                 Login <i className="ri-arrow-right-up-line"></i>
