@@ -1,114 +1,38 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
-class RegistrasiInput extends React.Component {
-    constructor(props) {
-        super(props);
+function RegistrasiInput({
+    currentStep,
+    username,
+    email,
+    password,
+    confirmPassword,
+    namaLengkap,
+    nip,
+    noHp,
+    jabatan,
+    namaSekolah,
+    errors,
+    apiError,
+    isLoading,
+    onUsernameChange,
+    onEmailChange,
+    onPasswordChange,
+    onConfirmPasswordChange,
+    onNamaLengkapChange,
+    onNipChange,
+    onNoHpChange,
+    onJabatanChange,
+    onNamaSekolahChange,
+    onNextStep,
+    onPrevStep,
+    onSubmit,
+}) {
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-        this.state = {
-            currentStep: 1,
-            username: '',
-            email: '',
-            password: '',
-            confirmPassword: '',
-            namaLengkap: '',
-            nip: '',
-            noHp: '',
-            jabatan: '',
-            namaSekolah: '',
-            errors: {},
-        };
-
-        this.onUsernameChange = this.onUsernameChange.bind(this);
-        this.onEmailChange = this.onEmailChange.bind(this);
-        this.onPasswordChange = this.onPasswordChange.bind(this);
-        this.onConfirmPasswordChange = this.onConfirmPasswordChange.bind(this);
-        this.onNamaLengkapChange = this.onNamaLengkapChange.bind(this);
-        this.onNipChange = this.onNipChange.bind(this);
-        this.onNoHpChange = this.onNoHpChange.bind(this);
-        this.onJabatanChange = this.onJabatanChange.bind(this);
-        this.onNamaSekolahChange = this.onNamaSekolahChange.bind(this);
-        this.onNextStep = this.onNextStep.bind(this);
-        this.onPrevStep = this.onPrevStep.bind(this);
-        this.onSubmitHandler = this.onSubmitHandler.bind(this);
-    }
-
-    onUsernameChange(e) { this.setState({ username: e.target.value }); }
-    onEmailChange(e) { this.setState({ email: e.target.value }); }
-    onPasswordChange(e) { this.setState({ password: e.target.value }); }
-    onConfirmPasswordChange(e) { this.setState({ confirmPassword: e.target.value }); }
-    onNamaLengkapChange(e) { this.setState({ namaLengkap: e.target.value }); }
-    onNipChange(e) { this.setState({ nip: e.target.value }); }
-    onNoHpChange(e) { this.setState({ noHp: e.target.value }); }
-    onJabatanChange(e) { this.setState({ jabatan: e.target.value }); }
-    onNamaSekolahChange(e) { this.setState({ namaSekolah: e.target.value }); }
-
-    validateStep1() {
-        const { username, email, password, confirmPassword } = this.state;
-        const errors = {};
-        if (!username.trim()) errors.username = 'Username tidak boleh kosong';
-        else if (!/^[a-z.]+$/.test(username)) errors.username = 'Username tidak boleh spasi dan menggunakan huruf kecil';
-        if (!email.trim()) errors.email = 'Email tidak boleh kosong';
-        else if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z]+\.[a-zA-Z]{2,}$/.test(email)) errors.email = 'Format email tidak valid';
-        if (!password) errors.password = 'Password tidak boleh kosong';
-        else if (password.length < 8) errors.password = 'Password minimal 8 karakter';
-        if (!confirmPassword) errors.confirmPassword = 'Konfirmasi password tidak boleh kosong';
-        else if (password !== confirmPassword) errors.confirmPassword = 'Password tidak cocok';
-        return errors;
-    }
-
-    validateStep2() {
-        const { namaLengkap, nip, noHp, jabatan, namaSekolah } = this.state;
-        const errors = {};
-        if (!namaLengkap.trim()) errors.namaLengkap = 'Nama lengkap tidak boleh kosong';
-        if (!nip.trim()) errors.nip = 'NIP tidak boleh kosong';
-        else if (!/^[0-9]+$/.test(nip)) errors.nip = 'NIP hanya boleh berisi angka';
-        if (!noHp.trim()) errors.noHp = 'No HP tidak boleh kosong';
-        else if (!/^[0-9]{10,13}$/.test(noHp)) errors.noHp = 'No HP tidak valid';
-        if (!jabatan.trim()) errors.jabatan = 'Jabatan tidak boleh kosong';
-        else if (!/^[a-zA-Z\s]+$/.test(jabatan)) errors.jabatan = 'Jabatan hanya boleh berisi huruf';
-        if (!namaSekolah.trim()) errors.namaSekolah = 'Nama sekolah tidak boleh kosong';
-        return errors;
-    }
-
-    onNextStep() {
-        const errors = this.validateStep1();
-        if (Object.keys(errors).length > 0) {
-            this.setState({ errors });
-            return;
-        }
-        this.setState({ errors: {}, currentStep: 2 });
-    }
-
-    onPrevStep() {
-        this.setState({ currentStep: 1, errors: {} });
-    }
-
-    onSubmitHandler(event) {
-        event.preventDefault();
-        const errors = this.validateStep2();
-        if (Object.keys(errors).length > 0) {
-            this.setState({ errors });
-            return;
-        }
-        this.setState({ errors: {}, currentStep: 3 });
-        if (this.props.onRegistrasi) {
-            this.props.onRegistrasi({
-                username: this.state.username,
-                email: this.state.email,
-                password: this.state.password,
-                namaLengkap: this.state.namaLengkap,
-                nip: this.state.nip,
-                noHp: this.state.noHp,
-                jabatan: this.state.jabatan,
-                namaSekolah: this.state.namaSekolah,
-            });
-        }
-    }
-
-    renderStepIndicator() {
-        const { currentStep } = this.state;
+    const renderStepIndicator = () => {
         const steps = ['Akun', 'Data Diri', 'Selesai'];
         return (
             <div className="flex items-center w-full mt-8">
@@ -125,51 +49,68 @@ class RegistrasiInput extends React.Component {
                 ))}
             </div>
         );
-    }
+    };
 
-    render() {
-        const { currentStep, username, email, password, confirmPassword, namaLengkap, nip, noHp, jabatan, namaSekolah, errors } = this.state;
+    return (
+        <div className="mx-auto w-full max-w-2xl my-10 px-6 py-10 sm:px-8 bg-white rounded-3xl border-2 border-gray-100 shadow-lg">
+            <div className="flex items-center gap-3">
+                <i className="ri-brain-fill ri-2x leading-none text-sky-600"></i>
+                <h1 className="text-3xl font-semibold text-blue-800">EduPredict</h1>
+            </div>
+            <div className="mt-4 inline-flex p-2 font-medium text-blue-800 bg-blue-100 px-4 rounded-3xl gap-2">
+                <i className="ri-computer-line"></i>
+                <h3>Registrasi Guru</h3>
+            </div>
 
-        return (
-            <div className="mx-auto w-150 m-10 px-8 pt-10 pb-10 bg-white rounded-3xl border-2 border-gray-100 shadow-lg">
-                <div className="flex items-center gap-3">
-                    <i className="ri-brain-fill ri-2x leading-none text-sky-600"></i>
-                    <h1 className="text-3xl font-semibold text-blue-800">EduPredict</h1>
+            {renderStepIndicator()}
+
+            {apiError && (
+                <div className="mt-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded-xl flex items-center gap-2">
+                    <i className="ri-error-warning-line"></i>
+                    <p className="text-sm">{apiError}</p>
                 </div>
-                <div className="mt-4 inline-flex p-2 font-medium text-blue-800 bg-blue-100 px-4 rounded-3xl gap-2">
-                    <i className="ri-computer-line"></i>
-                    <h3>Registrasi Guru</h3>
-                </div>
-
-                {this.renderStepIndicator()}
+            )}
 
                 {/* Step 1 - Buat Akun */}
                 {currentStep === 1 && (
                     <div>
-                        <h1 className="text-4xl font-semibold mt-6">Buat akun baru</h1>
-                        <p className="text-lg mt-2 opacity-75">Lengkapi data akun untuk melanjutkan</p>
-                        <div className="mt-6">
-                            <label className="text-lg font-medium">Username</label>
-                            <input type="text" value={username} onChange={this.onUsernameChange} placeholder="masukkan username anda" className="w-full border-2 border-gray-100 shadow-md rounded-xl p-4 mt-1 bg-transparent" />
+                        <h1 className="text-3xl sm:text-4xl font-semibold mt-6">Buat akun baru</h1>
+                        <p className="text-base sm:text-lg mt-2 opacity-75">Lengkapi data akun untuk melanjutkan</p>
+                        <div className="mt-6"> {/* Changed from mt-8 to mt-6 for consistency */}
+                            <label className="text-base sm:text-lg font-medium">Username</label>
+                            <input type="text" value={username} onChange={onUsernameChange} placeholder="masukkan username anda" className="w-full border-2 border-gray-100 shadow-md rounded-xl p-4 mt-1 bg-transparent" />
                             {errors.username && <p className="mt-1 text-sm text-red-500">{errors.username}</p>}
                         </div>
+                        {/* Gunakan onKeyDown agar user bisa tekan Enter untuk lanjut */}
                         <div className="mt-4">
-                            <label className="text-lg font-medium">Email</label>
-                            <input type="email" value={email} onChange={this.onEmailChange} placeholder="masukkan email anda" className="w-full border-2 border-gray-100 shadow-md rounded-xl p-4 mt-1 bg-transparent" />
+                            <label className="text-base sm:text-lg font-medium">Email</label>
+                            <input type="email" value={email} onChange={onEmailChange} placeholder="masukkan email anda" className="w-full border-2 border-gray-100 shadow-md rounded-xl p-4 mt-1 bg-transparent" />
                             {errors.email && <p className="mt-1 text-sm text-red-500">{errors.email}</p>}
                         </div>
-                        <div className="mt-4">
-                            <label className="text-lg font-medium">Password</label>
-                            <input type="password" value={password} onChange={this.onPasswordChange} placeholder="masukkan password anda" className="w-full border-2 border-gray-100 shadow-md rounded-xl p-4 mt-1 bg-transparent" />
+                        <div className="mt-4 relative">
+                            <label className="text-base sm:text-lg font-medium">Password</label>
+                            <div className="relative">
+                                <input type={showPassword ? "text" : "password"} value={password} onChange={onPasswordChange} placeholder="masukkan password anda" className="w-full border-2 border-gray-100 shadow-md rounded-xl p-4 mt-1 bg-transparent pr-12" />
+                                <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-4 top-1/2 -translate-y-1/2 mt-0.5 text-gray-500">
+                                    <i className={showPassword ? "ri-eye-off-line" : "ri-eye-line"}></i>
+                                </button>
+                            </div>
                             {errors.password && <p className="mt-1 text-sm text-red-500">{errors.password}</p>}
                         </div>
-                        <div className="mt-4">
-                            <label className="text-lg font-medium">Konfirmasi Password</label>
-                            <input type="password" value={confirmPassword} onChange={this.onConfirmPasswordChange} placeholder="konfirmasi password anda" className="w-full border-2 border-gray-100 shadow-md rounded-xl p-4 mt-1 bg-transparent" />
+                        <div className="mt-4 relative">
+                            <label className="text-base sm:text-lg font-medium">Konfirmasi Password</label>
+                            <div className="relative">
+                                <input type={showConfirmPassword ? "text" : "password"} value={confirmPassword} onChange={onConfirmPasswordChange} 
+                                    onKeyDown={(e) => e.key === 'Enter' && onNextStep()}
+                                    placeholder="konfirmasi password anda" className="w-full border-2 border-gray-100 shadow-md rounded-xl p-4 mt-1 bg-transparent pr-12" />
+                                <button type="button" onClick={() => setShowConfirmPassword(!showConfirmPassword)} className="absolute right-4 top-1/2 -translate-y-1/2 mt-0.5 text-gray-500">
+                                    <i className={showConfirmPassword ? "ri-eye-off-line" : "ri-eye-line"}></i>
+                                </button>
+                            </div>
                             {errors.confirmPassword && <p className="mt-1 text-sm text-red-500">{errors.confirmPassword}</p>}
                         </div>
                         <div className="mt-8 flex flex-col gap-y-4">
-                            <button type="button" onClick={this.onNextStep} className="bg-blue-900 text-white py-3 rounded-xl hover:bg-stone-900">Lanjut <i className="ri-arrow-right-long-line"></i></button>
+                            <button type="button" onClick={onNextStep} className="bg-blue-900 text-white py-3 rounded-xl hover:bg-stone-900">Lanjut <i className="ri-arrow-right-long-line"></i></button>
                             <div className="mt-2 flex justify-between items-center">
                                 <p className="font-medium text-base">Sudah punya akun?</p>
                                 <NavLink to="/login-guru" className="font-medium text-base text-blue-500">Masuk</NavLink>
@@ -180,41 +121,43 @@ class RegistrasiInput extends React.Component {
 
                 {/* Step 2 - Data Diri */}
                 {currentStep === 2 && (
-                    <form onSubmit={this.onSubmitHandler}>
-                        <h1 className="text-4xl font-semibold mt-6">Data Diri</h1>
-                        <p className="text-lg mt-2 opacity-75">Lengkapi data diri untuk mengakses sistem deteksi dini</p>
+                    <form onSubmit={onSubmit}>
+                        <h1 className="text-3xl sm:text-4xl font-semibold mt-6">Data Diri</h1>
+                        <p className="text-base sm:text-lg mt-2 opacity-75">Lengkapi data diri untuk mengakses sistem deteksi dini</p>
                             <div className="mt-4">
-                                <label className="text-lg font-medium">Nama Lengkap</label>
-                                <input type="text" value={namaLengkap} onChange={this.onNamaLengkapChange} placeholder="masukkan nama lengkap" className="w-full border-2 border-gray-100 shadow-md rounded-xl p-4 mt-1 bg-transparent" />
+                                <label className="text-base sm:text-lg font-medium">Nama Lengkap</label>
+                                <input type="text" value={namaLengkap} onChange={onNamaLengkapChange} placeholder="masukkan nama lengkap" className="w-full border-2 border-gray-100 shadow-md rounded-xl p-4 mt-1 bg-transparent" />
                                 {errors.namaLengkap && <p className="mt-1 text-sm text-red-500">{errors.namaLengkap}</p>}
                             </div>
-                            <div className="mt-4 grid grid-cols-2 gap-4">
+                            <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
-                                <label className="text-lg font-medium">NIP</label>
-                                <input type="text" value={nip} onChange={this.onNipChange} placeholder="masukkan NIP" className="w-full border-2 border-gray-100 shadow-md rounded-xl p-4 mt-1 bg-transparent" />
+                                <label className="text-base sm:text-lg font-medium">NIP</label>
+                                <input type="text" value={nip} onChange={onNipChange} placeholder="masukkan NIP" className="w-full border-2 border-gray-100 shadow-md rounded-xl p-4 mt-1 bg-transparent" />
                                 {errors.nip && <p className="mt-1 text-sm text-red-500">{errors.nip}</p>}
                             </div>
                             <div>
-                                <label className="text-lg font-medium">No HP</label>
-                                <input type="text" value={noHp} onChange={this.onNoHpChange} placeholder="masukkan no HP" className="w-full border-2 border-gray-100 shadow-md rounded-xl p-4 mt-1 bg-transparent" />
+                                <label className="text-base sm:text-lg font-medium">No HP</label>
+                                <input type="text" value={noHp} onChange={onNoHpChange} placeholder="masukkan no HP" className="w-full border-2 border-gray-100 shadow-md rounded-xl p-4 mt-1 bg-transparent" />
                                 {errors.noHp && <p className="mt-1 text-sm text-red-500">{errors.noHp}</p>}
                             </div>
                         </div>
-                        <div className="mt-4 grid grid-cols-2 gap-4">
+                        <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
-                                <label className="text-lg font-medium">Jabatan</label>
-                                <input type="text" value={jabatan} onChange={this.onJabatanChange} placeholder="masukkan jabatan" className="w-full border-2 border-gray-100 shadow-md rounded-xl p-4 mt-1 bg-transparent" />
+                                <label className="text-base sm:text-lg font-medium">Jabatan</label>
+                                <input type="text" value={jabatan} onChange={onJabatanChange} placeholder="masukkan jabatan" className="w-full border-2 border-gray-100 shadow-md rounded-xl p-4 mt-1 bg-transparent" />
                                 {errors.jabatan && <p className="mt-1 text-sm text-red-500">{errors.jabatan}</p>}
                             </div>
                             <div>
-                                <label className="text-lg font-medium">Nama Sekolah</label>
-                                <input type="text" value={namaSekolah} onChange={this.onNamaSekolahChange} placeholder="masukkan nama sekolah" className="w-full border-2 border-gray-100 shadow-md rounded-xl p-4 mt-1 bg-transparent" />
+                                <label className="text-base sm:text-lg font-medium">Nama Sekolah</label>
+                                <input type="text" value={namaSekolah} onChange={onNamaSekolahChange} placeholder="masukkan nama sekolah" className="w-full border-2 border-gray-100 shadow-md rounded-xl p-4 mt-1 bg-transparent" />
                                 {errors.namaSekolah && <p className="mt-1 text-sm text-red-500">{errors.namaSekolah}</p>}
                             </div>
                         </div>
                         <div className="mt-8 flex flex-col gap-y-4">
-                            <button type="submit" className="bg-blue-900 text-white py-3 rounded-xl hover:bg-stone-900">Daftar <i className="ri-check-line"></i></button>
-                            <button type="button" onClick={this.onPrevStep} className="border-2 border-blue-900 text-blue-900 py-3 rounded-xl hover:bg-blue-50"><i className="ri-arrow-left-long-line"></i> Kembali</button>
+                            <button type="submit" disabled={isLoading} className={`bg-blue-900 text-white py-3 rounded-xl hover:bg-stone-900 flex items-center justify-center gap-2 ${isLoading ? 'opacity-70 cursor-not-allowed' : ''}`}>
+                                <i className={isLoading ? "ri-loader-4-line animate-spin" : "ri-check-line"}></i> {isLoading ? 'Mendaftar...' : 'Daftar'}
+                            </button>
+                            <button type="button" onClick={onPrevStep} className="border-2 border-blue-900 text-blue-900 py-3 rounded-xl hover:bg-blue-50"><i className="ri-arrow-left-long-line"></i> Kembali</button>
                         </div>
                     </form>
                 )}
@@ -254,13 +197,36 @@ class RegistrasiInput extends React.Component {
                         <NavLink to="/login-guru" className="bg-blue-900 text-white px-8 py-3 rounded-xl hover:bg-stone-900">Kembali ke halaman login</NavLink>
                     </div>
                 )}
-            </div>
-        );
-    }
+        </div>
+    );
 }
 
 RegistrasiInput.propTypes = {
-    onRegistrasi: PropTypes.func,
+    currentStep: PropTypes.number.isRequired,
+    username: PropTypes.string.isRequired,
+    email: PropTypes.string.isRequired,
+    password: PropTypes.string.isRequired,
+    confirmPassword: PropTypes.string.isRequired,
+    namaLengkap: PropTypes.string.isRequired,
+    nip: PropTypes.string.isRequired,
+    noHp: PropTypes.string.isRequired,
+    jabatan: PropTypes.string.isRequired,
+    namaSekolah: PropTypes.string.isRequired,
+    errors: PropTypes.object.isRequired,
+    apiError: PropTypes.string,
+    isLoading: PropTypes.bool,
+    onUsernameChange: PropTypes.func.isRequired,
+    onEmailChange: PropTypes.func.isRequired,
+    onPasswordChange: PropTypes.func.isRequired,
+    onConfirmPasswordChange: PropTypes.func.isRequired,
+    onNamaLengkapChange: PropTypes.func.isRequired,
+    onNipChange: PropTypes.func.isRequired,
+    onNoHpChange: PropTypes.func.isRequired,
+    onJabatanChange: PropTypes.func.isRequired,
+    onNamaSekolahChange: PropTypes.func.isRequired,
+    onNextStep: PropTypes.func.isRequired,
+    onPrevStep: PropTypes.func.isRequired,
+    onSubmit: PropTypes.func.isRequired,
 };
 
 export default RegistrasiInput;

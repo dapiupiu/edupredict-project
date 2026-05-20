@@ -8,10 +8,11 @@ import Footer from './compenents/Footer';
 import RegistrasiPage from './pages/RegistrasiPage';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import LupaPasswordPage from './pages/LupaPasswordPage';
+import DashboardGuruPage from './pages/DashboardGuruPage';
 
 function App() {
   const location = useLocation();
-  const hideLayout = ['/login-guru', '/login-siswa', '/registrasi', '/lupa-password'].includes(location.pathname);
+  const hideLayout = ['/login-guru', '/login-siswa', '/registrasi', '/lupa-password', '/dashboardGuru'].includes(location.pathname);
 
   return (
     <div className="min-h-screen bg-blue-100 flex flex-col">
@@ -24,6 +25,7 @@ function App() {
           <Route path="/login-siswa" element={<LoginSiswaPage />} />
           <Route path="/registrasi" element={<RegistrasiPage />} />
           <Route path="/lupa-password" element={<LupaPasswordPage />} />
+          <Route path="/dashboardGuru" element={<DashboardGuruPage />} />
         </Routes>
       </div>
 
