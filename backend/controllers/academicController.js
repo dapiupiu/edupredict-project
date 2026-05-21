@@ -1,55 +1,42 @@
 const db = require("../config/db");
-// const axios = require('axios'); // ← aktifkan nanti saat Flask sudah siap
+const { predictRiskWithAI } = require("../services/aiService");
 
 // ─────────────────────────────────────────────────────────
-//  MAPPING ENCODING
-//  Sesuai label_encoders.pkl dari tim AI Engineer
-//  String → angka sebelum dikirim ke model
-// ─────────────────────────────────────────────────────────
-const ENCODINGS = {
-  Parental_Involvement: { High: 0, Low: 1, Medium: 2 },
-  Access_to_Resources: { High: 0, Low: 1, Medium: 2 },
-  Motivation_Level: { High: 0, Low: 1, Medium: 2 },
-  Internet_Access: { No: 0, Yes: 1 },
-  Family_Income: { High: 0, Low: 1, Medium: 2 },
-  Teacher_Quality: { High: 0, Low: 1, Medium: 2 },
-  Peer_Influence: { Negative: 0, Neutral: 1, Positive: 2 },
-  Parental_Education_Level: { College: 0, "High School": 1, Postgraduate: 2 },
-};
-
-// ─────────────────────────────────────────────────────────
-//  HARDCODE AI RESPONSE
-//  Dipakai sementara sebelum Flask AI siap
-//  Nanti diganti dengan axios.post ke Flask
+//  HARDCODE AI RESPONSE / FALLBACK
+//  Dipakai jika AI service error/down
 // ─────────────────────────────────────────────────────────
 const getHardcodedPrediction = (data) => {
-  // Logika sederhana berdasarkan attendance & hours_studied
-  // supaya hasilnya tidak selalu sama (lebih realistis untuk testing)
-  const attendance = data.Attendance;
-  const hours = data.Hours_Studied;
+  const attendance = Number(data.Attendance);
+  const hours = Number(data.Hours_Studied);
+  const previousScores = Number(data.Previous_Scores);
 
-  if (attendance >= 75 && hours >= 15) {
+  if (attendance >= 75 && hours >= 15 && previousScores >= 75) {
     return {
       risk_category: "Low",
-      confidence: 0.89,
-      probabilities: { High: 0.03, Low: 0.89, Medium: 0.08 },
+      confidence: 89,
+      probabilities: { Low: 89, Medium: 8, High: 3 },
       risk_factors: [],
-    };
-  } else if (attendance >= 55 && hours >= 8) {
-    return {
-      risk_category: "Medium",
-      confidence: 0.76,
-      probabilities: { High: 0.11, Low: 0.13, Medium: 0.76 },
-      risk_factors: ["Attendance", "Hours_Studied"],
-    };
-  } else {
-    return {
-      risk_category: "High",
-      confidence: 0.84,
-      probabilities: { High: 0.84, Low: 0.05, Medium: 0.11 },
-      risk_factors: ["Attendance", "Hours_Studied", "Motivation_Level"],
+      source: "hardcode_fallback",
     };
   }
+
+  if (attendance >= 55 && hours >= 8 && previousScores >= 60) {
+    return {
+      risk_category: "Medium",
+      confidence: 76,
+      probabilities: { Low: 13, Medium: 76, High: 11 },
+      risk_factors: ["Attendance", "Hours_Studied", "Previous_Scores"],
+      source: "hardcode_fallback",
+    };
+  }
+
+  return {
+    risk_category: "High",
+    confidence: 84,
+    probabilities: { Low: 5, Medium: 11, High: 84 },
+    risk_factors: ["Attendance", "Hours_Studied", "Previous_Scores", "Motivation_Level"],
+    source: "hardcode_fallback",
+  };
 };
 
 // ─────────────────────────────────────────────────────────
@@ -58,6 +45,7 @@ const getHardcodedPrediction = (data) => {
 // ─────────────────────────────────────────────────────────
 const inputAcademic = async (req, res) => {
   const { studentId } = req.params;
+
   const {
     hours_studied,
     attendance,
@@ -74,7 +62,7 @@ const inputAcademic = async (req, res) => {
     peer_influence,
   } = req.body;
 
-  // Validasi field wajib
+  
   const requiredFields = {
     hours_studied,
     attendance,
@@ -107,51 +95,54 @@ const inputAcademic = async (req, res) => {
   }
 
   try {
-    // Cek siswa ada
+    // ── STEP 1: Cek siswa ───────────────────────────────
     const [studentRows] = await db.query(
-      "SELECT id, nama_siswa, parental_education_level FROM students WHERE id = ? LIMIT 1",
+      `SELECT id, nama_siswa, parental_education_level
+       FROM students
+       WHERE id = ?
+       LIMIT 1`,
       [studentId],
     );
 
     if (studentRows.length === 0) {
-      return res
-        .status(404)
-        .json({ success: false, message: "Siswa tidak ditemukan." });
+      return res.status(404).json({
+        success: false,
+        message: "Siswa tidak ditemukan.",
+      });
     }
 
     const siswa = studentRows[0];
 
-    // ── STEP 1: Simpan ke academic_records ──────────────
+    // ── STEP 2: Simpan data akademik ────────────────────
     const [insertResult] = await db.query(
-  `INSERT INTO academic_records
-     (student_id, hours_studied, attendance, sleep_hours, previous_scores,
-      tutoring_sessions, physical_activity, parental_involvement,
-      access_to_resources, motivation_level, internet_access,
-      family_income, teacher_quality, peer_influence, parental_education_level)
-   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-  [
-    studentId,
-    hours_studied,
-    attendance,
-    sleep_hours,
-    previous_scores,
-    tutoring_sessions,
-    physical_activity,
-    parental_involvement,
-    access_to_resources,
-    motivation_level,
-    internet_access,
-    family_income,
-    teacher_quality,
-    peer_influence,
-    siswa.parental_education_level,
-  ]
-);
+      `INSERT INTO academic_records
+        (student_id, hours_studied, attendance, sleep_hours, previous_scores,
+         tutoring_sessions, physical_activity, parental_involvement,
+         access_to_resources, motivation_level, internet_access,
+         family_income, teacher_quality, peer_influence, parental_education_level)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      [
+        studentId,
+        Number(hours_studied),
+        Number(attendance),
+        Number(sleep_hours),
+        Number(previous_scores),
+        Number(tutoring_sessions),
+        Number(physical_activity),
+        parental_involvement,
+        access_to_resources,
+        motivation_level,
+        internet_access,
+        family_income,
+        teacher_quality,
+        peer_influence,
+        siswa.parental_education_level,
+      ],
+    );
 
     const academicRecordId = insertResult.insertId;
 
-    // ── STEP 2: Susun 14 fitur untuk AI ─────────────────
-    // Sesuai FEATURE_COLS dari notebook tim AI Engineer
+    // ── STEP 3: Susun payload 14 fitur untuk AI service ──
     const rawInput = {
       Hours_Studied: Number(hours_studied),
       Attendance: Number(attendance),
@@ -169,89 +160,93 @@ const inputAcademic = async (req, res) => {
       Parental_Education_Level: siswa.parental_education_level,
     };
 
-    // ── STEP 3: Panggil AI (hardcode dulu) ──────────────
+    // ── STEP 4: Prediksi via AI service + fallback hardcode ──
     let prediksi;
 
-    // ╔══════════════════════════════════════════════════╗
-    // ║  GANTI BLOK INI SAAT FLASK SUDAH SIAP:          ║
-    // ║                                                  ║
-    // ║  const flaskRes = await axios.post(             ║
-    // ║    'http://localhost:5001/predict', rawInput     ║
-    // ║  );                                             ║
-    // ║  prediksi = flaskRes.data;                      ║
-    // ╚══════════════════════════════════════════════════╝
+    try {
+      prediksi = await predictRiskWithAI(rawInput);
+    } catch (aiError) {
+      console.error(
+        "AI service error, fallback to hardcoded prediction:",
+        aiError.message,
+      );
 
-    prediksi = getHardcodedPrediction(rawInput); // ← hapus baris ini saat Flask siap
+      prediksi = getHardcodedPrediction(rawInput);
+    }
 
-    // ── STEP 4: Simpan hasil prediksi ───────────────────
+    // ── STEP 5: Simpan hasil prediksi ───────────────────
     const [predictionResult] = await db.query(
-  `INSERT INTO predictions
-     (student_id, academic_record_id, risk_category, confidence,
-      probabilities, risk_factors, raw_input)
-   VALUES (?, ?, ?, ?, ?, ?, ?)`,
-  [
-    studentId,
-    academicRecordId,
-    prediksi.risk_category,
-    prediksi.confidence,
-    JSON.stringify(prediksi.probabilities),
-    JSON.stringify(prediksi.risk_factors),
-    JSON.stringify(rawInput),
-  ]
-);
+      `INSERT INTO predictions
+        (student_id, academic_record_id, risk_category, confidence,
+         probabilities, risk_factors, raw_input)
+       VALUES (?, ?, ?, ?, ?, ?, ?)`,
+      [
+        studentId,
+        academicRecordId,
+        prediksi.risk_category,
+        prediksi.confidence,
+        JSON.stringify(prediksi.probabilities || {}),
+        JSON.stringify(prediksi.risk_factors || []),
+        JSON.stringify(rawInput),
+      ],
+    );
 
-const predictionId = predictionResult.insertId;
+    const predictionId = predictionResult.insertId;
 
-    // ── STEP 5: Kirim notifikasi jika risiko tinggi ─────
-    if (prediksi.risk_category === 'High') {
-  await db.query(
-    `INSERT INTO notifications
-       (user_id, student_id, prediction_id, title, message, type)
-     VALUES (?, ?, ?, ?, ?, ?)`,
-    [
-      req.user.id,
-      studentId,
-      predictionId,
-      'Peringatan Risiko Tinggi',
-      `${siswa.nama_siswa} terdeteksi berisiko TINGGI — segera lakukan intervensi!`,
-      'High',
-    ]
-  );
-} else if (prediksi.risk_category === 'Medium') {
-  await db.query(
-    `INSERT INTO notifications
-       (user_id, student_id, prediction_id, title, message, type)
-     VALUES (?, ?, ?, ?, ?, ?)`,
-    [
-      req.user.id,
-      studentId,
-      predictionId,
-      'Peringatan Risiko Sedang',
-      `${siswa.nama_siswa} berisiko SEDANG — pantau perkembangannya.`,
-      'Medium',
-    ]
-  );
-}
+    // ── STEP 6: Buat notifikasi jika Medium / High ──────
+    if (prediksi.risk_category === "High") {
+      await db.query(
+        `INSERT INTO notifications
+          (user_id, student_id, prediction_id, title, message, type)
+         VALUES (?, ?, ?, ?, ?, ?)`,
+        [
+          req.user.id,
+          studentId,
+          predictionId,
+          "Peringatan Risiko Tinggi",
+          `${siswa.nama_siswa} terdeteksi berisiko TINGGI — segera lakukan intervensi!`,
+          "High",
+        ],
+      );
+    } else if (prediksi.risk_category === "Medium") {
+      await db.query(
+        `INSERT INTO notifications
+          (user_id, student_id, prediction_id, title, message, type)
+         VALUES (?, ?, ?, ?, ?, ?)`,
+        [
+          req.user.id,
+          studentId,
+          predictionId,
+          "Peringatan Risiko Sedang",
+          `${siswa.nama_siswa} berisiko SEDANG — pantau perkembangannya.`,
+          "Medium",
+        ],
+      );
+    }
 
-    res.status(201).json({
+    return res.status(201).json({
       success: true,
       message: "Data akademik berhasil disimpan dan prediksi telah dilakukan.",
       data: {
         academic_record_id: academicRecordId,
+        prediction_id: predictionId,
         siswa: siswa.nama_siswa,
         prediksi: {
           risk_category: prediksi.risk_category,
           confidence: prediksi.confidence,
-          probabilities: prediksi.probabilities,
-          risk_factors: prediksi.risk_factors,
+          probabilities: prediksi.probabilities || {},
+          risk_factors: prediksi.risk_factors || [],
+          source: prediksi.source || "ai",
         },
       },
     });
   } catch (err) {
     console.error("inputAcademic error:", err);
-    res
-      .status(500)
-      .json({ success: false, message: "Terjadi kesalahan pada server." });
+
+    return res.status(500).json({
+      success: false,
+      message: "Terjadi kesalahan pada server.",
+    });
   }
 };
 
@@ -264,14 +259,18 @@ const getAcademicHistory = async (req, res) => {
 
   try {
     const [studentRows] = await db.query(
-      "SELECT id, nama_siswa, nisn, kelas FROM students WHERE id = ? LIMIT 1",
+      `SELECT id, nama_siswa, nisn, kelas
+       FROM students
+       WHERE id = ?
+       LIMIT 1`,
       [studentId],
     );
 
     if (studentRows.length === 0) {
-      return res
-        .status(404)
-        .json({ success: false, message: "Siswa tidak ditemukan." });
+      return res.status(404).json({
+        success: false,
+        message: "Siswa tidak ditemukan.",
+      });
     }
 
     const [histori] = await db.query(
@@ -290,6 +289,7 @@ const getAcademicHistory = async (req, res) => {
          ar.family_income,
          ar.teacher_quality,
          ar.peer_influence,
+         ar.parental_education_level,
          ar.recorded_at,
          p.risk_category,
          p.confidence,
@@ -302,7 +302,7 @@ const getAcademicHistory = async (req, res) => {
       [studentId],
     );
 
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
       data: {
         siswa: studentRows[0],
@@ -312,10 +312,15 @@ const getAcademicHistory = async (req, res) => {
     });
   } catch (err) {
     console.error("getAcademicHistory error:", err);
-    res
-      .status(500)
-      .json({ success: false, message: "Terjadi kesalahan pada server." });
+
+    return res.status(500).json({
+      success: false,
+      message: "Terjadi kesalahan pada server.",
+    });
   }
 };
 
-module.exports = { inputAcademic, getAcademicHistory };
+module.exports = {
+  inputAcademic,
+  getAcademicHistory,
+};

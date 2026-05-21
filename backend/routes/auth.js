@@ -1,15 +1,19 @@
 const express = require("express");
 const router = express.Router();
 const {
+  register,
   login,
   getMe,
   updateProfile,
   logout,
+  forgotPassword,
 } = require("../controllers/authController");
 const { verifyToken, guruOnly } = require("../middleware/auth");
 
 // public routes
+router.post("/register", register);
 router.post("/login", login);
+router.post("/forgot-password", forgotPassword);
 
 // protected routes
 router.get("/me", verifyToken, guruOnly, getMe);

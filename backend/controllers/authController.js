@@ -2,6 +2,71 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const db = require("../config/db");
 
+// POST /api/auth/register
+const register = async (req, res) => {
+  const {
+    email,
+    password,
+    namaLengkap,
+    username,
+  } = req.body;
+
+  const nama = namaLengkap || username;
+
+  if (!nama || !email || !password) {
+    return res.status(400).json({
+      success: false,
+      message: "Nama, email, dan password wajib diisi.",
+    });
+  }
+
+  if (password.length < 8) {
+    return res.status(400).json({
+      success: false,
+      message: "Password minimal 8 karakter.",
+    });
+  }
+
+  try {
+    const [existingUser] = await db.query(
+      "SELECT id FROM users WHERE email = ? LIMIT 1",
+      [email]
+    );
+
+    if (existingUser.length > 0) {
+      return res.status(409).json({
+        success: false,
+        message: "Email sudah terdaftar.",
+      });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const [result] = await db.query(
+      `INSERT INTO users (nama, email, password_hash, role)
+       VALUES (?, ?, ?, 'guru')`,
+      [nama, email, hashedPassword]
+    );
+
+    return res.status(201).json({
+      success: true,
+      message: "Registrasi berhasil. Silakan login.",
+      data: {
+        id: result.insertId,
+        nama,
+        email,
+        role: "guru",
+      },
+    });
+  } catch (err) {
+    console.error("Register Error:", err);
+    return res.status(500).json({
+      success: false,
+      message: "Terjadi kesalahan saat registrasi. Silakan coba lagi nanti.",
+    });
+  }
+};
+
 // POST /api/auth/login
 
 const login = async (req, res) => {
@@ -66,6 +131,50 @@ const login = async (req, res) => {
     res.status(500).json({
       success: false,
       message: "Terjadi kesalahan saat login. Silakan coba lagi nanti.",
+    });
+  }
+};
+
+// POST /api/auth/forgot-password
+const forgotPassword = async (req, res) => {
+  const { email } = req.body;
+
+  if (!email) {
+    return res.status(400).json({
+      success: false,
+      message: "Email wajib diisi.",
+    });
+  }
+
+  try {
+    const [rows] = await db.query(
+      "SELECT id, email FROM users WHERE email = ? LIMIT 1",
+      [email]
+    );
+
+    // Untuk alasan keamanan, response dibuat tetap umum.
+    // Jadi email tidak terdaftar pun tidak membocorkan data user.
+    if (rows.length === 0) {
+      return res.status(200).json({
+        success: true,
+        message:
+          "Jika email terdaftar, instruksi reset password akan dikirimkan.",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message:
+        "Jika email terdaftar, instruksi reset password akan dikirimkan.",
+      note:
+        "Fitur pengiriman email reset password belum diaktifkan. Endpoint ini masih placeholder untuk integrasi frontend.",
+    });
+  } catch (err) {
+    console.error("Forgot Password Error:", err);
+    return res.status(500).json({
+      success: false,
+      message:
+        "Terjadi kesalahan saat memproses permintaan reset password.",
     });
   }
 };
@@ -181,8 +290,10 @@ const logout = async (req, res) => {
 };
 
 module.exports = {
+  register,
   login,
   getMe,
   updateProfile,
   logout,
+  forgotPassword,
 };

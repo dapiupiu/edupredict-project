@@ -76,7 +76,6 @@ const getStudentById = async (req, res) => {
          ar.physical_activity,
          ar.parental_involvement,
          ar.access_to_resources,
-         ar.extracurricular_activities,
          ar.motivation_level,
          ar.internet_access,
          ar.family_income,
