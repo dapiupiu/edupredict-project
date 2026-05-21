@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
-function LoginGuruInput({ username, password, errors, apiError, isLoading, rememberMe, onUsernameChange, onPasswordChange, onRememberMeChange, onSubmit }) {
+function LoginGuruInput({ email, password, errors, apiError, isLoading, rememberMe, onEmailChange, onPasswordChange, onRememberMeChange, onSubmit }) {
     return (
         <div className="mx-auto w-full max-w-xl my-10 px-6 py-10 sm:px-8 bg-white rounded-3xl border-2 border-gray-100 shadow-lg">
             {/* logo edupredict */}
@@ -34,15 +34,15 @@ function LoginGuruInput({ username, password, errors, apiError, isLoading, remem
             {/* form user */}
             <form onSubmit={onSubmit}>
                 <div className="mt-8">
-                    <label className="text-base sm:text-lg font-medium">Username</label>
+                    <label className="text-base sm:text-lg font-medium">Email</label>
                     <input
                         type="text"
-                        placeholder="masukkan username anda"
-                        value={username}
-                        onChange={onUsernameChange}
+                        placeholder="masukkan email anda"
+                        value={email}
+                        onChange={onEmailChange}
                         className="w-full border-2 border-gray-100 shadow-md rounded-xl p-4 mt-1 bg-transparent"
                     />
-                    {errors.username && <p className="mt-1 text-sm text-red-500">{errors.username}</p>}
+                    {errors.email && <p className="mt-1 text-sm text-red-500">{errors.email}</p>}
                 </div>
                 <div className="mt-4">
                     <label className="text-base sm:text-lg font-medium">Password</label>
@@ -94,13 +94,13 @@ function LoginGuruInput({ username, password, errors, apiError, isLoading, remem
 }
 
 LoginGuruInput.propTypes = {
-    username: PropTypes.string.isRequired,
+    email: PropTypes.string.isRequired,
     password: PropTypes.string.isRequired,
     errors: PropTypes.object.isRequired,
     apiError: PropTypes.string,
     isLoading: PropTypes.bool,
     rememberMe: PropTypes.bool.isRequired,
-    onUsernameChange: PropTypes.func.isRequired,
+    onEmailChange: PropTypes.func.isRequired,
     onPasswordChange: PropTypes.func.isRequired,
     onRememberMeChange: PropTypes.func.isRequired,
     onSubmit: PropTypes.func.isRequired,

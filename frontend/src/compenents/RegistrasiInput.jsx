@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 
 function RegistrasiInput({
     currentStep,
-    username,
     email,
     password,
     confirmPassword,
@@ -16,7 +15,6 @@ function RegistrasiInput({
     errors,
     apiError,
     isLoading,
-    onUsernameChange,
     onEmailChange,
     onPasswordChange,
     onConfirmPasswordChange,
@@ -76,13 +74,8 @@ function RegistrasiInput({
                     <div>
                         <h1 className="text-3xl sm:text-4xl font-semibold mt-6">Buat akun baru</h1>
                         <p className="text-base sm:text-lg mt-2 opacity-75">Lengkapi data akun untuk melanjutkan</p>
-                        <div className="mt-6"> {/* Changed from mt-8 to mt-6 for consistency */}
-                            <label className="text-base sm:text-lg font-medium">Username</label>
-                            <input type="text" value={username} onChange={onUsernameChange} placeholder="masukkan username anda" className="w-full border-2 border-gray-100 shadow-md rounded-xl p-4 mt-1 bg-transparent" />
-                            {errors.username && <p className="mt-1 text-sm text-red-500">{errors.username}</p>}
-                        </div>
-                        {/* Gunakan onKeyDown agar user bisa tekan Enter untuk lanjut */}
-                        <div className="mt-4">
+                        
+                        <div className="mt-6">
                             <label className="text-base sm:text-lg font-medium">Email</label>
                             <input type="email" value={email} onChange={onEmailChange} placeholder="masukkan email anda" className="w-full border-2 border-gray-100 shadow-md rounded-xl p-4 mt-1 bg-transparent" />
                             {errors.email && <p className="mt-1 text-sm text-red-500">{errors.email}</p>}
@@ -203,7 +196,6 @@ function RegistrasiInput({
 
 RegistrasiInput.propTypes = {
     currentStep: PropTypes.number.isRequired,
-    username: PropTypes.string.isRequired,
     email: PropTypes.string.isRequired,
     password: PropTypes.string.isRequired,
     confirmPassword: PropTypes.string.isRequired,
@@ -215,7 +207,6 @@ RegistrasiInput.propTypes = {
     errors: PropTypes.object.isRequired,
     apiError: PropTypes.string,
     isLoading: PropTypes.bool,
-    onUsernameChange: PropTypes.func.isRequired,
     onEmailChange: PropTypes.func.isRequired,
     onPasswordChange: PropTypes.func.isRequired,
     onConfirmPasswordChange: PropTypes.func.isRequired,

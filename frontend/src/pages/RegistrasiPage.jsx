@@ -5,7 +5,6 @@ import RegistrasiInput from '../compenents/RegistrasiInput';
 function RegistrasiPage() {
     const [currentStep, setCurrentStep] = useState(1);
     const [registrasiData, setRegistrasiData] = useState({
-        username: '',
         email: '',
         password: '',
         confirmPassword: '',
@@ -23,7 +22,7 @@ function RegistrasiPage() {
 
     // Destructuring agar variabel bisa langsung digunakan tanpa registrasiData.xxx
     const {
-        username, email, password, confirmPassword,
+        email, password, confirmPassword,
         namaLengkap, nip, noHp, jabatan, namaSekolah
     } = registrasiData;
 
@@ -34,8 +33,6 @@ function RegistrasiPage() {
 
     const validateStep1 = () => {
         const newErrors = {};
-        if (!username.trim()) newErrors.username = 'Username tidak boleh kosong';
-        else if (!/^[a-z.]+$/.test(username)) newErrors.username = 'Username tidak boleh spasi dan menggunakan huruf kecil';
         if (!email.trim()) newErrors.email = 'Email tidak boleh kosong';
         else if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z]+\.[a-zA-Z]{2,}$/.test(email)) newErrors.email = 'Format email tidak valid';
         if (!password) newErrors.password = 'Password tidak boleh kosong';
@@ -93,7 +90,7 @@ function RegistrasiPage() {
             const response = await fetch(API_URL, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username, email, password, namaLengkap, nip, noHp, jabatan, namaSekolah }),
+                body: JSON.stringify({ email, password, namaLengkap, nip, noHp, jabatan, namaSekolah }),
             });
             const data = await response.json();
 
@@ -104,7 +101,7 @@ function RegistrasiPage() {
             
             console.log('Registrasi berhasil:', data);
             setCurrentStep(3); // Move to success step
-            navigate('/login-guru'); // Or navigate directly to login page
+            navigate('/login-guru'); 
         } catch (error) {
             setApiError('Terjadi kesalahan jaringan. Silakan coba lagi.');
             console.error('Error:', error);
@@ -117,7 +114,6 @@ function RegistrasiPage() {
         <div className="w-full min-h-screen bg-blue-100 flex items-center justify-center p-4">
             <RegistrasiInput
                 currentStep={currentStep}
-                username={username}
                 email={email}
                 password={password}
                 confirmPassword={confirmPassword}
@@ -129,7 +125,6 @@ function RegistrasiPage() {
                 errors={errors}
                 apiError={apiError}
                 isLoading={isLoading}
-                onUsernameChange={handleInputChange('username')}
                 onEmailChange={handleInputChange('email')}
                 onPasswordChange={handleInputChange('password')}
                 onConfirmPasswordChange={handleInputChange('confirmPassword')}

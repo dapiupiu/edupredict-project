@@ -9,10 +9,14 @@ import RegistrasiPage from './pages/RegistrasiPage';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import LupaPasswordPage from './pages/LupaPasswordPage';
 import DashboardGuruPage from './pages/DashboardGuruPage';
+import DaftarSiswaPage from './pages/DaftarSiswaPage';
+import TambahSiswaPage from './pages/TambahSiswaPage';
+import MonitoringPage from './pages/MonitoringPage';
+import ProfilGuruPage from './pages/ProfilGuruPage';
 
 function App() {
   const location = useLocation();
-  const hideLayout = ['/login-guru', '/login-siswa', '/registrasi', '/lupa-password', '/dashboardGuru'].includes(location.pathname);
+  const hideLayout = ['/login-guru', '/login-siswa', '/registrasi', '/lupa-password', '/dashboardGuru', '/daftarSiswa', '/tambahSiswa', '/monitoringSiswa', '/profilGuru'].includes(location.pathname);
 
   return (
     <div className="min-h-screen bg-blue-100 flex flex-col">
@@ -26,6 +30,10 @@ function App() {
           <Route path="/registrasi" element={<RegistrasiPage />} />
           <Route path="/lupa-password" element={<LupaPasswordPage />} />
           <Route path="/dashboardGuru" element={<DashboardGuruPage />} />
+          <Route path="/daftarSiswa" element={<DaftarSiswaPage />} />
+          <Route path="/tambahSiswa" element={<TambahSiswaPage />} />
+          <Route path="/monitoringSiswa" element={<MonitoringPage />} />
+          <Route path="/profilGuru" element={<ProfilGuruPage/>}/>
         </Routes>
       </div>
 
