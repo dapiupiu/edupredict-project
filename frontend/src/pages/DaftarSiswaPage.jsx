@@ -21,7 +21,7 @@ function DaftarSiswaPage() {
                 const token = localStorage.getItem('token');
                 if (!token) throw new Error("Silakan login kembali.");
 
-                const response = await fetch('http://localhost:5000/api/guru/students', {
+                const response = await fetch(`${BASE_URL}/api/guru/students`, {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }
@@ -78,7 +78,7 @@ function DaftarSiswaPage() {
             const token = localStorage.getItem('token');
             if (!token) throw new Error("Sesi berakhir. Silakan login kembali.");
 
-            const response = await fetch(`http://localhost:5000/api/guru/students/${id}`, {
+            const response = await fetch(`${BASE_URL}/api/guru/students/${id}`, {
                 method: 'DELETE',
                 headers: { 'Authorization': `Bearer ${token}` }
             });

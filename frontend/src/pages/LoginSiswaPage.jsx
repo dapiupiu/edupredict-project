@@ -47,7 +47,7 @@ function LoginSiswaPage() {
     setIsLoading(true);
 
     try {
-      const response = await fetch('http://localhost:5000/api/student/check', {
+      const response = await fetch(`${BASE_URL}/api/student/check`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ nisn: NISN }),

@@ -87,7 +87,7 @@ function RegistrasiPage() {
         setIsLoading(true);
 
         try {
-            const API_URL = 'http://localhost:5000/api/auth/register';
+            const API_URL = `${BASE_URL}/api/auth/register`;
             const response = await fetch(API_URL, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },

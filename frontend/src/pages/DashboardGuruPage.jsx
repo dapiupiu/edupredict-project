@@ -38,7 +38,7 @@ function DashboardGuruPage() {
             if (!token) throw new Error("Silakan login kembali.");
 
             const response = await fetch(
-                "http://localhost:5000/api/guru/dashboard",
+                `${BASE_URL}/api/guru/dashboard`,
                 {
                     headers: {
                         'Authorization': `Bearer ${token}`

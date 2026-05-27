@@ -40,7 +40,7 @@ function LupaPasswordPage() {
             // Asumsi ada endpoint untuk forgot password di backend
             // Endpoint ini belum ada di authController.js yang Anda berikan,
             // jadi ini adalah simulasi atau placeholder.
-            const response = await fetch('http://localhost:5000/api/auth/forgot-password', {
+            const response = await fetch(`${BASE_URL}/api/auth/forgot-password`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email }),
