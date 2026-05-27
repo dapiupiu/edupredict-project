@@ -77,7 +77,7 @@ function MonitoringPage() {
         try {
             const token = localStorage.getItem('token');
             // Ambil data lengkap dari endpoint detail siswa (sudah ada di backend)
-        const response = await fetch(`${BASE_URL}/api/guru/students/${id}`, {
+            const response = await fetch(`${BASE_URL}/api/guru/students/${id}`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             const result = await response.json();

@@ -27,8 +27,8 @@ function DaftarSiswaPage() {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }
-                });
-
+            });
+            
                 const result = await response.json();
 
                 if (result.success) {
