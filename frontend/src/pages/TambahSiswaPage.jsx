@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState , useEffect} from 'react';
 import BASE_URL from '../utils/api';
 import { Link, useNavigate } from 'react-router-dom';
 import DataSiswaInput from '../compenents/DataSiswaInput';
@@ -42,7 +42,7 @@ function TambahSiswaPage() {
             try {
                 const token = localStorage.getItem('token');
                 if (!token) return;
-                const response = await fetch('http://localhost:5000/api/guru/students', {
+                const response = await fetch(`${BASE_URL}/api/guru/students`, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 const result = await response.json();
