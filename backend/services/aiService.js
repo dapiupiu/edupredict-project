@@ -69,7 +69,7 @@ const predictRiskWithAI = async (payload) => {
     throw new Error('AI_SERVICE_URL belum diatur di .env');
   }
 
-  const response = await axios.post(`${AI_SERVICE_URL}/predict`, payload, {
+const response = await axios.post(`${AI_SERVICE_URL}/api/v1/predict`, payload, {
     timeout: 15000,
     headers: {
       'Content-Type': 'application/json',
