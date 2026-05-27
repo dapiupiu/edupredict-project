@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-
+import BASE_URL from '../utils/api';
 import { NavLink } from 'react-router-dom';
 
 function LupaPasswordPage() {
@@ -36,7 +36,10 @@ function LupaPasswordPage() {
         setIsLoading(true);
 
         try {
-            const response = await fetch('http://localhost:5000/api/auth/forgot-password', {
+            // Asumsi ada endpoint untuk forgot password di backend
+            // Endpoint ini belum ada di authController.js yang Anda berikan,
+            // jadi ini adalah simulasi atau placeholder.
+            const response = await fetch(`${BASE_URL}/api/auth/forgot-password`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email }),

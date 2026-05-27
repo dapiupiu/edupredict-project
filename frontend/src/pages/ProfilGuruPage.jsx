@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import BASE_URL from '../utils/api';
 import Sidebar from '../compenents/Sidebar';
 
 function ProfilGuruPage() {
@@ -32,7 +33,7 @@ function ProfilGuruPage() {
             const token = localStorage.getItem('token');
             if (!token) throw new Error("Token tidak ditemukan");
 
-            const response = await fetch('http://localhost:5000/api/auth/me', {
+            const response = await fetch(`${BASE_URL}/api/auth/me`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             const result = await response.json();
@@ -67,7 +68,7 @@ function ProfilGuruPage() {
 
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch('http://localhost:5000/api/auth/profile', {
+            const response = await fetch(`${BASE_URL}/api/auth/profile`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import BASE_URL from '../utils/api';
 import { useLocation } from 'react-router-dom';
 import Sidebar from '../compenents/Sidebar';
 
@@ -18,7 +19,7 @@ function MonitoringPage() {
                 const token = localStorage.getItem('token');
                 if (!token) throw new Error("Sesi tidak valid. Silakan login kembali.");
 
-                const response = await fetch('http://localhost:5000/api/guru/students', {
+                const response = await fetch(`${BASE_URL}/api/guru/students`, {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }

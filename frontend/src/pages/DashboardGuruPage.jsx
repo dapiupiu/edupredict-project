@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import BASE_URL from '../utils/api';
 import Sidebar from '../compenents/Sidebar';
 import StatCard from "../compenents/StatCard";
 import InsightAI from "../compenents/InsightAI";
@@ -58,15 +59,14 @@ function DashboardGuruPage() {
             const token = localStorage.getItem('token');
             if (!token) throw new Error("Silakan login kembali.");
 
-            // Mengambil data dashboard (notifikasi) dan data siswa (untuk statistik akurat) secara bersamaan
-            const [resDash, resStud] = await Promise.all([
-                fetch("http://localhost:5000/api/guru/dashboard", {
-                    headers: { 'Authorization': `Bearer ${token}` }
-                }),
-                fetch("http://localhost:5000/api/guru/students", {
-                    headers: { 'Authorization': `Bearer ${token}` }
-                })
-            ]);
+            const response = await fetch(
+                `${BASE_URL}/api/guru/dashboard`,
+                {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                }
+            );
 
             if (!resDash.ok || !resStud.ok) {
                 throw new Error("Gagal mengambil data dari server.");

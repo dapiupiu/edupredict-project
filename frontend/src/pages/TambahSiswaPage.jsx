@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import BASE_URL from '../utils/api';
 import { Link, useNavigate } from 'react-router-dom';
 import DataSiswaInput from '../compenents/DataSiswaInput';
 import StepTambahSiswa from '../compenents/StepTambahSiswa';
@@ -132,7 +133,7 @@ function TambahSiswaPage() {
             const headers = { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` };
 
             // Tahap 1: Simpan Siswa
-            const resSiswa = await fetch('http://localhost:5000/api/guru/students', {
+            const resSiswa = await fetch(`${BASE_URL}/api/guru/students`, {
                 method: 'POST',
                 headers,
                 body: JSON.stringify(formData)
@@ -152,7 +153,7 @@ function TambahSiswaPage() {
             }
 
             // Tahap 2: Input Akademik & Prediksi
-            const resPredict = await fetch(`http://localhost:5000/api/guru/academic/${dataSiswa.data.id}`, {
+            const resPredict = await fetch(`${BASE_URL}/api/guru/academic/${dataSiswa.data.id}`, {
                 method: 'POST',
                 headers,
                 body: JSON.stringify(formData)

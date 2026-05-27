@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
-import Sidebar from "../compenents/Sidebar";
+import React, { useState, useEffect } from 'react';
+import BASE_URL from '../utils/api';
+import Sidebar from '../compenents/Sidebar';
 import DaftarSiswa from "../compenents/DaftarSiswa";
 import SearchFilter from "../compenents/SearchFilter";
 import PageNavigation from "../compenents/PageNavigation";
@@ -22,16 +23,9 @@ function DaftarSiswaPage() {
             try {
                 const token = localStorage.getItem("token");
 
-                if (!token) {
-                    throw new Error("Silakan login kembali.");
-                }
-
-                const response = await fetch(
-                    "http://localhost:5000/api/guru/students",
-                    {
-                        headers: {
-                            Authorization: `Bearer ${token}`,
-                        },
+                const response = await fetch(`${BASE_URL}/api/guru/students`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
                     }
                 );
 
@@ -168,35 +162,12 @@ function DaftarSiswaPage() {
             const token =
                 localStorage.getItem("token");
 
-            const response = await fetch(
-                `http://localhost:5000/api/guru/students/${id}`,
-                {
-                    method: "DELETE",
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                }
-            );
-
-            const result =
-                await response.json();
-
-            if (!response.ok) {
-                throw new Error(
-                    result.message
-                );
-            }
-
-            setDataSiswa((prev) =>
-                prev.filter(
-                    (student) =>
-                        student.id !== id
-                )
-            );
-
-            alert(
-                "Data siswa berhasil dihapus"
-            );
+            const response = await fetch(`${BASE_URL}/api/guru/students/${id}`, {
+                method: 'DELETE',
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            const result = await response.json();
+            if (!response.ok) throw new Error(result.message);
 
         } catch (err) {
 
