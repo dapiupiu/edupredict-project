@@ -1,13 +1,13 @@
-const axios = require('axios');
+const axios = require("axios");
 
 const AI_SERVICE_URL = process.env.AI_SERVICE_URL;
 
 const normalizeRiskCategory = (value) => {
-  const risk = String(value || '').toLowerCase();
-  if (risk === 'low' || risk === 'rendah') return 'Low';
-  if (risk === 'medium' || risk === 'sedang') return 'Medium';
-  if (risk === 'high' || risk === 'tinggi') return 'High';
-  return 'Medium';
+  const risk = String(value || "").toLowerCase();
+  if (risk === "low" || risk === "rendah") return "Low";
+  if (risk === "medium" || risk === "sedang") return "Medium";
+  if (risk === "high" || risk === "tinggi") return "High";
+  return "Medium";
 };
 
 const normalizeConfidence = (value) => {
@@ -42,21 +42,29 @@ const normalizeProbabilities = (probabilities = {}) => {
 };
 
 const mapAIResponseToPrediction = (aiResponse) => {
-  // AI bisa return di root atau di dalam .result
-  const result = aiResponse.result || aiResponse;
+  // Data ada di results[0], bukan di root
+  const result = aiResponse.results?.[0];
+
+  if (!result) {
+    throw new Error("Response AI tidak memiliki results");
+  }
 
   return {
-    risk_category: normalizeRiskCategory(result.predicted_class || result.risk_category),
-    confidence: normalizeConfidence(result.confidence),
-    probabilities: normalizeProbabilities(result.probabilities || {}),
+    risk_category: normalizeRiskCategory(result.prediction.risk_category),
+    confidence: result.prediction.confidence, // sudah dalam persen, tidak perlu dinormalisasi
+    probabilities: {
+      Low: result.probabilities?.Low || 0,
+      Medium: result.probabilities?.Medium || 0,
+      High: result.probabilities?.High || 0,
+    },
     risk_factors: [],
-    source: 'ai',
+    source: "ai",
   };
 };
 
 const predictRiskWithAI = async (payload) => {
   if (!AI_SERVICE_URL) {
-    throw new Error('AI_SERVICE_URL belum diatur di .env');
+    throw new Error("AI_SERVICE_URL belum diatur di .env");
   }
 
   // Wrap payload sesuai format yang diminta AI: { student: { student_id, features: {...} } }
@@ -78,31 +86,36 @@ const predictRiskWithAI = async (payload) => {
         Peer_Influence: payload.Peer_Influence,
         Physical_Activity: payload.Physical_Activity,
         Parental_Education_Level: payload.Parental_Education_Level,
-      }
-    }
+      },
+    },
   };
 
-  const response = await axios.post(`${AI_SERVICE_URL}/api/v1/predict`, aiPayload, {
-    timeout: 15000,
-    headers: { 'Content-Type': 'application/json' },
-  });
+  const response = await axios.post(
+    `${AI_SERVICE_URL}/api/v1/predict`,
+    aiPayload,
+    {
+      timeout: 15000,
+      headers: { "Content-Type": "application/json" },
+    },
+  );
 
-  console.log('AI RAW RESPONSE:', JSON.stringify(response.data, null, 2));
 
   if (!response.data) {
-    throw new Error('AI service tidak mengembalikan response');
+    throw new Error("AI service tidak mengembalikan response");
   }
 
   // Cek status error
-  if (response.data.status && response.data.status !== 'success') {
-    throw new Error(`AI service error: ${response.data.message || 'status gagal'}`);
+  if (response.data.status && response.data.status !== "success") {
+    throw new Error(
+      `AI service error: ${response.data.message || "status gagal"}`,
+    );
   }
 
   // Validasi ada hasil prediksi
-  const result = response.data.result || response.data;
-  // if (!result.predicted_class && !result.risk_category) {
-  //   throw new Error('Response AI tidak memiliki predicted_class');
-  // }
+  const result = response.data.results?.[0];
+  if (!result || !result.prediction) {
+    throw new Error("Response AI tidak memiliki results");
+  }
 
   return mapAIResponseToPrediction(response.data);
 };
