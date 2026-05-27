@@ -87,6 +87,8 @@ const predictRiskWithAI = async (payload) => {
     headers: { 'Content-Type': 'application/json' },
   });
 
+  console.log('AI RAW RESPONSE:', JSON.stringify(response.data, null, 2));
+
   if (!response.data) {
     throw new Error('AI service tidak mengembalikan response');
   }
@@ -98,9 +100,9 @@ const predictRiskWithAI = async (payload) => {
 
   // Validasi ada hasil prediksi
   const result = response.data.result || response.data;
-  if (!result.predicted_class && !result.risk_category) {
-    throw new Error('Response AI tidak memiliki predicted_class');
-  }
+  // if (!result.predicted_class && !result.risk_category) {
+  //   throw new Error('Response AI tidak memiliki predicted_class');
+  // }
 
   return mapAIResponseToPrediction(response.data);
 };
