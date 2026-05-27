@@ -32,7 +32,6 @@ function DashboardGuruPage() {
     useEffect(() => {
         getDashboard();
     }, []);
-
     useEffect(() => {
         const userData = localStorage.getItem('user');
         let userName = '';
@@ -68,17 +67,16 @@ function DashboardGuruPage() {
                 }
             );
 
-            if (!resDash.ok || !resStud.ok) {
+            if (!response.ok) {
                 throw new Error("Gagal mengambil data dari server.");
             }
 
-            const resultDash = await resDash.json();
-            const resultStud = await resStud.json();
+            const resultDash = await response.json();
 
-            if (resultDash.success && resultStud.success) {
+            if (resultDash.success){
                 // 1. Deduplikasi semua data siswa agar perhitungan card akurat (1 siswa = 1 hitungan)
                 const uniqueStudentsMap = new Map();
-                resultStud.data.forEach(student => {
+                resultDash.data.forEach(student => {
                     const currentRecordedAt = new Date(student.last_recorded);
                     if (!uniqueStudentsMap.has(student.id)) {
                         uniqueStudentsMap.set(student.id, student);
