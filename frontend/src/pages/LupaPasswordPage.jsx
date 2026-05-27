@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-
+import BASE_URL from '../utils/api';
 import { NavLink } from 'react-router-dom';
 
 function LupaPasswordPage() {

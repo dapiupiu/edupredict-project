@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import BASE_URL from '../utils/api';
 import { useLocation } from 'react-router-dom';
 import Sidebar from '../compenents/Sidebar';
 

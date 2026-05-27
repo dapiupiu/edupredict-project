@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import BASE_URL from '../utils/api';
 import Sidebar from '../compenents/Sidebar';
 import StatCard from "../compenents/StatCard";
 import InsightAI from "../compenents/InsightAI";
