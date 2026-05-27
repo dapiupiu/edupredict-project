@@ -13,10 +13,12 @@ import DaftarSiswaPage from './pages/DaftarSiswaPage';
 import TambahSiswaPage from './pages/TambahSiswaPage';
 import MonitoringPage from './pages/MonitoringPage';
 import ProfilGuruPage from './pages/ProfilGuruPage';
+import DashboardSiswaPage from './pages/DashboardSiswaPage';
+
 
 function App() {
   const location = useLocation();
-  const hideLayout = ['/login-guru', '/login-siswa', '/registrasi', '/lupa-password', '/dashboardGuru', '/daftarSiswa', '/tambahSiswa', '/monitoringSiswa', '/profilGuru'].includes(location.pathname);
+  const hideLayout = ['/login-guru', '/login-siswa', '/registrasi', '/lupa-password', '/dashboardGuru', '/daftarSiswa', '/tambahSiswa', '/monitoringSiswa', '/profilGuru', '/dashboardSiswa'].includes(location.pathname);
 
   return (
     <div className="min-h-screen bg-blue-100 flex flex-col">
@@ -34,6 +36,7 @@ function App() {
           <Route path="/tambahSiswa" element={<TambahSiswaPage />} />
           <Route path="/monitoringSiswa" element={<MonitoringPage />} />
           <Route path="/profilGuru" element={<ProfilGuruPage/>}/>
+          <Route path="/dashboardSiswa" element={<DashboardSiswaPage/>}/>
         </Routes>
       </div>
 

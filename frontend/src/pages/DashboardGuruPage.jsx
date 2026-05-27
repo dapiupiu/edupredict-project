@@ -4,6 +4,7 @@ import StatCard from "../compenents/StatCard";
 import InsightAI from "../compenents/InsightAI";
 import DaftarSiswa from "../compenents/DaftarSiswa";
 import GrafikRisiko from "../compenents/GrafikRisiko";
+import Swal from 'sweetalert2';
 
 function DashboardGuruPage() {
     const [open, setOpen] = useState(true);
@@ -31,34 +32,114 @@ function DashboardGuruPage() {
         getDashboard();
     }, []);
 
+    useEffect(() => {
+        const userData = localStorage.getItem('user');
+        let userName = '';
+        if (userData) {
+            try {
+                const user = JSON.parse(userData);
+                userName = user.nama || '';
+            } catch (e) {
+                console.error("Failed to parse user data from localStorage", e);
+            }
+        }
+
+        Swal.fire({
+            title: `👋 Selamat Datang, ${userName}!`,
+            text: "Selamat datang di Dashboard Guru. Mari pantau perkembangan siswa hari ini.",
+            icon: "success",
+            confirmButtonText: "Mulai",
+            timer: 3000,
+            timerProgressBar: true
+        });
+    }, []);
     async function getDashboard() {
         try {
             const token = localStorage.getItem('token');
             if (!token) throw new Error("Silakan login kembali.");
 
-            const response = await fetch(
-                "http://localhost:5000/api/guru/dashboard",
-                {
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                }
-            );
+            // Mengambil data dashboard (notifikasi) dan data siswa (untuk statistik akurat) secara bersamaan
+            const [resDash, resStud] = await Promise.all([
+                fetch("http://localhost:5000/api/guru/dashboard", {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                }),
+                fetch("http://localhost:5000/api/guru/students", {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                })
+            ]);
 
-            if (!response.ok) {
-                if (response.status === 401 || response.status === 403) {
-                    throw new Error("Sesi tidak valid atau Anda tidak memiliki akses.");
-                }
-                const errorData = await response.json();
-                throw new Error(errorData.message || `Error: ${response.status}`);
+            if (!resDash.ok || !resStud.ok) {
+                throw new Error("Gagal mengambil data dari server.");
             }
 
-            const result = await response.json();
-            if (result.success) {
-                const dashboardData = result.data;
-                // Transform siswa_berisiko menjadi format data grafik (berdasarkan nama) untuk API
-                if (dashboardData.siswa_berisiko) {
-                    dashboardData.tren = dashboardData.siswa_berisiko.slice(0, 8).map(s => {
+            const resultDash = await resDash.json();
+            const resultStud = await resStud.json();
+
+            if (resultDash.success && resultStud.success) {
+                // 1. Deduplikasi semua data siswa agar perhitungan card akurat (1 siswa = 1 hitungan)
+                const uniqueStudentsMap = new Map();
+                resultStud.data.forEach(student => {
+                    const currentRecordedAt = new Date(student.last_recorded);
+                    if (!uniqueStudentsMap.has(student.id)) {
+                        uniqueStudentsMap.set(student.id, student);
+                    } else {
+                        const existingRecordedAt = new Date(uniqueStudentsMap.get(student.id).last_recorded); // Ambil recorded_at dari yang sudah ada di map
+                        if (currentRecordedAt > existingRecordedAt) { // Hanya ganti jika current strictly lebih baru
+                            uniqueStudentsMap.set(student.id, student);
+                        }
+                    }
+                });
+
+                const allUniqueStudents = Array.from(uniqueStudentsMap.values());
+
+                // 2. Rekalkulasi Ringkasan (Card) berdasarkan data unik yang sudah difilter
+                const ringkasan = {
+                    total_siswa: allUniqueStudents.length,
+                    risiko_tinggi: 0,
+                    risiko_sedang: 0,
+                    risiko_rendah: 0,
+                    belum_diprediksi: 0
+                };
+
+                allUniqueStudents.forEach(s => {
+                    if (s.risk_category === 'High') ringkasan.risiko_tinggi++;
+                    else if (s.risk_category === 'Medium') ringkasan.risiko_sedang++;
+                    else if (s.risk_category === 'Low') ringkasan.risiko_rendah++;
+                    else ringkasan.belum_diprediksi++;
+                });
+
+                // 3. Siapkan data untuk Tabel dan Insight AI (Urutkan berdasarkan risiko tertinggi)
+                allUniqueStudents.sort((a, b) => {
+                    const order = { 'High': 1, 'Medium': 2, 'Low': 3 };
+                    return (order[a.risk_category] || 4) - (order[b.risk_category] || 4);
+                });
+
+                // 4. Ambil data berisiko dari resultDash karena mengandung 'risk_factors' untuk Insight AI
+                // Lakukan deduplikasi juga agar hitungannya pas
+                const dashAtRiskMap = new Map();
+                const rawDashAtRisk = resultDash.data?.siswa_berisiko || [];
+                
+                rawDashAtRisk.forEach(student => {
+                    const currentRecordedAt = new Date(student.last_recorded);
+                    if (!dashAtRiskMap.has(student.id)) {
+                        dashAtRiskMap.set(student.id, student);
+                    } else {
+                        const existingRecordedAt = new Date(dashAtRiskMap.get(student.id).last_recorded);
+                        if (currentRecordedAt > existingRecordedAt) { // Hanya ganti jika current strictly lebih baru
+                            dashAtRiskMap.set(student.id, student);
+                        }
+                    }
+                });
+
+                const dashboardData = {
+                    ringkasan,
+                    siswa_berisiko: allUniqueStudents.slice(0, 10), // Hanya 10 untuk tabel
+                    all_at_risk: Array.from(dashAtRiskMap.values()), // Data dengan risk_factors untuk Insight AI
+                    notifikasi: resultDash.data.notifikasi,
+                };
+
+                // 4. Transformasi data untuk grafik tren
+                dashboardData.tren = allUniqueStudents.slice(0, 8).map(s => {
                         let probs = {};
                         try {
                             probs = typeof s.probabilities === 'string' ? JSON.parse(s.probabilities) : (s.probabilities || {});
@@ -72,10 +153,9 @@ function DashboardGuruPage() {
                             rendah: probs.Low || (s.risk_category === 'Low' ? s.confidence : 0),
                         };
                     });
-                }
                 setData(dashboardData);
             } else {
-                setError(result.message || "Gagal mengambil data dashboard");
+                setError("Gagal memproses data dashboard.");
             }
         } catch (error) {
             console.error("Dashboard Fetch Error:", error);
@@ -131,7 +211,7 @@ function DashboardGuruPage() {
                 </div>
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 mt-8">
                     <div className="lg:col-span-2 space-y-5">
-                        <InsightAI 
+                         <InsightAI 
                             ringkasan={data.ringkasan} 
                             siswaBerisiko={data.siswa_berisiko} 
                         />

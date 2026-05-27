@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 function LoginGuruInput({ email, password, errors, apiError, isLoading, rememberMe, onEmailChange, onPasswordChange, onRememberMeChange, onSubmit }) {
+    const [showPassword, setShowPassword] = useState(false);
+
     return (
         <div className="mx-auto w-full max-w-xl my-10 px-6 py-10 sm:px-8 bg-white rounded-3xl border-2 border-gray-100 shadow-lg">
             {/* logo edupredict */}
@@ -21,7 +23,7 @@ function LoginGuruInput({ email, password, errors, apiError, isLoading, remember
 
             <h1 className="text-3xl sm:text-4xl font-semibold mt-4">Selamat datang kembali</h1>
             <p className="text-base sm:text-lg mt-4 opacity-75">Masuk untuk mengakses dashboard dan prediksi risiko siswa</p>
-            
+
             {/* error dari api */}
             {apiError && (
                 <div className="mt-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded-xl flex items-center gap-2">
@@ -46,22 +48,27 @@ function LoginGuruInput({ email, password, errors, apiError, isLoading, remember
                 </div>
                 <div className="mt-4">
                     <label className="text-base sm:text-lg font-medium">Password</label>
-                    <input
-                        type="password"
-                        placeholder="masukkan password anda"
-                        value={password}
-                        onChange={onPasswordChange}
-                        className="w-full border-2 border-gray-100 shadow-md rounded-xl p-4 mt-1 bg-transparent"
-                    />
+                    <div className="relative">
+                        <input
+                            type={showPassword ? "text" : "password"}
+                            placeholder="masukkan password anda"
+                            value={password}
+                            onChange={onPasswordChange}
+                            className="w-full border-2 border-gray-100 shadow-md rounded-xl p-4 mt-1 bg-transparent pr-12"
+                        />
+                        <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-4 top-1/2 -translate-y-1/2 mt-0.5 text-gray-500">
+                            <i className={showPassword ? "ri-eye-off-line" : "ri-eye-line"}></i>
+                        </button>
+                    </div>
                     {errors.password && <p className="mt-1 text-sm text-red-500">{errors.password}</p>}
                 </div>
                 <div className="mt-8 flex flex-wrap justify-between items-center gap-2">
                     <div>
-                        <input 
-                            type="checkbox" 
-                            id="remember" 
-                            checked={rememberMe} 
-                            onChange={onRememberMeChange} 
+                        <input
+                            type="checkbox"
+                            id="remember"
+                            checked={rememberMe}
+                            onChange={onRememberMeChange}
                         />
                         <label className="ml-2 font-medium text-base" htmlFor="remember">Ingat saya</label>
                     </div>
@@ -71,8 +78,8 @@ function LoginGuruInput({ email, password, errors, apiError, isLoading, remember
                     {/* loding state */}
                     <button disabled={isLoading} className={`bg-blue-900 text-white py-3 rounded-xl hover:bg-stone-900 flex items-center justify-center gap-2 ${isLoading ? 'opacity-70 cursor-not-allowed' : ''}`}>
                         <i className={isLoading ? "ri-loader-4-line animate-spin" : "ri-login-box-line"}></i> {isLoading ? 'Mohon tunggu...' : 'Masuk sebagai Guru'}</button>
-                    {/* loding state */} 
-                    
+                    {/* loding state */}
+
                     <div className="flex-1 h-px bg-gray-900"></div>
                     {/* atau */}
                     <div className="flex items-center gap-3 w-full">

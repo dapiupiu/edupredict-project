@@ -15,7 +15,6 @@ function LupaPasswordPage() {
             newErrors.email = 'Email tidak boleh kosong';
         } else if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z]+\.[a-zA-Z]{2,}$/.test(email)) {
             newErrors.email = 'Format email tidak valid';
-
         }
       return newErrors;
     };
@@ -37,9 +36,6 @@ function LupaPasswordPage() {
         setIsLoading(true);
 
         try {
-            // Asumsi ada endpoint untuk forgot password di backend
-            // Endpoint ini belum ada di authController.js yang Anda berikan,
-            // jadi ini adalah simulasi atau placeholder.
             const response = await fetch('http://localhost:5000/api/auth/forgot-password', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },

@@ -12,7 +12,7 @@ function PilihSiswa({ dataSiswa = [], selectedId, onSelect }) {
                     <option value="">Pilih Siswa</option>
                     {dataSiswa.map(student => (
                         <option key={student.id} value={student.id}>
-                            {student.nama_siswa || student.nama} - {student.nisn || student.Nisn} ({student.kelas})
+                            {student.nama_siswa || student.nama} - {student.nisn || student.Nisn} 
                         </option>
                     ))}
                 </select>

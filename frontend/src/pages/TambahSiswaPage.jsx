@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import DataSiswaInput from '../compenents/DataSiswaInput';
 import StepTambahSiswa from '../compenents/StepTambahSiswa';
@@ -32,8 +32,26 @@ function TambahSiswaPage() {
     });
     const [errors, setErrors] = useState({});
     const [isLoading, setIsLoading] = useState(false);
+    const [existingStudents, setExistingStudents] = useState([]);
     const [predictionResult, setPredictionResult] = useState(null);
     const navigate = useNavigate();
+
+    useEffect(() => {
+        const fetchStudents = async () => {
+            try {
+                const token = localStorage.getItem('token');
+                if (!token) return;
+                const response = await fetch('http://localhost:5000/api/guru/students', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const result = await response.json();
+                if (result.success) setExistingStudents(result.data);
+            } catch (err) {
+                console.error("Gagal memuat data siswa untuk validasi:", err);
+            }
+        };
+        fetchStudents();
+    }, []);
 
     const handleInputChange = (field) => (e) => {
         setFormData(prev => ({ ...prev, [field]: e.target.value }));
@@ -56,8 +74,21 @@ function TambahSiswaPage() {
             }
         });
 
+        // Cek Duplikasi Nama & NISN di frontend
+        const isDuplicateNisn = existingStudents.some(s => String(s.nisn) === String(formData.nisn));
+        const isDuplicateNama = existingStudents.some(s => s.nama_siswa.toLowerCase().trim() === formData.nama_siswa.toLowerCase().trim());
+
+        if (isDuplicateNisn) {
+            newErrors.nisn = 'NISN tersebut sudah terdapat di daftar siswa';
+        }
+        if (isDuplicateNama) {
+            newErrors.nama_siswa = 'Nama tersebut sudah terdapat di daftar siswa';
+        }
+
         if (formData.nisn && !/^\d+$/.test(formData.nisn)) {
             newErrors.nisn = 'NISN harus berupa angka';
+        }  else if (!/^[0-9]{8}$/.test(formData.nisn)) { 
+            newErrors.nisn = 'NISN harus terdiri dari 8 digit angka';
         }
 
         // Validasi Rentang Nilai Numerik
@@ -107,7 +138,18 @@ function TambahSiswaPage() {
                 body: JSON.stringify(formData)
             });
             const dataSiswa = await resSiswa.json();
-            if (!resSiswa.ok) throw new Error(dataSiswa.message);
+            
+            if (!resSiswa.ok) {
+                if (resSiswa.status === 409 && dataSiswa.errors) {
+                    setErrors(prev => ({ ...prev, ...dataSiswa.errors }));
+                    setTimeout(() => {
+                        const firstError = document.querySelector('.text-red-500');
+                        if (firstError) firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }, 100);
+                    return;
+                }
+                throw new Error(dataSiswa.message);
+            }
 
             // Tahap 2: Input Akademik & Prediksi
             const resPredict = await fetch(`http://localhost:5000/api/guru/academic/${dataSiswa.data.id}`, {
@@ -136,7 +178,7 @@ function TambahSiswaPage() {
     return (
         <div className="min-h-screen bg-blue-50">
             {/* Header dengan Logo Terpusat */}
-            <div className="relative flex items-center border-b border-blue-200 bg-blue-100 p-4 px-4 sm:px-12">
+            <div className="sticky top-0 flex items-center border-b border-blue-200 bg-blue-100 p-4 px-4 sm:px-12">
                 <Link to="/daftarSiswa" className="z-20 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors flex items-center gap-2">
                     <i className="ri-arrow-left-long-line"> </i>
                     <span className="hidden sm:inline">Daftar Siswa</span>

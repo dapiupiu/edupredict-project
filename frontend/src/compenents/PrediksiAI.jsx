@@ -1,6 +1,6 @@
 import React from "react";
 
-function PrediksiAI({ predictionResult }) {
+function PrediksiAI({ predictionResult, hideHeader = false, hideDistribusi = false }) {
   if (!predictionResult || !predictionResult.prediksi) {
     return <div className="text-center py-10 text-gray-500">Tidak ada data prediksi untuk ditampilkan.</div>;
   }
@@ -62,7 +62,7 @@ function PrediksiAI({ predictionResult }) {
     }
     return {
       title: factor.replace(/_/g, ' '), // Replace underscores with spaces
-      value: "Perlu perhatian", // Generic value for now
+      value: risk_category === 'Low' ? 'Faktor pendukung' : 'Perlu perhatian',
       color: factorColor,
       dot: factorDot,
     };
@@ -82,30 +82,32 @@ function PrediksiAI({ predictionResult }) {
     <div className="max-w-4xl mx-auto p-6">
 
       {/* HEADER RESULT */}
-      <div className={`${headerBgColor} rounded-2xl p-6 flex justify-between items-center mb-6 shadow-sm`}>
-        <div>
-          <h1 className={`text-3xl font-bold ${headerTextColor}`}>
-            {siswa} - Risiko {risk_category === 'High' ? 'Tinggi' : risk_category === 'Medium' ? 'Sedang' : risk_category === 'Low' ? 'Rendah' : risk_category}
-          </h1>
+      {!hideHeader && (
+        <div className={`${headerBgColor} rounded-2xl p-6 flex justify-between items-center mb-6 shadow-sm`}>
+          <div>
+            <h1 className={`text-3xl font-bold ${headerTextColor}`}>
+              {siswa} - Risiko {risk_category === 'High' ? 'Tinggi' : risk_category === 'Medium' ? 'Sedang' : risk_category === 'Low' ? 'Rendah' : risk_category}
+            </h1>
 
-          <p className={`text-xl ${headerConfidenceColor} mt-2`}>
-            {riskStatusText}
-          </p>
+            <p className={`text-xl ${headerConfidenceColor} mt-2`}>
+              {riskStatusText}
+            </p>
+          </div>
+
+          <div className="text-right">
+            <h1 className={`text-5xl font-bold ${headerConfidenceColor}`}>
+              {confidence}%
+            </h1>
+
+            <p className={`text-xl ${headerConfidenceColor}`}>
+              kepercayaan model
+            </p>
+          </div>
         </div>
-
-        <div className="text-right">
-          <h1 className={`text-5xl font-bold ${headerConfidenceColor}`}>
-            {confidence}%
-          </h1>
-
-          <p className={`text-xl ${headerConfidenceColor}`}>
-            kepercayaan model
-          </p>
-        </div>
-      </div>
+      )}
 
       {/* DISTRIBUSI */}
-      {formattedProbabilities.length > 0 && (
+      {!hideDistribusi && formattedProbabilities.length > 0 && (
         <div className="bg-white rounded-2xl p-6 shadow mb-6">
         <h2 className="font-bold text-xl mb-6">
           📊 Distribusi Probabilitas Prediksi

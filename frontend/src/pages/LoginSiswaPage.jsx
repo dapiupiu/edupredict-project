@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-//import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import LoginSiswaInput from '../compenents/LoginSiswaInput';
 
 function LoginSiswaPage() {
@@ -9,7 +9,7 @@ function LoginSiswaPage() {
   const [apiSuccess, setApiSuccess] = useState('');
   const [errors, setErrors] = useState({});
 
-  //const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const validate = () => {
     const newErrors = {};
@@ -64,7 +64,7 @@ function LoginSiswaPage() {
       setApiError('');
       console.log('NISN ditemukan:', data);
       
-      //navigate('/dashboard-siswa', { state: { studentData: data.data } });
+      navigate('/dashboardSiswa', { state: { studentData: data.data } });
     } catch (error) {
       setApiError('Terjadi kesalahan jaringan. Silakan coba lagi.');
       setApiSuccess('');

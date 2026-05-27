@@ -29,7 +29,7 @@ function GrafikRisiko({ data = [] }) {
                         <YAxis tick={{ fontSize: 12 }} />
                         <Tooltip />
                         <Bar name="Rendah" dataKey="rendah" fill="#22c55e" radius={[4, 4, 0, 0]} />
-                        <Bar name="Sedang" dataKey="sedang" fill="#f59e0b" radius={[4, 4, 0, 0]} />
+                        <Bar name="Sedang" dataKey="sedang" fill="#f97316" radius={[4, 4, 0, 0]} />
                         <Bar name="Tinggi" dataKey="tinggi" fill="#ef4444" radius={[4, 4, 0, 0]} />
                         <Legend verticalAlign="bottom" height={36} iconType="square" />
                     </BarChart>
