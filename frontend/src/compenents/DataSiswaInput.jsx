@@ -40,12 +40,12 @@ function DataSiswaInput({ formData, errors, isLoading, onChange, onSubmit, onCan
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <label className="block text-gray-700 mb-2 font-medium">Jam belajar/minggu <span className="text-red-500">*</span></label>
-            <input type="number" min="4" max="36" value={formData.hours_studied} onChange={onChange('hours_studied')} className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none ${errors.hours_studied ? 'border-red-500' : 'border-gray-300'}`} />
+            <input type="number" value={formData.hours_studied} onChange={onChange('hours_studied')} className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none ${errors.hours_studied ? 'border-red-500' : 'border-gray-300'}`} />
             {errors.hours_studied && <p className="text-red-500 text-xs mt-1">{errors.hours_studied}</p>}
           </div>
           <div>
             <label className="block text-gray-700 mb-2 font-medium">Kehadiran (%) <span className="text-red-500">*</span></label>
-            <input type="number" min="60" max="100" value={formData.attendance} onChange={onChange('attendance')} className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none ${errors.attendance ? 'border-red-500' : 'border-gray-300'}`} />
+            <input type="number" value={formData.attendance} onChange={onChange('attendance')} className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none ${errors.attendance ? 'border-red-500' : 'border-gray-300'}`} />
             {errors.attendance && <p className="text-red-500 text-xs mt-1">{errors.attendance}</p>}
           </div>
           <div>

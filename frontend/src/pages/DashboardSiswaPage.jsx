@@ -72,7 +72,7 @@ function DashboardSiswaPage() {
     };
 
     const currentTheme = riskThemes[latestRecord.risk_category] || 
-                         { gradient: "from-blue-600 to-indigo-700 shadow-blue-200", subText: "text-blue-200", detail: "text-blue-100" };
+        { gradient: "from-blue-600 to-indigo-700 shadow-blue-200", subText: "text-blue-200", detail: "text-blue-100" };
 
     return (
         <div className="min-h-screen bg-blue-50">

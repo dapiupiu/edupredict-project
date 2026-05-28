@@ -92,13 +92,6 @@ function TambahSiswaPage() {
             newErrors.nisn = 'NISN harus terdiri dari 8 digit angka';
         }
 
-        // Validasi Rentang Nilai Numerik
-        if (formData.hours_studied && (formData.hours_studied < 4 || formData.hours_studied > 36)) {
-            newErrors.hours_studied = 'Rentang: 4 - 36 jam';
-        }
-        if (formData.attendance && (formData.attendance < 60 || formData.attendance > 100)) {
-            newErrors.attendance = 'Rentang: 60 - 100%';
-        }
         if (formData.previous_scores && (formData.previous_scores < 0 || formData.previous_scores > 100)) {
             newErrors.previous_scores = 'Skala: 0 - 100';
         }
@@ -141,7 +134,7 @@ function TambahSiswaPage() {
             const dataSiswa = await resSiswa.json();
             
             if (!resSiswa.ok) {
-                if (resSiswa.status === 409 && dataSiswa.errors) {
+                if (dataSiswa.errors) {
                     setErrors(prev => ({ ...prev, ...dataSiswa.errors }));
                     setTimeout(() => {
                         const firstError = document.querySelector('.text-red-500');
@@ -159,7 +152,17 @@ function TambahSiswaPage() {
                 body: JSON.stringify(formData)
             });
             const dataPredict = await resPredict.json();
-            if (!resPredict.ok) throw new Error(dataPredict.message);
+            if (!resPredict.ok) {
+                if (dataPredict.errors) {
+                    setErrors(prev => ({ ...prev, ...dataPredict.errors }));
+                    setTimeout(() => {
+                        const firstError = document.querySelector('.text-red-500');
+                        if (firstError) firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }, 100);
+                    return;
+                }
+                throw new Error(dataPredict.message);
+            }
 
             setPredictionResult(dataPredict.data);
             setStep(2);

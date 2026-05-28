@@ -40,9 +40,6 @@ function DaftarSiswa({ className, isDashboard, isDaftarSiswa = false, dataSiswa 
                                         Pendidikan Ortu
                                     </th>
                                     <th scope="col" className="border border-gray-200 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Internet
-                                    </th>
-                                    <th scope="col" className="border border-gray-200 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                         Status Risiko
                                     </th>
                                 </>
@@ -88,11 +85,6 @@ function DaftarSiswa({ className, isDashboard, isDaftarSiswa = false, dataSiswa 
                                                  item.parental_education_level === 'College' ? 'Diploma/S1' : 
                                                  item.parental_education_level === 'Postgraduate' ? 'S2/S3' : 
                                                  (item.parental_education_level || item.pendidikanOrtu)}
-                                            </td>
-                                            <td className="border border-gray-200 px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                                {(item.internet_access === 'Yes' || item.internet === 'Yes') ? 'Ya' : 
-                                                 (item.internet_access === 'No' || item.internet === 'No') ? 'Tidak' : 
-                                                 (item.internet_access || item.internet)}
                                             </td>
                                              <td className={`border border-gray-200 px-6 py-4 whitespace-nowrap text-sm font-bold ${
                                                 (item.risk_category || item.statusRisiko) === 'High' ? 'text-red-600' :
