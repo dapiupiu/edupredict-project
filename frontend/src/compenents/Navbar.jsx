@@ -37,7 +37,7 @@ function Navbar() {
                         <button onClick={() => scrollTo('fitur')} className="relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-blue-900 after:transition-all after:duration-300 hover:after:w-full">Fitur</button>
                         <button onClick={() => scrollTo('panduan')} className="relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-blue-900 after:transition-all after:duration-300 hover:after:w-full">Panduan Penggunaan</button>
                         <div className="relative">
-                            <button onClick={() => setDropdownOpen(!dropdownOpen)} className="bg-blue-900 text-white px-5 py-1 rounded-lg text-sm hover:bg-stone-900">
+                            <button onClick={() => setDropdownOpen(!dropdownOpen)} className="bg-blue-900 text-white px-5 py-1 rounded-lg text-sm hover:bg-stone-900 transition-all shadow-md">
                                 Login <i className="ri-arrow-right-up-line"></i>
                             </button>
                             {dropdownOpen && (

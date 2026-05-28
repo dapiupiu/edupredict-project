@@ -76,7 +76,7 @@ function LoginGuruInput({ email, password, errors, apiError, isLoading, remember
                 </div>
                 <div className="mt-8 flex flex-col gap-y-4">
                     {/* loding state */}
-                    <button disabled={isLoading} className={`bg-blue-900 text-white py-3 rounded-xl hover:bg-stone-900 flex items-center justify-center gap-2 ${isLoading ? 'opacity-70 cursor-not-allowed' : ''}`}>
+                    <button disabled={isLoading} className={`bg-blue-900 text-white py-3 rounded-xl hover:bg-stone-900 transition-all flex items-center justify-center gap-2 ${isLoading ? 'opacity-70 cursor-not-allowed' : ''}`}>
                         <i className={isLoading ? "ri-loader-4-line animate-spin" : "ri-login-box-line"}></i> {isLoading ? 'Mohon tunggu...' : 'Masuk sebagai Guru'}</button>
                     {/* loding state */}
 
