@@ -109,7 +109,7 @@ function DataSiswaInput({ formData, errors, isLoading, onChange, onSubmit, onCan
             <label className="block text-gray-700 mb-2 font-medium">Akses internet di rumah <span className="text-red-500">*</span></label>
             <select value={formData.internet_access} onChange={onChange('internet_access')} className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none ${errors.internet_access ? 'border-red-500' : 'border-gray-300'}`}>
               <option value=""></option>
-              <option value="Yes">ya</option>
+              <option value="Yes">ada</option>
               <option value="No">tidak</option>
             </select>
             {errors.internet_access && <p className="text-red-500 text-xs mt-1">{errors.internet_access}</p>}

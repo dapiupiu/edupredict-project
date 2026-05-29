@@ -14,6 +14,23 @@ function PrediksiAI({ predictionResult, hideHeader = false, hideDistribusi = fal
   const probabilities = typeof prediksi.probabilities === 'string' 
     ? JSON.parse(prediksi.probabilities) : (prediksi.probabilities || {});
 
+  const factorTranslation = {
+    'Attendance': 'Kehadiran',
+    'Hours_Studied': 'Jam Belajar',
+    'Parental_Involvement': 'Keterlibatan Orang Tua',
+    'Access_to_Resources': 'Akses Sumber Belajar',
+    'Sleep_Hours': 'Jam Tidur',
+    'Previous_Scores': 'Nilai Ujian Sebelumnya',
+    'Motivation_Level': 'Tingkat Motivasi',
+    'Internet_Access': 'Akses Internet',
+    'Tutoring_Sessions': 'Sesi Bimbingan Belajar',
+    'Family_Income': 'Pendapatan Keluarga',
+    'Teacher_Quality': 'Kualitas Pengajaran Guru',
+    'Peer_Influence': 'Pengaruh Teman',
+    'Physical_Activity': 'Aktivitas Fisik',
+    'Parental_Education_Level': 'Pendidikan Orang Tua',
+  };
+
   // Determine colors based on risk_category
   let headerBgColor = "bg-gray-100";
   let headerTextColor = "text-gray-800";
@@ -38,13 +55,24 @@ function PrediksiAI({ predictionResult, hideHeader = false, hideDistribusi = fal
   }
 
   // Format probabilities for display
-  const formattedProbabilities = Object.entries(probabilities).map(([key, value]) => {
+  const formattedProbabilities = Object.entries(probabilities || {}).map(([key, value]) => {
     let color = "bg-gray-500";
-    if (key === 'High') color = "bg-red-700";
-    else if (key === 'Medium') color = "bg-orange-600";
-    else if (key === 'Low') color = "bg-green-700";
-    return { label: `Risiko ${key.toLowerCase()}`, value: value, color: color };
+    let translatedKey = '';
+    if (key === 'High') {
+      color = "bg-red-700";
+      translatedKey = 'Tinggi';
+    }
+    else if (key === 'Medium') {
+      color = "bg-orange-600";
+      translatedKey = 'Sedang';
+    }
+    else if (key === 'Low') {
+      color = "bg-green-700";
+      translatedKey = 'Rendah';
+    }
+    return { label: `Risiko ${translatedKey}`, value: value, color: color };
   }).sort((a, b) => b.value - a.value); // Sort by value descending
+
 
   // Format risk factors for display
   const formattedFactors = risk_factors && risk_factors.length > 0 ? risk_factors.map(factor => {
@@ -61,7 +89,7 @@ function PrediksiAI({ predictionResult, hideHeader = false, hideDistribusi = fal
         factorDot = "bg-green-600";
     }
     return {
-      title: factor.replace(/_/g, ' '), // Replace underscores with spaces
+      title: factorTranslation[factor] || factor.replace(/_/g, ' '), // Translate factor name
       value: risk_category === 'Low' ? 'Faktor pendukung' : 'Perlu perhatian',
       color: factorColor,
       dot: factorDot,
@@ -71,7 +99,8 @@ function PrediksiAI({ predictionResult, hideHeader = false, hideDistribusi = fal
   // Generate recommendations based on risk category
   let generatedRecommendation = "";
   if (risk_category === 'High') {
-    generatedRecommendation = `Siswa atas nama ${siswa} memerlukan pendampingan intensif segera. Disarankan untuk memprioritaskan perbaikan pada aspek ${risk_factors.map(f => f.replace(/_/g, ' ')).join(' dan ')}.`;
+    const translatedRiskFactors = risk_factors.map(f => factorTranslation[f] || f.replace(/_/g, ' ')).join(' dan ');
+    generatedRecommendation = `Siswa atas nama ${siswa} memerlukan pendampingan intensif segera. Disarankan untuk memprioritaskan perbaikan pada aspek ${translatedRiskFactors}.`;
   } else if (risk_category === 'Medium') {
     generatedRecommendation = `Lakukan pemantauan berkala pada ${siswa}. Tingkatkan motivasi dan berikan bimbingan tambahan pada area yang menjadi faktor risiko agar kondisi tidak memburuk.`;
   } else { // Low

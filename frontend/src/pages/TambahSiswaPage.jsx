@@ -1,6 +1,6 @@
 import React, { useState , useEffect} from 'react';
 import BASE_URL from '../utils/api';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import DataSiswaInput from '../compenents/DataSiswaInput';
 import StepTambahSiswa from '../compenents/StepTambahSiswa';
 import PrediksiAI from '../compenents/PrediksiAI';
@@ -34,8 +34,60 @@ function TambahSiswaPage() {
     const [errors, setErrors] = useState({});
     const [isLoading, setIsLoading] = useState(false);
     const [existingStudents, setExistingStudents] = useState([]);
+    const [createdStudentId, setCreatedStudentId] = useState(null);
     const [predictionResult, setPredictionResult] = useState(null);
     const navigate = useNavigate();
+    const location = useLocation();
+
+    // Effect untuk mengambil data siswa jika masuk dalam mode Edit
+    useEffect(() => {
+        const studentIdToEdit = location.state?.studentId;
+        if (studentIdToEdit) {
+            const fetchStudentDetail = async () => {
+                try {
+                    const token = localStorage.getItem('token');
+                    const response = await fetch(`${BASE_URL}/api/guru/students/${studentIdToEdit}`, {
+                        headers: { 'Authorization': `Bearer ${token}` }
+                    });
+                    const result = await response.json();
+                    
+                    if (result.success) {
+                        const { siswa, histori } = result.data;
+                        // Ambil record akademik terbaru untuk mengisi form
+                        const latest = histori && histori.length > 0 ? histori[histori.length - 1] : {};
+                        
+                        setFormData({
+                            nama_siswa: siswa.nama_siswa || '',
+                            nisn: siswa.nisn || '',
+                            kelas: siswa.kelas || '',
+                            gender: siswa.gender || '',
+                            parental_education_level: siswa.parental_education_level || '',
+                            hours_studied: latest.hours_studied || '',
+                            attendance: latest.attendance || '',
+                            previous_scores: latest.previous_scores || '',
+                            sleep_hours: latest.sleep_hours || '',
+                            tutoring_sessions: latest.tutoring_sessions || '',
+                            physical_activity: latest.physical_activity || '',
+                            parental_involvement: latest.parental_involvement || '',
+                            access_to_resources: latest.access_to_resources || '',
+                            motivation_level: latest.motivation_level || '',
+                            internet_access: latest.internet_access || '',
+                            family_income: latest.family_income || '',
+                            peer_influence: latest.peer_influence || '',
+                            teacher_quality: latest.teacher_quality || '',
+                            school_type: siswa.school_type || 'Public',
+                            distance_from_home: siswa.distance_from_home || 'Moderate',
+                            learning_disabilities: siswa.learning_disabilities || 'No'
+                        });
+                        setCreatedStudentId(studentIdToEdit);
+                    }
+                } catch (err) {
+                    console.error("Gagal mengambil detail siswa:", err);
+                }
+            };
+            fetchStudentDetail();
+        }
+    }, [location.state]);
 
     useEffect(() => {
         const fetchStudents = async () => {
@@ -76,8 +128,12 @@ function TambahSiswaPage() {
         });
 
         // Cek Duplikasi Nama & NISN di frontend
-        const isDuplicateNisn = existingStudents.some(s => String(s.nisn) === String(formData.nisn));
-        const isDuplicateNama = existingStudents.some(s => s.nama_siswa.toLowerCase().trim() === formData.nama_siswa.toLowerCase().trim());
+        const isDuplicateNisn = existingStudents.some(s => 
+            String(s.nisn) === String(formData.nisn) && s.id !== createdStudentId
+        );
+        const isDuplicateNama = existingStudents.some(s => 
+            s.nama_siswa.toLowerCase().trim() === formData.nama_siswa.toLowerCase().trim() && s.id !== createdStudentId
+        );
 
         if (isDuplicateNisn) {
             newErrors.nisn = 'NISN tersebut sudah terdapat di daftar siswa';
@@ -125,28 +181,53 @@ function TambahSiswaPage() {
 
             const headers = { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` };
 
-            // Tahap 1: Simpan Siswa
-            const resSiswa = await fetch(`${BASE_URL}/api/guru/students`, {
-                method: 'POST',
-                headers,
-                body: JSON.stringify(formData)
-            });
-            const dataSiswa = await resSiswa.json();
-            
-            if (!resSiswa.ok) {
-                if (dataSiswa.errors) {
-                    setErrors(prev => ({ ...prev, ...dataSiswa.errors }));
-                    setTimeout(() => {
-                        const firstError = document.querySelector('.text-red-500');
-                        if (firstError) firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    }, 100);
-                    return;
+            let currentStudentId = createdStudentId;
+
+            // Tahap 1: Simpan (POST) atau Perbarui (PUT) Siswa
+            if (!currentStudentId) {
+                const resSiswa = await fetch(`${BASE_URL}/api/guru/students`, {
+                    method: 'POST',
+                    headers,
+                    body: JSON.stringify(formData)
+                });
+                const dataSiswa = await resSiswa.json();
+                
+                if (!resSiswa.ok) {
+                    if (dataSiswa.errors) {
+                        setErrors(prev => ({ ...prev, ...dataSiswa.errors }));
+                        setTimeout(() => {
+                            const firstError = document.querySelector('.text-red-500');
+                            if (firstError) firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        }, 100);
+                        return;
+                    }
+                    throw new Error(dataSiswa.message);
                 }
-                throw new Error(dataSiswa.message);
+                currentStudentId = dataSiswa.data.id;
+                setCreatedStudentId(currentStudentId);
+            } else {
+                const resUpdate = await fetch(`${BASE_URL}/api/guru/students/${currentStudentId}`, {
+                    method: 'PUT',
+                    headers,
+                    body: JSON.stringify(formData)
+                });
+                const dataUpdate = await resUpdate.json();
+
+                if (!resUpdate.ok) {
+                    if (dataUpdate.errors) {
+                        setErrors(prev => ({ ...prev, ...dataUpdate.errors }));
+                        setTimeout(() => {
+                            const firstError = document.querySelector('.text-red-500');
+                            if (firstError) firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        }, 100);
+                        return;
+                    }
+                    throw new Error(dataUpdate.message);
+                }
             }
 
             // Tahap 2: Input Akademik & Prediksi
-            const resPredict = await fetch(`${BASE_URL}/api/guru/academic/${dataSiswa.data.id}`, {
+            const resPredict = await fetch(`${BASE_URL}/api/guru/academic/${currentStudentId}`, {
                 method: 'POST',
                 headers,
                 body: JSON.stringify(formData)

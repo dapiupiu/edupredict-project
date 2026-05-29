@@ -4,16 +4,11 @@ import { useNavigate } from 'react-router-dom';
 import RegistrasiInput from '../compenents/RegistrasiInput';
 
 function RegistrasiPage() {
-    const [currentStep, setCurrentStep] = useState(1);
     const [registrasiData, setRegistrasiData] = useState({
         email: '',
         password: '',
         confirmPassword: '',
         namaLengkap: '',
-        nip: '',
-        noHp: '',
-        jabatan: '',
-        namaSekolah: '',
     });
     const [errors, setErrors] = useState({});
     const [isLoading, setIsLoading] = useState(false);
@@ -23,8 +18,7 @@ function RegistrasiPage() {
 
     // Destructuring agar variabel bisa langsung digunakan tanpa registrasiData.xxx
     const {
-        email, password, confirmPassword,
-        namaLengkap, nip, noHp, jabatan, namaSekolah
+        email, password, confirmPassword, namaLengkap
     } = registrasiData;
 
     // Fungsi handler input yang lebih ringkas
@@ -32,8 +26,9 @@ function RegistrasiPage() {
         setRegistrasiData(prev => ({ ...prev, [field]: e.target.value }));
     };
 
-    const validateStep1 = () => {
+    const validate = () => {
         const newErrors = {};
+        if (!namaLengkap.trim()) newErrors.namaLengkap = 'Nama lengkap tidak boleh kosong';
         if (!email.trim()) newErrors.email = 'Email tidak boleh kosong';
         else if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z]+\.[a-zA-Z]{2,}$/.test(email)) newErrors.email = 'Format email tidak valid';
         if (!password) newErrors.password = 'Password tidak boleh kosong';
@@ -43,40 +38,9 @@ function RegistrasiPage() {
         return newErrors;
     };
 
-    const validateStep2 = () => {
-        const newErrors = {};
-        if (!namaLengkap.trim()) newErrors.namaLengkap = 'Nama lengkap tidak boleh kosong';
-        if (!nip.trim()) newErrors.nip = 'NIP tidak boleh kosong';
-        else if (!/^[0-9]+$/.test(nip)) newErrors.nip = 'NIP hanya boleh berisi angka';
-        if (!noHp.trim()) newErrors.noHp = 'No HP tidak boleh kosong';
-        else if (!/^[0-9]{10,13}$/.test(noHp)) newErrors.noHp = 'No HP tidak valid';
-        if (!jabatan.trim()) newErrors.jabatan = 'Jabatan tidak boleh kosong';
-        else if (!/^[a-zA-Z\s]+$/.test(jabatan)) newErrors.jabatan = 'Jabatan hanya boleh berisi huruf';
-        if (!namaSekolah.trim()) newErrors.namaSekolah = 'Nama sekolah tidak boleh kosong';
-        return newErrors;
-    };
-
-    const handleNextStep = () => {
-        const validationErrors = validateStep1();
-        if (Object.keys(validationErrors).length > 0) {
-            setErrors(validationErrors);
-            return;
-        }
-        setErrors({});
-        setCurrentStep(2);
-        window.scrollTo(0, 0);
-    };
-
-    const handlePrevStep = () => {
-        setCurrentStep(1);
-        setErrors({});
-        setApiError('');
-        window.scrollTo(0, 0);
-    };
-
     const handleRegistrasi = async (event) => {
         event.preventDefault();
-        const validationErrors = validateStep2();
+        const validationErrors = validate();
         if (Object.keys(validationErrors).length > 0) {
             setErrors(validationErrors);
             return;
@@ -91,7 +55,7 @@ function RegistrasiPage() {
             const response = await fetch(API_URL, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, password, namaLengkap, nip, noHp, jabatan, namaSekolah }),
+                body: JSON.stringify({ email, password, namaLengkap }),
             });
             const data = await response.json();
 
@@ -101,7 +65,6 @@ function RegistrasiPage() {
             }
             
             console.log('Registrasi berhasil:', data);
-            setCurrentStep(3); // Move to success step
             navigate('/login-guru'); 
         } catch (error) {
             setApiError('Terjadi kesalahan jaringan. Silakan coba lagi.');
@@ -114,15 +77,10 @@ function RegistrasiPage() {
     return (
         <div className="w-full min-h-screen bg-blue-100 flex items-center justify-center p-4">
             <RegistrasiInput
-                currentStep={currentStep}
                 email={email}
                 password={password}
                 confirmPassword={confirmPassword}
                 namaLengkap={namaLengkap}
-                nip={nip}
-                noHp={noHp}
-                jabatan={jabatan}
-                namaSekolah={namaSekolah}
                 errors={errors}
                 apiError={apiError}
                 isLoading={isLoading}
@@ -130,12 +88,6 @@ function RegistrasiPage() {
                 onPasswordChange={handleInputChange('password')}
                 onConfirmPasswordChange={handleInputChange('confirmPassword')}
                 onNamaLengkapChange={handleInputChange('namaLengkap')}
-                onNipChange={handleInputChange('nip')}
-                onNoHpChange={handleInputChange('noHp')}
-                onJabatanChange={handleInputChange('jabatan')}
-                onNamaSekolahChange={handleInputChange('namaSekolah')}
-                onNextStep={handleNextStep}
-                onPrevStep={handlePrevStep}
                 onSubmit={handleRegistrasi}
             />
         </div>

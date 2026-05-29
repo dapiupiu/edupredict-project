@@ -149,10 +149,7 @@ function DashboardSiswaPage() {
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                     {/* 3. Analisis AI (Probabilitas, Faktor, Rekomendasi) */}
                     <div className="lg:col-span-2 space-y-8">
-                        <div className="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
-                            <div className="p-6 border-b border-gray-50 flex items-center justify-end">
-                                <span className="text-xs font-bold text-gray-400">Update Terakhir: {new Date(latestRecord.recorded_at).toLocaleDateString('id-ID')}</span>
-                            </div>
+                        <div className="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">  
                             <PrediksiAI 
                                 predictionResult={{ 
                                     siswa: siswa.nama_siswa || siswa.nama,
@@ -161,6 +158,9 @@ function DashboardSiswaPage() {
                                 hideHeader={true}
                                 hideDistribusi={true}
                             />
+                            <div className="p-6 border-b border-gray-50 flex items-center justify-end">
+                                <span className="text-xs font-bold text-gray-400">Update Terakhir: {new Date(latestRecord.recorded_at).toLocaleDateString('id-ID')}</span>
+                            </div>
                         </div>
                     </div>
 

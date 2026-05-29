@@ -3,23 +3,23 @@ import React from 'react';
 function InsightAI({ ringkasan, siswaBerisiko }) {
     // Pemetaan terjemahan faktor risiko dari backend ke Bahasa Indonesia
     const factorTranslation = {
-        'attendance': 'Kehadiran',
-        'hours_studied': 'Jam Belajar',
-        'previous_scores': 'Nilai Ujian',
-        'sleep_hours': 'Jam Tidur',
-        'tutoring_sessions': 'Sesi Bimbel',
-        'physical_activity': 'Aktivitas Fisik',
-        'parental_involvement': 'Keterlibatan Orang Tua',
-        'access_to_resources': 'Akses Sumber Belajar',
-        'motivation_level': 'Tingkat Motivasi',
-        'internet_access': 'Akses Internet',
-        'family_income': 'Pendapatan Keluarga',
-        'peer_influence': 'Pengaruh Teman',
-        'teacher_quality': 'Kualitas Pengajaran',
-        'parental_education_level': 'Pendidikan Orang Tua',
-        'school_type': 'Tipe Sekolah',
-        'distance_from_home': 'Jarak Rumah',
-        'learning_disabilities': 'Kesulitan Belajar'
+        'Attendance': 'Kehadiran',
+        'Hours_Studied': 'Jam Belajar',
+        'Previous_Scores': 'Nilai Ujian',
+        'Sleep_Hours': 'Jam Tidur',
+        'Tutoring_Sessions': 'Sesi Bimbel',
+        'Physical_Activity': 'Aktivitas Fisik',
+        'Parental_Involvement': 'Keterlibatan Orang Tua',
+        'Access_to_Resources': 'Akses Sumber Belajar',
+        'Motivation_Level': 'Tingkat Motivasi',
+        'Internet_Access': 'Akses Internet',
+        'Family_Income': 'Pendapatan Keluarga',
+        'Peer_Influence': 'Pengaruh Teman',
+        'Teacher_Quality': 'Kualitas Pengajaran',
+        'Parental_Education_Level': 'Pendidikan Orang Tua',
+        'School_Type': 'Tipe Sekolah',
+        'Distance_From_Home': 'Jarak Rumah',
+        'Learning_Disabilities': 'Kesulitan Belajar'
     };
 
     // Hitung faktor risiko dominan dari data siswa yang masuk radar
@@ -49,7 +49,7 @@ function InsightAI({ ringkasan, siswaBerisiko }) {
         <div className="bg-white p-6 rounded-xl shadow">
             <div className="flex items-center gap-2 mb-4">
                 <i className="ri-bard-fill text-sky-600 text-2xl"></i>
-                <h1 className="font-bold text-2xl">Insight AI</h1>
+                <h1 className="font-bold text-2xl">Analisis Risiko Akademik</h1>
             </div>
             <div className="mt-5 space-y-4">
                 <div className="flex items-start gap-3">

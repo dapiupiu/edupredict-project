@@ -34,7 +34,7 @@ function DaftarSiswa({ className, isDashboard, isDaftarSiswa = false, dataSiswa 
                             <th scope="col" className="border border-gray-200 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 Kelas
                             </th>
-                            {!isDashboard && (
+                            {!isDashboard && ( // Perhatikan bahwa ini adalah bagian dari conditional rendering
                                 <>
                                     <th scope="col" className="border border-gray-200 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                         Pendidikan Ortu
@@ -44,7 +44,7 @@ function DaftarSiswa({ className, isDashboard, isDaftarSiswa = false, dataSiswa 
                                     </th>
                                 </>
                             )}
-                            <th scope="col" className=" text-center border border-gray-200 px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            <th scope="col" className=" text-center border border-gray-200 px-3 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 Aksi
                             </th>
                         </tr>
@@ -101,24 +101,32 @@ function DaftarSiswa({ className, isDashboard, isDaftarSiswa = false, dataSiswa 
                                             </td>
                                         </>
                                     )}
-                                    <td className="border border-gray-200 px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    <td className="border border-gray-200 px-3 py-4 whitespace-nowrap text-sm text-gray-500">
                                         <div className="flex gap-2 justify-center">
                                             <button 
                                                 onClick={() => navigate('/monitoringSiswa', { state: { studentId: item.id } })}
-                                                className="bg-blue-100 text-blue-800 px-3 py-1 rounded hover:bg-blue-200 transition-colors duration-200"
+                                                className="bg-blue-100 text-blue-800 px-2 py-1 text-xs rounded hover:bg-blue-200 transition-colors duration-200"
                                             >
-                                                Detail
+                                                Detail 
+                                            </button>
+                                    
+                                            <button 
+                                                onClick={() => navigate('/tambahSiswa', { state: { studentId: item.id } })}
+                                                className="bg-green-100 text-green-800 px-2 py-1 text-xs rounded hover:bg-green-200 transition-colors duration-200"
+                                            >
+                                                <i className="ri-edit-line"></i>
+                                                <span> Edit</span>
                                             </button>
                                             {!isDashboard && (
                                                 <button 
                                                     onClick={() => onDelete && onDelete(item.id, item.nama_siswa || item.nama)}
-                                                    className="bg-red-50 text-red-600 px-2 py-1 rounded hover:bg-red-100 transition-colors duration-200 flex items-center gap-1"
+                                                    className="bg-red-50 text-red-600 px-2 py-1 text-xs rounded hover:bg-red-100 transition-colors duration-200 flex items-center gap-1"
                                                     title="Hapus Data"
                                                 >
                                                     <i className="ri-delete-bin-line"></i>
-                                                    <span>Hapus</span>
+                                                    <span> Hapus</span>
                                                 </button>
-                                            )}
+                                            )} 
                                         </div>
                                     </td>
                                 </tr>

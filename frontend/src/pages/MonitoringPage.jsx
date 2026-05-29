@@ -122,36 +122,40 @@ function MonitoringPage() {
                             </h2>
                             <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-sm">
                                 <div className="space-y-1">
-                                    <p className="text-gray-400 font-semibold uppercase text-[10px]">Identitas</p>
+                                    <p className="text-gray-400 font-semibold uppercase text-[10px]">Identitas Siswa</p>
                                     <p className="font-medium text-gray-800">NISN: {selectedStudent.nisn}</p>
                                     <p className="font-medium text-gray-800">Kelas: {selectedStudent.kelas}</p>
-                                    <p className="font-medium text-gray-800">Gender: {selectedStudent.gender === 'Male' ? 'Laki-laki' : 'Perempuan'}</p>
-                                    <p className="font-medium text-gray-800">Ortu: {
+                                    <p className="font-medium text-gray-800">Jenis Kelamin: {selectedStudent.gender === 'Male' ? 'Laki-laki' : 'Perempuan'}</p>
+                                    <p className="font-medium text-gray-800">Pendidikan Ortu: {
                                         selectedStudent.parental_education_level === 'High School' ? 'SMA/SMK' :
                                         selectedStudent.parental_education_level === 'College' ? 'Diploma/S1' :
                                         selectedStudent.parental_education_level === 'Postgraduate' ? 'S2/S3' : selectedStudent.parental_education_level || '-'
                                     }</p>
                                 </div>
                                 <div className="space-y-1">
-                                    <p className="text-gray-400 font-semibold uppercase text-[10px]">Akademik</p>
+                                    <p className="text-gray-400 font-semibold uppercase text-[10px]">Data Akademik</p>
                                     <p className="font-medium text-gray-800">Kehadiran: {selectedStudent.attendance || '0'}%</p>
                                     <p className="font-medium text-gray-800">Jam Belajar: {selectedStudent.hours_studied || '0'} j/mgg</p>
-                                    <p className="font-medium text-gray-800">Rata-rata: {selectedStudent.previous_scores || '0'}</p>
-                                    <p className="font-medium text-gray-800">Fisik: {selectedStudent.physical_activity || '0'} j/mgg</p>
+                                    <p className="font-medium text-gray-800">Rata-rata nilai ujian sebelumnya: {selectedStudent.previous_scores || '0'}</p>
+                                    <p className="font-medium text-gray-800">Aktivitas Fisik: {selectedStudent.physical_activity || '0'} j/mgg</p>
                                 </div>
                                 <div className="space-y-1">
-                                    <p className="text-gray-400 font-semibold uppercase text-[10px]">Perilaku</p>
+                                    <p className="text-gray-400 font-semibold uppercase text-[10px]">Perilaku Belajar</p>
                                     <p className="font-medium text-gray-800">Jam Tidur: {selectedStudent.sleep_hours || '0'} j/mlm</p>
                                     <p className="font-medium text-gray-800">Motivasi: {
-                                        selectedStudent.motivation_level === 'High' ? 'Tinggi' :
-                                        selectedStudent.motivation_level === 'Medium' ? 'Sedang' :
-                                        selectedStudent.motivation_level === 'Low' ? 'Rendah' : '-'
+                                        selectedStudent.motivation_level === 'High' ? 'Sangat Termotivasi' :
+                                        selectedStudent.motivation_level === 'Medium' ? 'Cukup Termotivasi' :
+                                        selectedStudent.motivation_level === 'Low' ? 'Kurang Termotivasi' : '-'
                                     }</p>
-                                    <p className="font-medium text-gray-800">Bimbel: {selectedStudent.tutoring_sessions || '0'} sesi</p>
-                                    <p className="font-medium text-gray-800">Teman: {selectedStudent.peer_influence || '-'}</p>
+                                    <p className="font-medium text-gray-800">Sesi Bimbel: {selectedStudent.tutoring_sessions || '0'} sesi</p>
+                                    <p className="font-medium text-gray-800">Pengaruh Teman: {
+                                        selectedStudent.peer_influence === 'Positive' ? 'Baik' :
+                                        selectedStudent.peer_influence === 'Neutral' ? 'Biasa saja' :
+                                        selectedStudent.peer_influence === 'Negative' ? 'Buruk' : '-'
+                                    }</p>
                                 </div>
                                 <div className="space-y-1">
-                                    <p className="text-gray-400 font-semibold uppercase text-[10px]">Lingkungan</p>
+                                    <p className="text-gray-400 font-semibold uppercase text-[10px]">Faktor Sosial dan Lingkungan</p>
                                     <p className="font-medium text-gray-800">Internet: {selectedStudent.internet_access === 'Yes' ? 'Ada' : 'Tidak'}</p>
                                     <p className="font-medium text-gray-800">Pendapatan Ortu: {
                                         selectedStudent.family_income === 'High' ? 'Tinggi' :
@@ -159,7 +163,11 @@ function MonitoringPage() {
                                         selectedStudent.family_income === 'Low' ? 'Rendah' : '-'
                                     }</p>
                                     <p className="font-medium text-gray-800">Sekolah: {selectedStudent.school_type === 'Public' ? 'Negeri' : 'Swasta'}</p>
-                                    <p className="font-medium text-gray-800">Kualitas Guru: {selectedStudent.teacher_quality || '-'}</p>
+                                    <p className="font-medium text-gray-800">Kualitas Guru: {
+                                        selectedStudent.teacher_quality === 'High' ? 'Sangat baik' :
+                                        selectedStudent.teacher_quality === 'Medium' ? 'Cukup baik' :
+                                        selectedStudent.teacher_quality === 'Low' ? 'Kurang baik' : '-'
+                                    }</p>
                                 </div>
                             </div>
                         </div>
