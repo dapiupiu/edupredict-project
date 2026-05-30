@@ -26,7 +26,6 @@ function TambahSiswaPage() {
     family_income: "",
     peer_influence: "",
     teacher_quality: "",
-    // Default values for hidden requirements
     school_type: "Public",
     distance_from_home: "Moderate",
     learning_disabilities: "No",
@@ -36,10 +35,10 @@ function TambahSiswaPage() {
   const [existingStudents, setExistingStudents] = useState([]);
   const [createdStudentId, setCreatedStudentId] = useState(null);
   const [predictionResult, setPredictionResult] = useState(null);
+  const [oodWarnings, setOodWarnings] = useState([]);
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Effect untuk mengambil data siswa jika masuk dalam mode Edit
   useEffect(() => {
     const studentIdToEdit = location.state?.studentId;
     if (studentIdToEdit) {
@@ -48,18 +47,13 @@ function TambahSiswaPage() {
           const token = localStorage.getItem("token");
           const response = await fetch(
             `${BASE_URL}/api/guru/students/${studentIdToEdit}`,
-            {
-              headers: { Authorization: `Bearer ${token}` },
-            },
+            { headers: { Authorization: `Bearer ${token}` } },
           );
           const result = await response.json();
-
           if (result.success) {
             const { siswa, histori } = result.data;
-            // Ambil record akademik terbaru untuk mengisi form
             const latest =
               histori && histori.length > 0 ? histori[histori.length - 1] : {};
-
             setFormData({
               nama_siswa: siswa.nama_siswa || "",
               nisn: siswa.nisn || "",
@@ -147,7 +141,6 @@ function TambahSiswaPage() {
       }
     });
 
-    // Cek Duplikasi Nama & NISN di frontend
     const isDuplicateNisn = existingStudents.some(
       (s) =>
         String(s.nisn) === String(formData.nisn) && s.id !== createdStudentId,
@@ -158,12 +151,10 @@ function TambahSiswaPage() {
           formData.nama_siswa.toLowerCase().trim() && s.id !== createdStudentId,
     );
 
-    if (isDuplicateNisn) {
+    if (isDuplicateNisn)
       newErrors.nisn = "NISN tersebut sudah terdapat di daftar siswa";
-    }
-    if (isDuplicateNama) {
+    if (isDuplicateNama)
       newErrors.nama_siswa = "Nama tersebut sudah terdapat di daftar siswa";
-    }
 
     if (formData.nisn && !/^\d+$/.test(formData.nisn)) {
       newErrors.nisn = "NISN harus berupa angka";
@@ -174,27 +165,23 @@ function TambahSiswaPage() {
     if (
       formData.previous_scores &&
       (formData.previous_scores < 0 || formData.previous_scores > 100)
-    ) {
+    )
       newErrors.previous_scores = "Skala: 0 - 100";
-    }
     if (
       formData.sleep_hours &&
       (formData.sleep_hours < 4 || formData.sleep_hours > 10)
-    ) {
+    )
       newErrors.sleep_hours = "Rentang: 4 - 10 jam";
-    }
     if (
       formData.tutoring_sessions &&
       (formData.tutoring_sessions < 0 || formData.tutoring_sessions > 4)
-    ) {
+    )
       newErrors.tutoring_sessions = "Maksimal 4 sesi";
-    }
     if (
       formData.physical_activity &&
       (formData.physical_activity < 0 || formData.physical_activity > 6)
-    ) {
+    )
       newErrors.physical_activity = "Maksimal 6";
-    }
 
     return newErrors;
   };
@@ -222,7 +209,7 @@ function TambahSiswaPage() {
 
       let currentStudentId = createdStudentId;
 
-      // Tahap 1: Simpan (POST) atau Perbarui (PUT) Siswa
+      // Tahap 1: Simpan atau Perbarui Siswa
       if (!currentStudentId) {
         const resSiswa = await fetch(`${BASE_URL}/api/guru/students`, {
           method: "POST",
@@ -230,7 +217,6 @@ function TambahSiswaPage() {
           body: JSON.stringify(formData),
         });
         const dataSiswa = await resSiswa.json();
-
         if (!resSiswa.ok) {
           if (dataSiswa.errors) {
             setErrors((prev) => ({ ...prev, ...dataSiswa.errors }));
@@ -258,7 +244,6 @@ function TambahSiswaPage() {
           },
         );
         const dataUpdate = await resUpdate.json();
-
         if (!resUpdate.ok) {
           if (dataUpdate.errors) {
             setErrors((prev) => ({ ...prev, ...dataUpdate.errors }));
@@ -302,16 +287,14 @@ function TambahSiswaPage() {
         throw new Error(dataPredict.message);
       }
 
-      // Tampilkan OOD warning jika ada nilai yang di-clamp
+      // Set OOD warnings jika ada nilai yang di-clamp
       if (
         dataPredict.data?.is_ood &&
         dataPredict.data?.ood_warnings?.length > 0
       ) {
-        alert(
-          "⚠️ Perhatian: Beberapa nilai disesuaikan ke batas data pelatihan:\n\n" +
-            dataPredict.data.ood_warnings.map((w) => `• ${w}`).join("\n") +
-            "\n\nPrediksi tetap dilakukan dengan nilai yang sudah disesuaikan.",
-        );
+        setOodWarnings(dataPredict.data.ood_warnings);
+      } else {
+        setOodWarnings([]);
       }
 
       setPredictionResult(dataPredict.data);
@@ -325,13 +308,13 @@ function TambahSiswaPage() {
   };
 
   const handleFinalSubmit = () => {
-    setStep(3); // Set ke step 3 (Simpan Data) agar indikator menyala
+    setStep(3);
     window.scrollTo(0, 0);
   };
 
   return (
     <div className="min-h-screen bg-blue-50">
-      {/* Header dengan Logo Terpusat */}
+      {/* Header */}
       <div className="sticky top-0 flex items-center border-b border-blue-200 bg-blue-100 p-4 px-4 sm:px-12">
         <Link
           to="/daftarSiswa"
@@ -368,6 +351,27 @@ function TambahSiswaPage() {
               <i className="ri-robot-line text-blue-500"></i>
               Hasil Analisis AI
             </h2>
+
+            {/* OOD Warning Banner */}
+            {oodWarnings.length > 0 && (
+              <div className="mb-6 bg-yellow-50 border border-yellow-300 rounded-lg p-4">
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="text-lg">⚠️</span>
+                  <span className="text-yellow-700 font-bold text-sm">
+                    Perhatian: Beberapa nilai disesuaikan ke batas data
+                    pelatihan
+                  </span>
+                </div>
+                <ul className="text-sm text-yellow-700 space-y-1 ml-6">
+                  {oodWarnings.map((w, i) => (
+                    <li key={i}>• {w}</li>
+                  ))}
+                </ul>
+                <p className="text-xs text-yellow-600 mt-2 italic ml-6">
+                  Prediksi tetap dilakukan dengan nilai yang sudah disesuaikan.
+                </p>
+              </div>
+            )}
 
             <PrediksiAI predictionResult={predictionResult} />
 
