@@ -32,7 +32,7 @@ function PrediksiAI({
     Parental_Involvement: "Keterlibatan Orang Tua",
     Access_to_Resources: "Akses Sumber Belajar",
     Sleep_Hours: "Jam Tidur",
-    Previous_Scores: "Nilai Ujian Sebelumnya",
+    Previous_Scores: "Nilai Rapor Sebelumnya",
     Motivation_Level: "Tingkat Motivasi",
     Internet_Access: "Akses Internet",
     Tutoring_Sessions: "Sesi Bimbingan Belajar",
