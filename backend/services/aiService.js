@@ -65,4 +65,32 @@ const predictRiskWithAI = async (payload) => {
   };
 };
 
-module.exports = { predictRiskWithAI };
+const analyzeDominantFactors = async (payload) => {
+  try {
+    const response = await axios.post(
+      `${AI_SERVICE_URL}/api/v1/analyze/dominant-factors`,
+      payload,
+      { timeout: 15000, headers: { 'Content-Type': 'application/json' } }
+    );
+    return response.data.factors || [];
+  } catch (err) {
+    console.error('Dominant factors error:', err.message);
+    return [];
+  }
+};
+
+const analyzeRecommendations = async (payload) => {
+  try {
+    const response = await axios.post(
+      `${AI_SERVICE_URL}/api/v1/analyze/recommendations`,
+      payload,
+      { timeout: 15000, headers: { 'Content-Type': 'application/json' } }
+    );
+    return response.data.recommendations || [];
+  } catch (err) {
+    console.error('Recommendations error:', err.message);
+    return [];
+  }
+};
+
+module.exports = { predictRiskWithAI, analyzeDominantFactors, analyzeRecommendations };

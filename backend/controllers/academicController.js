@@ -1,5 +1,10 @@
 const db = require("../config/db");
-const { predictRiskWithAI } = require("../services/aiService");
+const {
+  predictRiskWithAI,
+  analyzeDominantFactors,
+  analyzeRecommendations,
+} = require("../services/aiService");
+const { validateAndClamp } = require("../utils/validateInput");
 
 // ─────────────────────────────────────────────────────────
 //  HARDCODE AI RESPONSE / FALLBACK
@@ -34,7 +39,12 @@ const getHardcodedPrediction = (data) => {
     risk_category: "High",
     confidence: 84,
     probabilities: { Low: 5, Medium: 11, High: 84 },
-    risk_factors: ["Attendance", "Hours_Studied", "Previous_Scores", "Motivation_Level"],
+    risk_factors: [
+      "Attendance",
+      "Hours_Studied",
+      "Previous_Scores",
+      "Motivation_Level",
+    ],
     source: "hardcode_fallback",
   };
 };
@@ -62,7 +72,6 @@ const inputAcademic = async (req, res) => {
     peer_influence,
   } = req.body;
 
-  
   const requiredFields = {
     hours_studied,
     attendance,
@@ -160,34 +169,57 @@ const inputAcademic = async (req, res) => {
       Parental_Education_Level: siswa.parental_education_level,
     };
 
-    // ── STEP 4: Prediksi via AI service + fallback hardcode ──
+    // ── STEP 4a: Clamp input ke training bounds (OOD protection) ──
+    const { clampedInput, oodWarnings } = validateAndClamp(rawInput);
+
+    if (oodWarnings.length > 0) {
+      console.log("OOD warnings untuk siswa", studentId, ":", oodWarnings);
+    }
+
+    // ── STEP 4b: Prediksi via AI service + fallback hardcode ──
     let prediksi;
 
     try {
-      prediksi = await predictRiskWithAI(rawInput);
+      prediksi = await predictRiskWithAI(clampedInput);
     } catch (aiError) {
       console.error(
         "AI service error, fallback to hardcoded prediction:",
         aiError.message,
       );
 
-      prediksi = getHardcodedPrediction(rawInput);
+      prediksi = getHardcodedPrediction(clampedInput);
     }
+
+    // ── STEP 4c: Ambil dominant factors & recommendations dari AI ──
+    const analyzePayload = {
+      student_id: `STU-${studentId}`,
+      features: clampedInput,
+      prediction: {
+        risk_category: prediksi.risk_category,
+        confidence: prediksi.confidence,
+        predicted_exam_score: 0,
+      },
+    };
+
+    const [dominantFactors, recommendations] = await Promise.all([
+      analyzeDominantFactors(analyzePayload),
+      analyzeRecommendations(analyzePayload),
+    ]);
 
     // ── STEP 5: Simpan hasil prediksi ───────────────────
     const [predictionResult] = await db.query(
       `INSERT INTO predictions
-        (student_id, academic_record_id, risk_category, confidence,
-         probabilities, risk_factors, raw_input)
-       VALUES (?, ?, ?, ?, ?, ?, ?)`,
+    (student_id, academic_record_id, risk_category, confidence,
+     probabilities, risk_factors, raw_input)
+   VALUES (?, ?, ?, ?, ?, ?, ?)`,
       [
         studentId,
         academicRecordId,
         prediksi.risk_category,
         prediksi.confidence,
         JSON.stringify(prediksi.probabilities || {}),
-        JSON.stringify(prediksi.risk_factors || []),
-        JSON.stringify(rawInput),
+        JSON.stringify(dominantFactors), // ← dari AI langsung
+        JSON.stringify(clampedInput),
       ],
     );
 
@@ -235,9 +267,13 @@ const inputAcademic = async (req, res) => {
           risk_category: prediksi.risk_category,
           confidence: prediksi.confidence,
           probabilities: prediksi.probabilities || {},
-          risk_factors: prediksi.risk_factors || [],
+          risk_factors: dominantFactors,
+          recommendations: recommendations,
           source: prediksi.source || "ai",
         },
+        ood_warnings: oodWarnings,
+        is_ood: oodWarnings.length > 0,
+        input_used: clampedInput,
       },
     });
   } catch (err) {
