@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import BASE_URL from '../utils/api';
 import { useNavigate } from 'react-router-dom';
 import RegistrasiInput from '../components/RegistrasiInput';
+import Swal from 'sweetalert2';
 
 function RegistrasiPage() {
     const [registrasiData, setRegistrasiData] = useState({
@@ -60,12 +61,27 @@ function RegistrasiPage() {
             const data = await response.json();
 
             if (!response.ok) {
-                setApiError(data.message || 'Registrasi gagal. Silakan coba lagi.');
+                if (response.status === 409 || data.message === "Email sudah terdaftar.") {
+                    setErrors(prev => ({ ...prev, email: 'Email tersebut sudah terdaftar. gunakan email lain' }));
+                    setApiError(''); // Pastikan apiError kosong jika error spesifik
+                } else {
+                    setApiError(data.message || 'Registrasi gagal. Silakan coba lagi.');
+                }
                 return;
             }
             
-            console.log('Registrasi berhasil:', data);
-            navigate('/login-guru'); 
+            // Tampilkan Pop-up sukses sebelum navigasi
+            Swal.fire({
+                title: 'Registrasi Berhasil! 🎉',
+                text: 'Akun Anda berhasil dibuat.Terima kasih telah bergabung. Kini Anda dapat mengakses fitur pemantauan dan deteksi dini risiko akademik siswa melalui EduPredict.',
+                icon: 'success',
+                confirmButtonText: 'Masuk Sekarang',
+                confirmButtonColor: '#1e3a8a', // Sesuai warna blue-900 di aplikasi
+                timer: 5000,
+                timerProgressBar: true
+            }).then(() => {
+                navigate('/login-guru'); 
+            });
         } catch (error) {
             setApiError('Terjadi kesalahan jaringan. Silakan coba lagi.');
             console.error('Error:', error);

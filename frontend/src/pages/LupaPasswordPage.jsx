@@ -47,13 +47,18 @@ function LupaPasswordPage() {
 
             const data = await response.json();
 
-            if (!response.ok) {
-                setApiError(data.message || 'Terjadi kesalahan saat mengirim permintaan reset password.');
+            if (!response.ok) { // Jika respons tidak OK (misalnya status 404 atau 500)
+                if (response.status === 404 && data.message === "Email tersebut belum terdaftar. Silakan daftar akun dulu.") {
+                    setApiError(data.message); // Tampilkan pesan error spesifik dari backend
+                } else {
+                    setApiError(data.message || 'Terjadi kesalahan saat mengirim permintaan reset password.');
+                }
                 setApiSuccess('');
                 return;
             }
 
-            setApiSuccess('Kami sudah mengirimkan surel yang berisi tautan untuk mereset kata sandi anda.');
+            // Jika respons OK, tampilkan pesan sukses
+            setApiSuccess(data.message || 'Kami sudah mengirimkan surel yang berisi tautan untuk mereset kata sandi anda.');
             setApiError('');
             console.log('Permintaan reset password berhasil:', data);
         } catch (error) {
