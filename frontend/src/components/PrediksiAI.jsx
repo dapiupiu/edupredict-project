@@ -5,6 +5,7 @@ function PrediksiAI({
   hideHeader = false,
   hideDistribusi = false,
   fullWidth = false,
+  isSiswa = false,
 }) {
   if (!predictionResult || !predictionResult.prediksi) {
     return (
@@ -54,18 +55,18 @@ function PrediksiAI({
     headerBgColor = "bg-red-100";
     headerTextColor = "text-red-800";
     headerConfidenceColor = "text-red-700";
-    riskStatusText = "Memerlukan perhatian segera";
+    riskStatusText = isSiswa ? "Ayo tingkatkan semangat belajarmu!" : "Memerlukan perhatian segera";
   } else if (risk_category === "Medium") {
     headerBgColor = "bg-orange-100";
     headerTextColor = "text-orange-800";
     headerConfidenceColor = "text-orange-700";
-    riskStatusText = "Perlu dipantau lebih lanjut";
+    riskStatusText = isSiswa ? "Ada beberapa hal yang bisa diperbaiki" : "Perlu dipantau lebih lanjut";
   } else {
     // Low
     headerBgColor = "bg-green-100";
     headerTextColor = "text-green-800";
     headerConfidenceColor = "text-green-700";
-    riskStatusText = "Terpantau stabil";
+    riskStatusText = isSiswa ? "Wah, performa belajarmu keren!" : "Terpantau stabil";
   }
 
   // Format probabilities for display
@@ -88,6 +89,30 @@ function PrediksiAI({
     .sort((a, b) => b.value - a.value); // Sort by value descending
 
   // Format risk factors for display
+  const getFactorValue = (factorKey) => {
+    const val = prediksi[factorKey.toLowerCase()] || prediksi[factorKey];
+    if (val === undefined || val === null) return "-";
+
+    const unitMap = {
+      Attendance: "%",
+      Hours_Studied: " jam/minggu",
+      Sleep_Hours: " jam/malam",
+      Previous_Scores: " (Skala 0-100)",
+      Tutoring_Sessions: " sesi/bulan",
+      Physical_Activity: " jam/minggu",
+    };
+
+    const labelMap = {
+      Low: "Sangat Baik", Medium: "Cukup Baik", High: "Kurang Optimal",
+      Positive: "Baik", Neutral: "Biasa saja", Negative: "Buruk",
+      Yes: "Ada", No: "Tidak Ada",
+      "High School": "SMA/SMK", College: "Diploma/S1", Postgraduate: "S2/S3",
+    };
+
+    if (unitMap[factorKey]) return `${val}${unitMap[factorKey]}`;
+    return labelMap[val] || val;
+  };
+
   const formattedFactors =
     risk_factors && risk_factors.length > 0
       ? risk_factors.map((factor) => {
@@ -103,13 +128,28 @@ function PrediksiAI({
             factorColor = "text-green-700";
             factorDot = "bg-green-600";
           }
+
+          const statusPrefix = 
+            isSiswa ? (
+              risk_category === "High" ? "Hal yang perlu kamu perbaiki" :
+              risk_category === "Medium" ? "Catatan untukmu" :
+              "Hal yang sudah kamu lakukan dengan baik"
+            ) : (
+              risk_category === "High" ? "Faktor Risiko Kritis" :
+              risk_category === "Medium" ? "Faktor Perhatian" :
+              "Faktor Pendukung Utama"
+            );
+
           return {
             title:
               typeof factor === "string"
                 ? factorTranslation[factor] || factor.replace(/_/g, " ")
-                : factor.factor || factor.note || "", // Translate factor name
-            value:
-              risk_category === "Low" ? "Faktor pendukung" : "Perlu perhatian",
+                : factor.factor || factor.note || "",
+            value: typeof factor === "string" 
+                ? `${statusPrefix}: ${getFactorValue(factor)}`
+                : isSiswa 
+                    ? (risk_category === "Low" ? "Aspek ini sangat membantu menjaga kestabilan belajarmu saat ini." : "Bagian ini memerlukan sedikit perhatian lebih darimu.")
+                    : (risk_category === "Low" ? "Faktor ini mendukung kestabilan performa siswa." : "Faktor ini memerlukan perhatian khusus berdasarkan riwayat akademik."),
             color: factorColor,
             dot: factorDot,
           };
@@ -117,7 +157,7 @@ function PrediksiAI({
       : [
           {
             title: "Tidak ada faktor risiko dominan terdeteksi.",
-            value: "",
+            value: isSiswa ? "Wah hebat! Kamu menunjukkan pola belajar yang sangat positif di semua aspek." : "Siswa menunjukkan pola belajar yang sangat positif di semua aspek.",
             color: "text-green-700",
             dot: "bg-green-600",
           },
@@ -125,20 +165,27 @@ function PrediksiAI({
 
   // Generate recommendations based on risk category
   let generatedRecommendation = "";
-  if (risk_category === "High") {
-    const translatedRiskFactors = risk_factors
-      .map((f) =>
-        typeof f === "string"
-          ? factorTranslation[f] || f.replace(/_/g, " ")
-          : f.factor || "",
-      )
-      .join(" dan ");
-    generatedRecommendation = `Siswa atas nama ${siswa} memerlukan pendampingan intensif segera. Disarankan untuk memprioritaskan perbaikan pada aspek ${translatedRiskFactors}.`;
-  } else if (risk_category === "Medium") {
-    generatedRecommendation = `Lakukan pemantauan berkala pada ${siswa}. Tingkatkan motivasi dan berikan bimbingan tambahan pada area yang menjadi faktor risiko agar kondisi tidak memburuk.`;
+  const topFactors = risk_factors
+    .slice(0, 2)
+    .map((f) => typeof f === "string" ? (factorTranslation[f] || f).toLowerCase() : (f.factor || "").toLowerCase())
+    .join(" dan juga ");
+
+  if (isSiswa) {
+    if (risk_category === "High") {
+      generatedRecommendation = `Halo ${siswa}, tetap semangat ya! 🤗 Sistem melihat kamu sedang menghadapi beberapa tantangan dalam belajar. Jangan berkecil hati, jadikan ini pengingat untuk fokus pada aspek ${topFactors}. Kamu punya potensi besar, ayo perbaiki bersama Bapak/Ibu guru!`;
+    } else if (risk_category === "Medium") {
+      generatedRecommendation = `Halo ${siswa}, progres belajarmu sudah cukup baik. Namun, ada hal kecil di bagian ${topFactors} yang perlu kamu perhatikan lagi. Yuk, tingkatkan sedikit lagi usahanya!`;
+    } else {
+      generatedRecommendation = `Wah, luar biasa sekali, ${siswa}! 🌟 Performa belajarmu saat ini sangat stabil. Tetap pertahankan konsistensi dan semangatmu ya, teruslah jadi inspirasi buat teman-temanmu!`;
+    }
   } else {
-    // Low
-    generatedRecommendation = `Performa ${siswa} saat ini sangat stabil. Teruskan pemantauan rutin dan berikan apresiasi positif untuk menjaga konsistensi belajarnya.`;
+    if (risk_category === "High") {
+      generatedRecommendation = `Siswa atas nama ${siswa} memerlukan pendampingan intensif segera. Prioritas intervensi sebaiknya difokuskan pada aspek ${topFactors}. Disarankan melakukan diskusi personal untuk identifikasi hambatan belajar.`;
+    } else if (risk_category === "Medium") {
+      generatedRecommendation = `Lakukan pemantauan berkala pada ${siswa} terutama pada area ${topFactors}. Motivasi tambahan dapat membantu siswa kembali ke jalur akademik yang stabil.`;
+    } else {
+      generatedRecommendation = `Performa akademik ${siswa} saat ini terpantau sangat stabil. Teruskan pemantauan rutin dan berikan apresiasi positif guna mempertahankan konsistensi belajar siswa.`;
+    }
   }
 
   return (
@@ -209,7 +256,10 @@ function PrediksiAI({
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
         {/* FAKTOR */}
         <div className="bg-white rounded-2xl p-6 shadow h-full flex flex-col">
-          <h2 className="font-bold text-xl mb-4">⚠️ Faktor Dominan</h2>
+          <h2 className="font-bold text-xl mb-4">
+            {risk_category === "Low" ? "✅ Faktor Pendukung" : 
+             risk_category === "Medium" ? "🔍 Analisis Faktor" : "⚠️ Faktor Dominan"}
+          </h2>
 
           <div className="space-y-4">
             {formattedFactors.map((factor, index) => (

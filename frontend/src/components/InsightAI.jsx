@@ -1,7 +1,6 @@
 import React from "react";
 
 function InsightAI({ ringkasan, siswaBerisiko }) {
-  // Pemetaan terjemahan faktor risiko dari backend ke Bahasa Indonesia
   const factorTranslation = {
     Attendance: "Kehadiran",
     Hours_Studied: "Jam Belajar",
@@ -17,12 +16,8 @@ function InsightAI({ ringkasan, siswaBerisiko }) {
     Peer_Influence: "Pengaruh Teman",
     Teacher_Quality: "Kualitas Pengajaran",
     Parental_Education_Level: "Pendidikan Orang Tua",
-    School_Type: "Tipe Sekolah",
-    Distance_From_Home: "Jarak Rumah",
-    Learning_Disabilities: "Kesulitan Belajar",
   };
 
-  // Hitung faktor risiko dominan dari data siswa yang masuk radar
   const factorCounts = {};
   siswaBerisiko?.forEach((s) => {
     try {
@@ -32,22 +27,29 @@ function InsightAI({ ringkasan, siswaBerisiko }) {
           : s.risk_factors;
 
       factors?.forEach((f) => {
-        factorCounts[f] = (factorCounts[f] || 0) + 1;
+        // ✅ Tangani string atau object
+        const key =
+          typeof f === "string"
+            ? f
+            : f?.factor ?? f?.name ?? f?.key ?? null;
+
+        if (key && typeof key === "string") {
+          factorCounts[key] = (factorCounts[key] || 0) + 1;
+        }
       });
     } catch (e) {
       console.error("Gagal memproses faktor risiko:", e);
     }
   });
 
-  const dominantFactor =
-    Object.entries(factorCounts).sort(([, a], [, b]) => b - a)[0]?.[0] ||
-    "Belum terdeteksi";
+  const dominantFactorKey =
+    Object.entries(factorCounts).sort(([, a], [, b]) => b - a)[0]?.[0] ?? null;
 
-  // SESUDAH
-  const translatedFactor =
-    typeof dominantFactor === "string"
-      ? factorTranslation[dominantFactor] || dominantFactor.replace(/_/g, " ")
-      : dominantFactor?.factor || "Belum terdeteksi";
+  const translatedFactor = dominantFactorKey
+    ? factorTranslation[dominantFactorKey] ??
+      dominantFactorKey.replace(/_/g, " ")
+    : "Belum terdeteksi";
+
   const totalAtRisk =
     (ringkasan?.risiko_tinggi || 0) + (ringkasan?.risiko_sedang || 0);
 
@@ -68,7 +70,7 @@ function InsightAI({ ringkasan, siswaBerisiko }) {
         </div>
         <div className="flex items-start gap-3">
           <div className="w-2 h-2 mt-2 rounded-full bg-orange-500 flex-shrink-0"></div>
-          <p className="text-gray-700">
+          <p className="text-gray-700 leading-relaxed">
             Faktor risiko dominan:{" "}
             <span className="font-semibold text-blue-800">
               {translatedFactor}
@@ -77,12 +79,11 @@ function InsightAI({ ringkasan, siswaBerisiko }) {
         </div>
         <div className="flex items-start gap-3">
           <div className="w-2 h-2 mt-2 rounded-full bg-green-500 flex-shrink-0"></div>
-          <p className="text-gray-700 italic">
+          <p className="text-gray-700 italic leading-relaxed">
             Saran AI:{" "}
             {totalAtRisk > 0
-              ? "Segera tinjau histori akademik siswa terkait dan lakukan intervensi pada aspek " +
-                translatedFactor
-              : "Lanjutkan monitoring rutin untuk menjaga performa siswa."}
+              ? `Kami merekomendasikan peninjauan lebih lanjut pada aspek ${translatedFactor} melalui pendekatan personal atau bimbingan konseling bagi siswa yang terdampak.`
+              : "Pertahankan pola pengajaran saat ini dan teruskan pemantauan rutin untuk menjaga stabilitas performa siswa."}
           </p>
         </div>
       </div>

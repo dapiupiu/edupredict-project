@@ -14,7 +14,14 @@ function DataSiswaInput({ formData, errors, isLoading, onChange, onSubmit, onCan
           </div>
           <div>
             <label className="block text-gray-700 mb-2 font-medium">NISN <span className="text-red-500">*</span></label>
-            <input type="text" value={formData.nisn} onChange={onChange('nisn')} className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition-all ${errors.nisn ? 'border-red-500' : 'border-gray-300'}`} />
+            <input 
+              type="text" 
+              maxLength="10"
+              inputMode="numeric"
+              placeholder="Masukkan 10 digit NISN"
+              value={formData.nisn} 
+              onChange={onChange('nisn')} 
+              className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition-all ${errors.nisn ? 'border-red-500' : 'border-gray-300'}`} />
             {errors.nisn && <p className="text-red-500 text-xs mt-1">{errors.nisn}</p>}
           </div>
           <div>
@@ -40,32 +47,32 @@ function DataSiswaInput({ formData, errors, isLoading, onChange, onSubmit, onCan
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <label className="block text-gray-700 mb-2 font-medium">Jam belajar/minggu <span className="text-red-500">*</span></label>
-            <input type="number" value={formData.hours_studied} onChange={onChange('hours_studied')} className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none ${errors.hours_studied ? 'border-red-500' : 'border-gray-300'}`} />
+            <input type="text" min="0" value={formData.hours_studied} onChange={onChange('hours_studied')} className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none ${errors.hours_studied ? 'border-red-500' : 'border-gray-300'}`} />
             {errors.hours_studied && <p className="text-red-500 text-xs mt-1">{errors.hours_studied}</p>}
           </div>
           <div>
             <label className="block text-gray-700 mb-2 font-medium">Kehadiran (%) <span className="text-red-500">*</span></label>
-            <input type="number" value={formData.attendance} onChange={onChange('attendance')} className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none ${errors.attendance ? 'border-red-500' : 'border-gray-300'}`} />
+            <input type="text" min="0" max="100" value={formData.attendance} onChange={onChange('attendance')} className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none ${errors.attendance ? 'border-red-500' : 'border-gray-300'}`} />
             {errors.attendance && <p className="text-red-500 text-xs mt-1">{errors.attendance}</p>}
           </div>
           <div>
             <label className="block text-gray-700 mb-2 font-medium">Nilai Rapor Sebelumnya <span className="text-red-500">*</span></label>
-            <input type="number" min="0" max="100" value={formData.previous_scores} onChange={onChange('previous_scores')} className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none ${errors.previous_scores ? 'border-red-500' : 'border-gray-300'}`} />
+            <input type="text" min="0" max="100" value={formData.previous_scores} onChange={onChange('previous_scores')} className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none ${errors.previous_scores ? 'border-red-500' : 'border-gray-300'}`} />
             {errors.previous_scores && <p className="text-red-500 text-xs mt-1">{errors.previous_scores}</p>}
           </div>
           <div>
             <label className="block text-gray-700 mb-2 font-medium">Jam tidur/malam <span className="text-red-500">*</span></label>
-            <input type="number" min="4" max="10" value={formData.sleep_hours} onChange={onChange('sleep_hours')} className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none ${errors.sleep_hours ? 'border-red-500' : 'border-gray-300'}`} />
+            <input type="text" min="0" max="10" value={formData.sleep_hours} onChange={onChange('sleep_hours')} className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none ${errors.sleep_hours ? 'border-red-500' : 'border-gray-300'}`} />
             {errors.sleep_hours && <p className="text-red-500 text-xs mt-1">{errors.sleep_hours}</p>}
           </div>
           <div>
             <label className="block text-gray-700 mb-2 font-medium">Sesi bimbingan belajar/bulan <span className="text-red-500">*</span></label>
-            <input type="number" min="0" max="4" value={formData.tutoring_sessions} onChange={onChange('tutoring_sessions')} className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none ${errors.tutoring_sessions ? 'border-red-500' : 'border-gray-300'}`} />
+            <input type="text" min="0" value={formData.tutoring_sessions} onChange={onChange('tutoring_sessions')} className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none ${errors.tutoring_sessions ? 'border-red-500' : 'border-gray-300'}`} />
             {errors.tutoring_sessions && <p className="text-red-500 text-xs mt-1">{errors.tutoring_sessions}</p>}
           </div>
           <div>
             <label className="block text-gray-700 mb-2 font-medium">Aktivitas fisik/minggu <span className="text-red-500">*</span></label>
-            <input type="number" min="0" max="6" value={formData.physical_activity} onChange={onChange('physical_activity')} className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none ${errors.physical_activity ? 'border-red-500' : 'border-gray-300'}`} />
+            <input type="text" min="0" value={formData.physical_activity} onChange={onChange('physical_activity')} className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none ${errors.physical_activity ? 'border-red-500' : 'border-gray-300'}`} />
             {errors.physical_activity && <p className="text-red-500 text-xs mt-1">{errors.physical_activity}</p>}
           </div>
         </div>

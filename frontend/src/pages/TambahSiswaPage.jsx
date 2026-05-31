@@ -105,7 +105,11 @@ function TambahSiswaPage() {
   }, []);
 
   const handleInputChange = (field) => (e) => {
-    setFormData((prev) => ({ ...prev, [field]: e.target.value }));
+    const value = e.target.value;
+    // Validasi saat mengetik: hanya angka dan maks 10 digit untuk NISN
+    if (field === 'nisn' && (!/^\d*$/.test(value) || value.length > 10)) return;
+    
+    setFormData((prev) => ({ ...prev, [field]: value }));
     if (errors[field]) setErrors((prev) => ({ ...prev, [field]: null }));
   };
 
@@ -156,12 +160,20 @@ function TambahSiswaPage() {
     if (isDuplicateNama)
       newErrors.nama_siswa = "Nama tersebut sudah terdapat di daftar siswa";
 
-    if (formData.nisn && !/^\d+$/.test(formData.nisn)) {
-      newErrors.nisn = "NISN harus berupa angka";
-    } else if (!/^[0-9]{8}$/.test(formData.nisn)) {
-      newErrors.nisn = "NISN harus terdiri dari 8 digit angka";
+    if (formData.nisn && !/^\d{10}$/.test(formData.nisn)) {
+      newErrors.nisn = "NISN harus terdiri dari 10 digit angka";
     }
 
+    if (
+      formData.hours_studied &&
+      (formData.hours_studied < 0 || formData.hours_studied > 36)
+    )
+      newErrors.hours_studied = "Maksimal 36 jam";
+    if (
+      formData.attendance &&
+      (formData.attendance < 0 || formData.attendance > 100)
+    )
+      newErrors.attendance = "Skala: 0 - 100";
     if (
       formData.previous_scores &&
       (formData.previous_scores < 0 || formData.previous_scores > 100)
@@ -169,9 +181,10 @@ function TambahSiswaPage() {
       newErrors.previous_scores = "Skala: 0 - 100";
     if (
       formData.sleep_hours &&
-      (formData.sleep_hours < 4 || formData.sleep_hours > 10)
+      (formData.sleep_hours < 0 || formData.sleep_hours > 24)
     )
-      newErrors.sleep_hours = "Rentang: 4 - 10 jam";
+      newErrors.sleep_hours = "Maksimal 24 jam";
+      
     if (
       formData.tutoring_sessions &&
       (formData.tutoring_sessions < 0 || formData.tutoring_sessions > 4)
@@ -471,4 +484,3 @@ function TambahSiswaPage() {
 }
 
 export default TambahSiswaPage;
-

@@ -9,11 +9,6 @@ function DashboardSiswaPage() {
     // Mengambil data dari state navigasi (dikirim dari LoginSiswaPage)
     const studentData = location.state?.studentData;
 
-    // Debugging: Cek isi data di console browser (F12)
-    React.useEffect(() => {
-        console.log("Data Siswa yang diterima:", studentData);
-    }, [studentData]);
-
     if (!studentData) {
         return (
             <div className="min-h-screen bg-blue-50 flex flex-col items-center justify-center p-4 text-center">
@@ -37,7 +32,30 @@ function DashboardSiswaPage() {
     const sortedHistori = histori && Array.isArray(histori) 
         ? [...histori].sort((a, b) => new Date(b.recorded_at) - new Date(a.recorded_at)) 
         : [];
-    const latestRecord = sortedHistori.length > 0 ? sortedHistori[0] : {};
+    
+    // Ambil record terbaru dan parse data JSON-nya agar siap digunakan
+    const rawLatest = sortedHistori.length > 0 ? sortedHistori[0] : {};
+    
+    const rawProbabilities = typeof rawLatest.probabilities === 'string' 
+        ? JSON.parse(rawLatest.probabilities) 
+        : (rawLatest.probabilities || {});
+
+    // Normalisasi kunci probabilitas agar sesuai dengan standar komponen PrediksiAI (Capitalized)
+    const probabilities = {
+        High: rawProbabilities.High ?? rawProbabilities.high ?? 0,
+        Medium: rawProbabilities.Medium ?? rawProbabilities.medium ?? 0,
+        Low: rawProbabilities.Low ?? rawProbabilities.low ?? 0
+    };
+
+    const risk_factors = typeof rawLatest.risk_factors === 'string'
+        ? JSON.parse(rawLatest.risk_factors)
+        : (rawLatest.risk_factors || []);
+
+    const latestRecord = {
+        ...rawLatest,
+        probabilities,
+        risk_factors
+    };
 
     // Gabungkan data untuk kemudahan akses dengan dukungan alias (key mapping)
     const data = { 
@@ -49,46 +67,29 @@ function DashboardSiswaPage() {
         risk_category: latestRecord?.risk_category || latestRecord?.status_risiko || latestRecord?.statusRisiko
     };
 
-    // Parse probabilitas untuk rincian persentase
-    const probabilities = typeof latestRecord.probabilities === 'string' 
-        ? JSON.parse(latestRecord.probabilities) 
-        : (latestRecord.probabilities || {});
-
     const translateMap = {
         'High': 'Tinggi', 'Medium': 'Sedang', 'Low': 'Rendah',
         'High School': 'SMA/SMK', 'College': 'Diploma/S1', 'Postgraduate': 'S2/S3',
         'Positive': 'Baik', 'Neutral': 'Biasa saja', 'Negative': 'Buruk',
         'Yes': 'Ada', 'No': 'Tidak',
+        'Public': 'Negeri', 'Private': 'Swasta'
     };
 
     const translate = (val, field = "") => {
         if (!val) return '-';
-        if (field === 'income' && val === 'Medium') return 'Menengah';
-        if (field === 'motivation') {
-            if (val === 'Low') return 'Kurang termotivasi';
-            if (val === 'Medium') return 'Cukup termotivasi';
-            if (val === 'High') return 'Sangat termotivasi';
+        
+        const specificTranslations = {
+            income: { 'Medium': 'Menengah', 'Low': 'Rendah', 'High': 'Tinggi' },
+            motivation: { 'Low': 'Kurang termotivasi', 'Medium': 'Cukup termotivasi', 'High': 'Sangat termotivasi' },
+            teacher: { 'Low': 'Kurang baik', 'Medium': 'Cukup baik', 'High': 'Sangat baik' },
+            involvement: { 'Low': 'Jarang terlibat', 'Medium': 'Cukup terlibat', 'High': 'Sangat terlibat' },
+            resources: { 'Low': 'Terbatas', 'Medium': 'Cukup', 'High': 'Lengkap' }
+        };
+
+        if (field && specificTranslations[field] && specificTranslations[field][val]) {
+            return specificTranslations[field][val];
         }
-        if (field === 'teacher') {
-            if (val === 'Low') return 'Kurang baik';
-            if (val === 'Medium') return 'Cukup baik';
-            if (val === 'High') return 'Sangat baik';
-        }
-        if (field === 'involvement') {
-            if (val === 'Low') return 'Jarang terlibat';
-            if (val === 'Medium') return 'Cukup terlibat';
-            if (val === 'High') return 'Sangat terlibat';
-        }
-        if (field === 'resources') {
-            if (val === 'Low') return 'Terbatas';
-            if (val === 'Medium') return 'Cukup';
-            if (val === 'High') return 'Lengkap';
-        }
-        if (field === 'education') {
-            if (val === 'High School') return 'SMA/SMK';
-            if (val === 'College') return 'Diploma/S1';
-            if (val === 'Postgraduate') return 'S2/S3';
-        }
+
         return translateMap[val] || val;
     };
 
@@ -137,32 +138,13 @@ function DashboardSiswaPage() {
                             <h1 className="text-3xl sm:text-4xl font-black mb-2">Selamat Datang, {data.nama_siswa || data.nama || 'Siswa'}! 👋</h1>
                             <p className={`${currentTheme.detail} text-lg`}>NISN: {data.nisn || '-'} | Kelas: {data.kelas || '-'}</p>
                         </div>
-                        <div className="bg-white/10 backdrop-blur-md p-5 rounded-2xl border border-white/20 flex items-center gap-6">
+                        <div className="bg-white/10 backdrop-blur-md p-5 rounded-2xl border border-white/20 flex items-center gap-4 sm:gap-6">
                             <div className="text-right">
                                 <p className={`text-xs font-bold ${currentTheme.subText} uppercase mb-1`}>Status Risiko</p>
                                 <p className="text-2xl font-black">
                                     {translate(data.risk_category || 'Low')}
                                 </p>
                             </div>
-                            {probabilities.High !== undefined && (
-                                <>
-                                    <div className="h-12 w-px bg-white/20"></div>
-                                    <div className="hidden sm:flex flex-col gap-0.5 text-[10px] font-bold">
-                                        <div className="flex justify-between gap-4">
-                                            <span className="text-red-200">TINGGI:</span>
-                                            <span>{(probabilities.High || 0).toFixed(1)}%</span>
-                                        </div>
-                                        <div className="flex justify-between gap-4">
-                                            <span className="text-orange-200">SEDANG:</span>
-                                            <span>{(probabilities.Medium || 0).toFixed(1)}%</span>
-                                        </div>
-                                        <div className="flex justify-between gap-4">
-                                            <span className="text-green-200">RENDAH:</span>
-                                            <span>{(probabilities.Low || 0).toFixed(1)}%</span>
-                                        </div>
-                                    </div>
-                                </>
-                            )}
                             <div className="h-12 w-px bg-white/20"></div>
                             <div className="text-center">
                                 <p className={`text-[10px] font-bold ${currentTheme.subText} uppercase mb-1`}>Kepercayaan AI</p>
@@ -175,7 +157,7 @@ function DashboardSiswaPage() {
                 {/* 2. Grid Statistik Utama */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                     <StatBox title="Kehadiran" value={`${data.attendance || 0}%`} icon="ri-calendar-check-line" color="blue" />
-                    <StatBox title="Nilai Akademik Sebelumnya" value={data.previous_scores || 0} icon="ri-award-line" color="amber" />
+                    <StatBox title="Nilai Rapor Sebelumnya" value={data.previous_scores || 0} icon="ri-award-line" color="amber" />
                     <StatBox title="Jam Belajar" value={`${data.hours_studied || 0} jam/mgg`} icon="ri-book-open-line" color="emerald" />
                     <StatBox title="Sesi Bimbel" value={`${data.tutoring_sessions || 0} sesi/bln`} icon="ri-presentation-line" color="indigo" />
                 </div>
@@ -186,10 +168,10 @@ function DashboardSiswaPage() {
                         predictionResult={{ 
                             siswa: data.nama_siswa || data.nama || 'Siswa',
                             prediksi: data 
-                        }} 
+                        }}
+                        isSiswa={true}
                         hideHeader={true}
-                        //hideDistribusi={true}
-                        fullWidth={true}
+                        fullWidth={true} 
                     />
 
                     {/* 4. Detail Data Input Card */}

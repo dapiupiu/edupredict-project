@@ -59,7 +59,7 @@ function TabEditProfil({ profileData, formData, handleInputChange, handleUpdateP
                 </div>
             </div>
 
-            {/* Kolom Kanan — Form Pengaturan Akun */}
+            {/* Kolom Kanan — Form informasi pribadi */}
             <div className="lg:col-span-2">
                 <form onSubmit={handleUpdateProfile} className="space-y-4 sm:space-y-6">
                     {/* Card 1: Informasi Pribadi */}

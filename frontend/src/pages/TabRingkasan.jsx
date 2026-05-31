@@ -2,7 +2,7 @@ import React from 'react';
 import RisikoBadge from './RisikoBadge';
 import BASE_URL from '../utils/api';
 
-function TabRingkasan({ profileData, siswaBerisiko, notifikasi, onEditClick }) {
+function TabRingkasan({ profileData, siswaBerisiko, notifikasi }) {
     const initials = profileData.nama
         ? profileData.nama.split(' ').slice(0, 2).map(w => w[0]).join('').toUpperCase()
         : '?';
@@ -38,7 +38,6 @@ function TabRingkasan({ profileData, siswaBerisiko, notifikasi, onEditClick }) {
                         </span>
                     </div>
                     <div className="border-t border-gray-50 pt-4 text-left space-y-3">
-                        <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">Informasi Pribadi</p>
                         <div className="flex items-center gap-2 text-sm text-gray-600">
                             <i className="ri-id-card-line text-blue-400 text-base w-4 text-center"></i>
                             <div className="min-w-0 flex-1">
@@ -69,64 +68,12 @@ function TabRingkasan({ profileData, siswaBerisiko, notifikasi, onEditClick }) {
                                 </p>
                             </div>
                         </div>
-                        
-                        <div className="flex items-center gap-2 text-sm text-gray-600">
-                            <i className="ri-phone-line text-blue-400 text-base w-4 text-center"></i>
-                            <div className="min-w-0 flex-1">
-                                <p className="text-xs text-gray-400">No. HP</p>
-                                <p className="font-medium text-gray-800 truncate">{profileData.no_hp || profileData.noHp || '-'}</p>
-                            </div>
-                        </div>
-                        <div className="flex items-center gap-2 text-sm text-gray-600">
-                            <i className="ri-map-pin-line text-blue-400 text-base w-4 text-center"></i>
-                            <div className="min-w-0 flex-1">
-                                <p className="text-xs text-gray-400">Alamat</p>
-                                <p className="font-medium text-gray-800 truncate">{profileData.alamat || '-'}</p>
-                            </div>
-                        </div>
                         <div className="flex items-center gap-2 text-sm text-gray-600">
                             <i className="ri-calendar-line text-blue-400 text-base w-4 text-center"></i>
                             <div className="min-w-0 flex-1">
                                 <p className="text-xs text-gray-400">Bergabung</p>
                                 <p className="font-medium text-gray-800">{bergabung}</p>
                             </div>
-                        </div>
-                        <div className="pt-2 border-t border-gray-50">
-                            <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">Data Mengajar</p>
-                            <div className="space-y-3">
-                                <div className="flex items-center gap-2 text-sm text-gray-600">
-                                    <i className="ri-building-line text-blue-400 text-base w-4 text-center"></i>
-                                    <div className="min-w-0 flex-1">
-                                        <p className="text-xs text-gray-400">Nama Sekolah</p>
-                                        <p className="font-medium text-gray-800 truncate">{profileData.nama_sekolah || profileData.namaSekolah || '-'} | ({profileData.school_type || '-'})</p>
-                                    </div>
-                                </div>
-                                <div className="flex items-center gap-2 text-sm text-gray-600">
-                                    <i className="ri-presentation-line text-blue-400 text-base w-4 text-center"></i>
-                                    <div className="min-w-0 flex-1">
-                                        <p className="text-xs text-gray-400">Wali Kelas</p>
-                                        <p className="font-medium text-gray-800 truncate">{profileData.kelas || '-'}</p>
-                                    </div>
-                                </div>
-                                <div className="flex items-center gap-2 text-sm text-gray-600">
-                                    <i className="ri-bookmark-line text-blue-400 text-base w-4 text-center"></i>
-                                    <div className="min-w-0 flex-1">
-                                        <p className="text-xs text-gray-400">Jenjang</p>
-                                        <p className="font-medium text-gray-800 truncate">{profileData.jenjang || '-'}</p>
-                                    </div>
-                                </div>
-                                
-                            </div>
-                        </div>
-
-                        <div className="pt-2">
-                            <button
-                                onClick={onEditClick}
-                                className="w-full py-2.5 px-4 bg-blue-50 text-blue-600 hover:bg-blue-100 font-bold rounded-xl transition-all flex items-center justify-center gap-2 text-sm border border-blue-100"
-                            >
-                                <i className="ri-edit-line"></i>
-                                Edit Profil
-                            </button>
                         </div>
                     </div>
                 </div>

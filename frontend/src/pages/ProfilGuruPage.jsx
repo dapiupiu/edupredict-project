@@ -18,7 +18,8 @@ function ProfilGuruPage() {
     const [profileData, setProfileData] = useState({
         nama: '', nip: '', nuptk: '', ttl: '',
         pendidikanTerakhir: '', email: '', role: '', 
-        status: '', created_at: ''
+        status: '', created_at: '', no_hp: '', alamat: '',
+        nama_sekolah: '', school_type: '', kelas: '', jenjang: ''
     });
 
     const [formData, setFormData] = useState({
@@ -250,6 +251,7 @@ function ProfilGuruPage() {
                                     profileData={profileData} 
                                     siswaBerisiko={siswaBerisiko} 
                                     notifikasi={notifikasi} 
+                                    onEditClick={() => setActiveTab('edit')}
                                 />
                             )}
                             {activeTab === 'edit' && (

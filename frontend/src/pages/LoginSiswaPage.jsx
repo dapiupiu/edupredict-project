@@ -16,16 +16,16 @@ function LoginSiswaPage() {
     const newErrors = {};
     if (!NISN.trim()) {
       newErrors.NISN = 'NISN wajib diisi, tidak boleh kosong';
-    } else if (!/^[0-9]{8}$/.test(NISN)) { 
-      newErrors.NISN = 'NISN harus terdiri dari 8 digit angka';
+    } else if (!/^\d{10}$/.test(NISN)) { 
+      newErrors.NISN = 'NISN harus terdiri dari 10 digit angka';
     }
     return newErrors;
   };
 
-  // Handler untuk memastikan input hanya angka dan maksimal 8 karakter
+  // Handler untuk memastikan input hanya angka dan maksimal 10 karakter
   const handleNISNChange = (e) => {
     const value = e.target.value;
-    if (/^[0-9]*$/.test(value) && value.length <= 8) {
+    if (/^\d*$/.test(value) && value.length <= 10) {
       setNISN(value);
     }
   };

@@ -40,7 +40,7 @@ function LoginSiswaInput({ NISN, errors, apiError, apiSuccess, isLoading, onNISN
                     onChange={onNISNChange} 
                     className={`w-full border-2 ${errors.NISN ? 'border-red-500' : 'border-sky-600'} shadow-md rounded-xl p-4 mt-1 bg-transparent outline-none transition-colors`} 
                     placeholder="Masukkan NISN anda"
-                    maxLength="8"
+                    maxLength="10"
                 />
                 {errors.NISN && <p className="mt-1 text-sm text-red-500">{errors.NISN}</p>}
             </div>
