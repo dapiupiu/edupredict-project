@@ -4,15 +4,23 @@ import Sidebar from '../components/Sidebar';
 import DaftarSiswa from "../components/DaftarSiswa";
 import SearchFilter from "../components/SearchFilter";
 import PageNavigation from "../components/PageNavigation";
+import TopBar from '../components/TopBar';
 
 function DaftarSiswaPage() {
-    const [open, setOpen] = useState(true);
+    const [open, setOpen] = useState(() => {
+        const saved = localStorage.getItem('sidebarOpen');
+        return saved !== null ? JSON.parse(saved) : true;
+    });
     const [dataSiswa, setDataSiswa] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
     const [searchQuery, setSearchQuery] = useState("");
     const [riskFilter, setRiskFilter] = useState("semua");
+
+    useEffect(() => {
+        localStorage.setItem('sidebarOpen', JSON.stringify(open));
+    }, [open]);
 
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 5;
@@ -188,23 +196,13 @@ function DaftarSiswaPage() {
 
     return (
         <div className="flex min-h-screen bg-blue-50">
-
             <Sidebar
                 open={open}
                 setOpen={setOpen}
             />
-
-            <div
-                className={`
-                    flex-1
-                    p-3 sm:p-6 md:p-8
-                    transition-all
-                    duration-500
-                    ${open ? "md:ml-64" : "md:ml-16"}
-                    ml-16
-                `}
-            >
-
+            <div className={`flex-1 transition-all duration-500 ${open ? "md:ml-64" : "md:ml-16"} ml-16 min-h-screen flex flex-col`}>
+                <TopBar />
+                <div className="p-3 sm:p-6 md:p-8">
                 <h1 className="text-3xl font-bold">
                     Daftar Siswa
                 </h1>
@@ -253,6 +251,7 @@ function DaftarSiswaPage() {
                         />
                     </div>
                 )}
+                </div>
 
             </div>
 

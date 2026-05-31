@@ -44,7 +44,7 @@ function DaftarSiswa({ className, isDashboard, isDaftarSiswa = false, dataSiswa 
                                     </th>
                                 </>
                             )}
-                            <th scope="col" className=" text-center border border-gray-200 px-3 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            <th scope="col" className="print:hidden text-center border border-gray-200 px-3 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 Aksi
                             </th>
                         </tr>
@@ -101,7 +101,7 @@ function DaftarSiswa({ className, isDashboard, isDaftarSiswa = false, dataSiswa 
                                             </td>
                                         </>
                                     )}
-                                    <td className="border border-gray-200 px-3 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    <td className="print:hidden border border-gray-200 px-3 py-4 whitespace-nowrap text-sm text-gray-500">
                                         <div className="flex gap-2 justify-center">
                                             <button 
                                                 onClick={() => navigate('/monitoringSiswa', { state: { studentId: item.id } })}

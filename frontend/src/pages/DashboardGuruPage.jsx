@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import BASE_URL from '../utils/api';
 import Sidebar from '../components/Sidebar';
 import StatCard from "../components/StatCard";
@@ -6,9 +7,14 @@ import InsightAI from "../components/InsightAI";
 import DaftarSiswa from "../components/DaftarSiswa";
 import GrafikRisiko from "../components/GrafikRisiko";
 import Swal from 'sweetalert2';
+import TopBar from '../components/TopBar';
 
 function DashboardGuruPage() {
-    const [open, setOpen] = useState(true);
+    const location = useLocation();
+    const [open, setOpen] = useState(() => {
+        const saved = localStorage.getItem('sidebarOpen');
+        return saved !== null ? JSON.parse(saved) : true;
+    });
 
     // Untuk desain: isi initial state dengan data dummy
     const [data, setData] = useState({
@@ -32,7 +38,15 @@ function DashboardGuruPage() {
     useEffect(() => {
         getDashboard();
     }, []);
+
     useEffect(() => {
+        localStorage.setItem('sidebarOpen', JSON.stringify(open));
+    }, [open]);
+
+    useEffect(() => {
+        // Hanya tampilkan pop-up jika datang dari halaman login
+        if (!location.state?.fromLogin) return;
+
         const userData = localStorage.getItem('user');
         let userName = '';
         if (userData) {
@@ -52,7 +66,8 @@ function DashboardGuruPage() {
             timer: 3000,
             timerProgressBar: true
         });
-    }, []);
+    }, [location.state]);
+
     async function getDashboard() {
         try {
             const token = localStorage.getItem('token');
@@ -111,7 +126,9 @@ function DashboardGuruPage() {
     return (
         <div className="flex min-h-screen bg-blue-50">
             <Sidebar open={open} setOpen={setOpen} />
-            <div className={`flex-1 p-3 sm:p-6 md:p-8 transition-all duration-500 ${open ? 'md:ml-64' : 'md:ml-16'} ml-16 min-h-screen`}>
+            <div className={`flex-1 transition-all duration-500 ${open ? 'md:ml-64' : 'md:ml-16'} ml-16 min-h-screen flex flex-col`}>
+                <TopBar />
+                <div className="p-3 sm:p-6 md:p-8">
                 <h1 className="text-3xl font-bold">Dashboard Guru</h1>
                 <p className="mt-2">Selamat datang di dashboard guru</p>
 
@@ -170,6 +187,7 @@ function DashboardGuruPage() {
                 </div>
                     </>
                 )}
+                </div>
             </div>
         </div>
     )

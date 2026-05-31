@@ -5,13 +5,21 @@ import Sidebar from "../components/Sidebar";
 
 import PilihSiswa from "../components/PilihSiswa";
 import PrediksiAI from "../components/PrediksiAI";
+import TopBar from "../components/TopBar";
 
 function MonitoringPage() {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(() => {
+    const saved = localStorage.getItem('sidebarOpen');
+    return saved !== null ? JSON.parse(saved) : true;
+  });
   const [dataSiswa, setDataSiswa] = useState([]);
   const [selectedStudent, setSelectedStudent] = useState(null);
   const [loading, setLoading] = useState(true);
   const location = useLocation();
+
+  useEffect(() => {
+    localStorage.setItem('sidebarOpen', JSON.stringify(open));
+  }, [open]);
 
   useEffect(() => {
     const fetchStudents = async () => {
@@ -110,9 +118,9 @@ function MonitoringPage() {
   return (
     <div className="flex min-h-screen bg-blue-50">
       <Sidebar open={open} setOpen={setOpen} />
-      <div
-        className={`flex-1 p-3 sm:p-6 md:p-8 transition-all duration-500 ${open ? "md:ml-64" : "md:ml-16"} ml-16 min-h-screen bg-blue-50`}
-      >
+      <div className={`flex-1 transition-all duration-500 ${open ? "md:ml-64" : "md:ml-16"} ml-16 min-h-screen flex flex-col`}>
+        <TopBar />
+        <div className="p-3 sm:p-6 md:p-8">
         <h1 className="text-3xl font-bold">Monitoring Siswa</h1>
         <p className="mt-2">
           Pantau perkembangan siswa dan identifikasi potensi risiko sejak dini
@@ -130,17 +138,14 @@ function MonitoringPage() {
           <div className="mt-8 space-y-6 animate-fadeIn">
             {/* Card Informasi Data Lengkap Sesuai Input */}
             <div className="bg-white p-6 sm:p-8 rounded-xl shadow border-t-4 border-blue-500">
-              <h2 className="text-xl font-bold mb-6 flex items-center gap-2 text-blue-900">
+              <h2 className="text-2xl font-bold mb-6 flex items-center gap-2 text-blue-900">
                 <i className="ri-file-list-3-line"></i>
                 Informasi Detail Siswa
               </h2>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-sm">
                 <div className="space-y-1">
                   <p className="text-gray-400 font-semibold uppercase text-[10px]">
-                    Identitas Siswa
-                  </p>
-                  <p className="font-medium text-gray-800">
-                    NISN: {selectedStudent.nisn}
+                    Data Siswa
                   </p>
                   <p className="font-medium text-gray-800">
                     Kelas: {selectedStudent.kelas}
@@ -152,7 +157,7 @@ function MonitoringPage() {
                       : "Perempuan"}
                   </p>
                   <p className="font-medium text-gray-800">
-                    Pendidikan Ortu:{" "}
+                    Pendidikan Terakhir Ortu:{" "}
                     {selectedStudent.parental_education_level === "High School"
                       ? "SMA/SMK"
                       : selectedStudent.parental_education_level === "College"
@@ -161,6 +166,13 @@ function MonitoringPage() {
                             "Postgraduate"
                           ? "S2/S3"
                           : selectedStudent.parental_education_level || "-"}
+                  </p>
+                  <p className="font-medium text-gray-800">
+                    Akses sumber beajar : {" "}
+                    {selectedStudent.learning_resource_access === "Yes"
+                      ? "Ada"
+                      : "Tidak"}
+
                   </p>
                 </div>
                 <div className="space-y-1">
@@ -218,13 +230,13 @@ function MonitoringPage() {
                     Faktor Sosial dan Lingkungan
                   </p>
                   <p className="font-medium text-gray-800">
-                    Internet:{" "}
+                    Akses Internet di rumah:{" "}
                     {selectedStudent.internet_access === "Yes"
                       ? "Ada"
                       : "Tidak"}
                   </p>
                   <p className="font-medium text-gray-800">
-                    Pendapatan Ortu:{" "}
+                    Pendapatan Keluarga:{" "}
                     {selectedStudent.family_income === "High"
                       ? "Tinggi"
                       : selectedStudent.family_income === "Medium"
@@ -232,12 +244,6 @@ function MonitoringPage() {
                         : selectedStudent.family_income === "Low"
                           ? "Rendah"
                           : "-"}
-                  </p>
-                  <p className="font-medium text-gray-800">
-                    Sekolah:{" "}
-                    {selectedStudent.school_type === "Public"
-                      ? "Negeri"
-                      : "Swasta"}
                   </p>
                   <p className="font-medium text-gray-800">
                     Kualitas Guru:{" "}
@@ -249,6 +255,16 @@ function MonitoringPage() {
                           ? "Kurang baik"
                           : "-"}
                   </p>
+                  <p className="font-medium text-gray-800">
+                   Keterlibatan orang tua : {" "}
+                   {selectedStudent.parental_involvement === "High"
+                      ? "Sangat Terlibat"
+                      : selectedStudent.parental_involvement === "Medium"
+                        ? "Cukup Terlibat"
+                        : selectedStudent.parental_involvement === "Low"
+                          ? "Jarang Terlibat"
+                          : "-"}
+                  </p>
                 </div>
               </div>
             </div>
@@ -256,8 +272,8 @@ function MonitoringPage() {
             {/* Bagian Analisis AI menggunakan komponen PrediksiAI */}
             <div className="bg-white rounded-xl shadow overflow-hidden">
               <div className="p-6 sm:p-8 pb-0">
-                <h2 className="text-2xl font-bold flex items-center gap-2 text-gray-800">
-                  <i className="ri-robot-line text-blue-500"></i>
+                <h2 className="text-3xl font-extrabold mb-1 flex items-center gap-2 text-blue-900">
+                  <i className="ri-robot-line text-blue-900"></i>
                   Hasil Analisis AI
                 </h2>
               </div>
@@ -270,6 +286,7 @@ function MonitoringPage() {
             </div>
           </div>
         )}
+        </div>
       </div>
     </div>
   );

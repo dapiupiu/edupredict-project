@@ -170,12 +170,12 @@ function TabEditProfil({ profileData, formData, handleInputChange, handleUpdateP
                                 />
                             </div>
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">Tipe Sekolah</label>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">Kategori Sekolah</label>
                                 <select 
                                     name="school_type"
                                     value={formData.school_type}
                                     onChange={handleInputChange}
-                                    className={"w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none "}>
+                                    className={"w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-all text-sm "}>
                                     <option value="">Pilih Tipe Sekolah</option>
                                     <option value="Negeri">Negeri</option>
                                     <option value="Swasta">Swasta</option>
@@ -197,7 +197,7 @@ function TabEditProfil({ profileData, formData, handleInputChange, handleUpdateP
                                     name="jenjang"
                                     value={formData.jenjang}
                                     onChange={handleInputChange}
-                                    className={"w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none "}>
+                                    className={"w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-all text-sm"}>
                                     <option value="">Pilih Jenjang</option>
                                     <option value="SMP">SMP</option>
                                     <option value="SMA/MA">SMA/MA</option>
@@ -224,7 +224,7 @@ function TabEditProfil({ profileData, formData, handleInputChange, handleUpdateP
                     </div>
 
                     {/* Card 2: Ganti Password */}
-                    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 sm:p-8">
+                    <div id="section-password" className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 sm:p-8 scroll-mt-20">
                         <h3 className="text-base font-bold text-gray-800 mb-6 flex items-center gap-2">
                             <i className="ri-lock-password-line text-blue-500"></i>
                             Ganti Password <span className="text-xs font-normal text-gray-400 ml-1">(opsional)</span>

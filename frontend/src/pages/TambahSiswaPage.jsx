@@ -33,6 +33,7 @@ function TambahSiswaPage() {
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [existingStudents, setExistingStudents] = useState([]);
+  const [teacherProfile, setTeacherProfile] = useState(null);
   const [createdStudentId, setCreatedStudentId] = useState(null);
   const [predictionResult, setPredictionResult] = useState(null);
   const [oodWarnings, setOodWarnings] = useState([]);
@@ -104,6 +105,24 @@ function TambahSiswaPage() {
     fetchStudents();
   }, []);
 
+  useEffect(() => {
+    const fetchTeacher = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const res = await fetch(`${BASE_URL}/api/auth/me`, { headers: { Authorization: `Bearer ${token}` } });
+        const result = await res.json();
+        if (result.success) {
+          setTeacherProfile(result.data);
+          // Autofill kelas jika sedang menambah siswa baru (bukan mode edit)
+          if (!location.state?.studentId && result.data.kelas) {
+            setFormData(prev => ({ ...prev, kelas: result.data.kelas }));
+          }
+        }
+      } catch (err) { console.error("Gagal ambil profil guru:", err); }
+    };
+    fetchTeacher();
+  }, []);
+
   const handleInputChange = (field) => (e) => {
     const value = e.target.value;
     // Validasi saat mengetik: hanya angka dan maks 10 digit untuk NISN
@@ -111,6 +130,24 @@ function TambahSiswaPage() {
     
     setFormData((prev) => ({ ...prev, [field]: value }));
     if (errors[field]) setErrors((prev) => ({ ...prev, [field]: null }));
+  };
+
+  // Fungsi normalisasi kelas: 9A -> 9A, IXA -> 9A
+  const normalizeKelas = (kelas) => {
+    if (!kelas) return "";
+    let s = kelas.toUpperCase().replace(/\s+/g, "");
+    const romanMap = {
+      "XII": "12", "XI": "11", "X": "10",
+      "IX": "9", "VIII": "8", "VII": "7", "VI": "6",
+      "V": "5", "IV": "4", "III": "3", "II": "2", "I": "1"
+    };
+    const sortedRomans = Object.keys(romanMap).sort((a, b) => b.length - a.length);
+    for (const rom of sortedRomans) {
+      if (s.startsWith(rom)) {
+        return s.replace(rom, romanMap[rom]);
+      }
+    }
+    return s;
   };
 
   const validateForm = () => {

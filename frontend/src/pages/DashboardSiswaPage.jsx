@@ -115,6 +115,13 @@ function DashboardSiswaPage() {
         }
     };
 
+    const handlePrint = () => {
+        const originalTitle = document.title;
+        document.title = `Laporan_Prediksi_${data.nama_siswa || 'Siswa'}_${data.nisn || ''}`;
+        window.print();
+        document.title = originalTitle;
+    };
+
     // Logika tema warna dinamis berdasarkan kategori risiko
     const riskThemes = {
         High: { gradient: "from-red-600 to-red-700 shadow-red-200", subText: "text-red-100", detail: "text-red-50" },
@@ -127,22 +134,45 @@ function DashboardSiswaPage() {
 
     return (
         <div className="min-h-screen bg-blue-50">
+            <style dangerouslySetInnerHTML={{ __html: `
+                @media print {
+                    body { background-color: white !important; }
+                    .print\\:hidden { display: none !important; }
+                    .min-h-screen { background-color: white !important; }
+                    * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+                }
+            `}} />
             {/* Header Navbar untuk Siswa */}
-            <nav className="bg-white border-b border-blue-100 p-4 px-6 sm:px-12 flex justify-between items-center sticky top-0 z-50">
+            <nav className="bg-white border-b border-blue-100 p-4 px-6 sm:px-12 flex justify-between items-center sticky top-0 z-50 print:hidden">
                 <div className="flex items-center gap-3">
                     <i className="ri-brain-fill text-3xl text-blue-600"></i>
                     <h1 className="text-2xl font-black text-blue-900 tracking-tight">EduPredict</h1>
                 </div>
-                <button 
-                    onClick={handleLogout}
-                    className="bg-red-50 text-red-600 px-4 py-2 rounded-xl font-bold hover:bg-red-100 transition-all flex items-center gap-2 text-sm"
-                >
-                    <i className="ri-logout-box-r-line"></i> 
-                    <span className="hidden sm:inline">Keluar</span>
-                </button>
+                <div className="flex items-center gap-3">
+                    <button 
+                        onClick={handlePrint}
+                        className="bg-blue-50 text-blue-600 px-4 py-2 rounded-xl font-bold hover:bg-blue-100 transition-all flex items-center gap-2 text-sm"
+                    >
+                        <i className="ri-printer-line"></i> 
+                        <span className="hidden sm:inline">Cetak Laporan</span>
+                    </button>
+                    <button 
+                        onClick={handleLogout}
+                        className="bg-red-50 text-red-600 px-4 py-2 rounded-xl font-bold hover:bg-red-100 transition-all flex items-center gap-2 text-sm"
+                    >
+                        <i className="ri-logout-box-r-line"></i> 
+                        <span className="hidden sm:inline">Keluar</span>
+                    </button>
+                </div>
             </nav>
 
-            <div className="max-w-6xl mx-auto p-4 sm:p-8">
+            <div className="max-w-6xl mx-auto p-4 sm:p-8 print:p-0 print:max-w-full">
+                {/* Header Khusus Cetak (Hanya muncul saat di-print) */}
+                <div className="hidden print:block mb-8 text-center border-b-2 border-blue-900 pb-4">
+                    <h1 className="text-3xl font-black text-blue-900">LAPORAN PREDIKSI AKADEMIK SISWA</h1>
+                    <p className="text-gray-500 font-bold uppercase tracking-widest mt-1">Sistem Deteksi Dini EduPredict</p>
+                </div>
+
                 {/* 1. Card Selamat Datang & Ringkasan Risiko */}
                 <div className={`bg-gradient-to-br ${currentTheme.gradient} rounded-3xl p-6 sm:p-8 text-white shadow-xl mb-8 relative overflow-hidden transition-all duration-500`}>
                     <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -mr-32 -mt-32 blur-3xl"></div>

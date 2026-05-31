@@ -60,7 +60,7 @@ function LoginGuruPage() {
       // Simpan token dan data user ke localStorage
       localStorage.setItem('token', data.data.token);
       localStorage.setItem('user', JSON.stringify(data.data.user));
-      navigate('/dashboardGuru'); 
+      navigate('/dashboardGuru', { state: { fromLogin: true } }); 
     } catch (error) {
       setApiError('Terjadi kesalahan jaringan. Silakan coba lagi.');
       console.error('Error:', error);

@@ -160,7 +160,7 @@ function DataSiswaInput({ formData, errors, isLoading, onChange, onSubmit, onCan
               <option value="High">Sangat baik</option>
             </select>
             {errors.teacher_quality && <p className="text-red-500 text-xs mt-1">{errors.teacher_quality}</p>}
-          </div>
+          </div> 
         </div>
       </div>
 

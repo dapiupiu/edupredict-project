@@ -12,10 +12,10 @@ function TabRingkasan({ profileData, siswaBerisiko, notifikasi, onEditClick }) {
         : '-';
 
     return (
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-6 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-6">
             {/* Kolom Kiri — Info Profil */}
             <div className="lg:col-span-1">
-                <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 text-center">
+                <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 text-center h-full flex flex-col">
                     <div className="relative w-16 h-16 mx-auto mb-3">
                         {profileData.foto_profil ? (
                             <img src={`${BASE_URL}/${profileData.foto_profil}`} alt="Profil" className="w-16 h-16 rounded-full object-cover border-2 border-blue-50" />
@@ -118,8 +118,8 @@ function TabRingkasan({ profileData, siswaBerisiko, notifikasi, onEditClick }) {
                                 
                             </div>
                         </div>
-
-                        <div className="pt-2">
+                        
+                        <div className="pt-6 mt-auto">
                             <button
                                 onClick={onEditClick}
                                 className="w-full py-2.5 px-4 bg-blue-50 text-blue-600 hover:bg-blue-100 font-bold rounded-xl transition-all flex items-center justify-center gap-2 text-sm border border-blue-100"
@@ -133,7 +133,7 @@ function TabRingkasan({ profileData, siswaBerisiko, notifikasi, onEditClick }) {
             </div>
 
             {/* Kolom Kanan */}
-            <div className="lg:col-span-2 space-y-6">
+            <div className="lg:col-span-2 flex flex-col gap-6">
                 {/* Perlu Perhatian */}
                 <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
                     <h3 className="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-4 flex items-center gap-2">
@@ -160,7 +160,7 @@ function TabRingkasan({ profileData, siswaBerisiko, notifikasi, onEditClick }) {
                 </div>
 
                 {/* Aktivitas Terbaru */}
-                <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+                <div id="section-notifikasi" className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 scroll-mt-20 flex-1 flex flex-col">
                     <h3 className="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-4 flex items-center gap-2">
                         <i className="ri-time-line text-sm"></i>
                         Notifikasi dan Aktivitas 

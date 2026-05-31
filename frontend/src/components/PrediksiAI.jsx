@@ -189,7 +189,7 @@ function PrediksiAI({
   }
 
   return (
-    <div className={`${fullWidth ? 'w-full' : 'max-w-4xl mx-auto'} p-6`}>
+    <div className={`${fullWidth ? 'w-full' : 'max-w-4xl mx-auto'} px-6 pb-6 pt-2`}>
       {/* HEADER RESULT */}
       {!hideHeader && (
         <div
@@ -197,15 +197,11 @@ function PrediksiAI({
         >
           <div>
             <h1 className={`text-3xl font-bold ${headerTextColor}`}>
-              {siswa} - Risiko{" "}
-              {risk_category === "High"
-                ? "Tinggi"
-                : risk_category === "Medium"
-                  ? "Sedang"
-                  : risk_category === "Low"
-                    ? "Rendah"
-                    : risk_category}
+              {siswa}
             </h1>
+            <p className={`text-base font-bold ${headerConfidenceColor} mt-1 opacity-90`}>
+              NISN: {prediksi.nisn || '-'} | Status Risiko: {risk_category === "High" ? "Tinggi" : risk_category === "Medium" ? "Sedang" : "Rendah"}
+            </p>
 
             <p className={`text-xl ${headerConfidenceColor} mt-2`}>
               {riskStatusText}

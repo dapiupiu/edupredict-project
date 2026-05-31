@@ -1,19 +1,31 @@
 import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import BASE_URL from '../utils/api';
 import Sidebar from '../components/Sidebar';
 import TabRingkasan from '../components/TabRingkasan';
 import TabEditProfil from '../components/TabEditProfil';
+import Swal from 'sweetalert2';
+import TopBar from '../components/TopBar';
 function ProfilGuruPage() {
-    const [open, setOpen] = useState(true);
+    const location = useLocation();
+    const [open, setOpen] = useState(() => {
+        const saved = localStorage.getItem('sidebarOpen');
+        return saved !== null ? JSON.parse(saved) : true;
+    });
     const [activeTab, setActiveTab] = useState('ringkasan');
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
     const [siswaBerisiko, setSiswaBerisiko] = useState([]);
     const [notifikasi, setNotifikasi] = useState([]);
+    const [dataSiswa, setDataSiswa] = useState([]);
     const [unreadCount, setUnreadCount] = useState(0);
     const [selectedFile, setSelectedFile] = useState(null);
     const [previewUrl, setPreviewUrl] = useState(null);
+
+    useEffect(() => {
+        localStorage.setItem('sidebarOpen', JSON.stringify(open));
+    }, [open]);
 
     const [profileData, setProfileData] = useState({
         nama: '', nip: '', nuptk: '', ttl: '',
@@ -35,7 +47,26 @@ function ProfilGuruPage() {
     useEffect(() => {
         fetchProfile();
         fetchDashboardData();
+        fetchStudents();
     }, []);
+
+    // Handle navigasi internal dari TopBar (klik notifikasi)
+    useEffect(() => {
+        if (location.state?.activeTab) {
+            setActiveTab(location.state.activeTab);
+            
+            if (location.state?.scrollTo) {
+                setTimeout(() => {
+                    const idMap = {
+                        notifikasi: 'section-notifikasi',
+                        password: 'section-password'
+                    };
+                    const targetId = idMap[location.state.scrollTo];
+                    document.getElementById(targetId)?.scrollIntoView({ behavior: 'smooth' });
+                }, 300); // Beri jeda sedikit agar komponen dipastikan sudah render
+            }
+        }
+    }, [location.state]);
 
     const fetchProfile = async () => {
         try {
@@ -75,6 +106,34 @@ function ProfilGuruPage() {
         } finally {
             setLoading(false);
         }
+    };
+
+    const fetchStudents = async () => {
+        try {
+            const token = localStorage.getItem("token");
+            const response = await fetch(`${BASE_URL}/api/guru/students`, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            const result = await response.json();
+            if (result.success) setDataSiswa(result.data);
+        } catch (err) { console.error(err); }
+    };
+
+    const normalizeKelas = (kelas) => {
+        if (!kelas) return "";
+        let s = kelas.toUpperCase().replace(/\s+/g, "");
+        const romanMap = {
+            "XII": "12", "XI": "11", "X": "10",
+            "IX": "9", "VIII": "8", "VII": "7", "VI": "6",
+            "V": "5", "IV": "4", "III": "3", "II": "2", "I": "1"
+        };
+        const sortedRomans = Object.keys(romanMap).sort((a, b) => b.length - a.length);
+        for (const rom of sortedRomans) {
+            if (s.startsWith(rom)) {
+                return s.replace(rom, romanMap[rom]);
+            }
+        }
+        return s;
     };
 
     const fetchDashboardData = async () => {
@@ -166,6 +225,14 @@ function ProfilGuruPage() {
             return;
         }
 
+        // Validasi kesamaan kelas dengan siswa yang sudah ada
+        const normalizedNewKelas = normalizeKelas(formData.kelas);
+        const conflictingStudent = dataSiswa.find(s => normalizeKelas(s.kelas) !== normalizedNewKelas);
+        if (conflictingStudent && dataSiswa.length > 0) {
+            setError(`Kelas harus sama dengan data siswa yang sudah ada (${conflictingStudent.kelas}).`);
+            return;
+        }
+
         if (formData.password_baru && formData.password_baru !== formData.confirm_password) {
             setError('Konfirmasi password baru tidak cocok.');
             Swal.fire({
@@ -248,8 +315,9 @@ function ProfilGuruPage() {
     return (
         <div className="flex min-h-screen bg-blue-50">
             <Sidebar open={open} setOpen={setOpen} />
-            <div className={`flex-1 p-4 sm:p-6 md:p-8 transition-all duration-500 ${open ? 'md:ml-64' : 'md:ml-16'} ml-16 min-h-screen`}>
-
+            <div className={`flex-1 transition-all duration-500 ${open ? 'md:ml-64' : 'md:ml-16'} ml-16 min-h-screen flex flex-col`}>
+                <TopBar />
+                <div className="p-4 sm:p-6 md:p-8">
                 {/* Header */}
                 <h1 className="text-2xl font-bold text-gray-900">Profil Guru</h1>
                 <p className="mt-1 text-sm text-gray-500">Kelola informasi akun, data wali kelas, dan pengaturan sistem</p>
@@ -307,6 +375,7 @@ function ProfilGuruPage() {
                             )}
                         </>
                     )}
+                </div>
                 </div>
             </div>
         </div>
