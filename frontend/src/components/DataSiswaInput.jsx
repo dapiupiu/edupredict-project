@@ -49,7 +49,7 @@ function DataSiswaInput({ formData, errors, isLoading, onChange, onSubmit, onCan
             {errors.attendance && <p className="text-red-500 text-xs mt-1">{errors.attendance}</p>}
           </div>
           <div>
-            <label className="block text-gray-700 mb-2 font-medium">Nilai rata-rata ujian <span className="text-red-500">*</span></label>
+            <label className="block text-gray-700 mb-2 font-medium">Nilai akademik sebelumnya <span className="text-red-500">*</span></label>
             <input type="number" min="0" max="100" value={formData.previous_scores} onChange={onChange('previous_scores')} className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none ${errors.previous_scores ? 'border-red-500' : 'border-gray-300'}`} />
             {errors.previous_scores && <p className="text-red-500 text-xs mt-1">{errors.previous_scores}</p>}
           </div>

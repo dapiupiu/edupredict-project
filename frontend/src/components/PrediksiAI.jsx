@@ -4,6 +4,7 @@ function PrediksiAI({
   predictionResult,
   hideHeader = false,
   hideDistribusi = false,
+  fullWidth = false,
 }) {
   if (!predictionResult || !predictionResult.prediksi) {
     return (
@@ -141,7 +142,7 @@ function PrediksiAI({
   }
 
   return (
-    <div className="max-w-4xl mx-auto p-6">
+    <div className={`${fullWidth ? 'w-full' : 'max-w-4xl mx-auto'} p-6`}>
       {/* HEADER RESULT */}
       {!hideHeader && (
         <div
@@ -205,9 +206,9 @@ function PrediksiAI({
       )}
 
       {/* GRID */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
         {/* FAKTOR */}
-        <div className="bg-white rounded-2xl p-6 shadow">
+        <div className="bg-white rounded-2xl p-6 shadow h-full flex flex-col">
           <h2 className="font-bold text-xl mb-4">⚠️ Faktor Dominan</h2>
 
           <div className="space-y-4">
@@ -230,7 +231,7 @@ function PrediksiAI({
         </div>
 
         {/* REKOMENDASI */}
-        <div className="bg-white rounded-2xl p-6 shadow">
+        <div className="bg-white rounded-2xl p-6 shadow h-full flex flex-col">
           <h2 className="font-bold text-xl mb-4">✨ Rekomendasi AI</h2>
 
           <div className="space-y-4">

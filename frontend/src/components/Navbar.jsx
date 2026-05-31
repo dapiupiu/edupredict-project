@@ -1,6 +1,8 @@
 import React from 'react';
 import { NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { useState, useEffect } from 'react';
+import logoImg from '../assets/logo.png';
+
 
 function Navbar() {
     const [menuActive, setMenuActive] = useState(false);
@@ -29,7 +31,7 @@ function Navbar() {
             <div className="container mx-auto px-4">
                 <div className="navbar-box flex items-center justify-between py-2">
                     <div className="logo-box flex items-center gap-3">
-                        <i className="ri-brain-fill ri-2x leading-none text-sky-600"></i>
+                        <img src={logoImg} alt="logo" className="w-12 h-12 object-contain" />
                         <h1 className="text-2xl font-bold text-blue-900">Edu Predict</h1>
                     </div>
                     <div className={`Nav-items flex lg:gap-12 gap-8 absolute md:static left-1/2 -translate-x-1/2 md:left-0 md:-translate-x-0 flex-col md:flex-row w-full text-center ${menuActive ? "top-16 opacity-100" : "-top-72 opacity-0"} md:w-auto py-10 md:py-0 transition-all md:transition-none bg-blue-100 md:opacity-100 items-center`}>

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import BASE_URL from '../utils/api';
 import { useNavigate } from 'react-router-dom';
-import RegistrasiInput from '../compenents/RegistrasiInput';
+import RegistrasiInput from '../components/RegistrasiInput';
 
 function RegistrasiPage() {
     const [registrasiData, setRegistrasiData] = useState({

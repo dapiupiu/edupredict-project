@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import BASE_URL from '../utils/api';
-import Sidebar from '../compenents/Sidebar';
-import DaftarSiswa from "../compenents/DaftarSiswa";
-import SearchFilter from "../compenents/SearchFilter";
-import PageNavigation from "../compenents/PageNavigation";
+import Sidebar from '../components/Sidebar';
+import DaftarSiswa from "../components/DaftarSiswa";
+import SearchFilter from "../components/SearchFilter";
+import PageNavigation from "../components/PageNavigation";
 
 function DaftarSiswaPage() {
     const [open, setOpen] = useState(true);

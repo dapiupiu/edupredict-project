@@ -10,7 +10,7 @@ function DaftarSiswa({ className, isDashboard, isDaftarSiswa = false, dataSiswa 
         <div className={`bg-white p-6 rounded-xl shadow ${className}`}>
             {!isDaftarSiswa && (
                 <h1 className="font-bold text-xl mb-4">
-                    Daftar Siswa Berisiko
+                    Siswa yang Perlu Dipantau
                 </h1>
             )}
 
@@ -109,7 +109,7 @@ function DaftarSiswa({ className, isDashboard, isDaftarSiswa = false, dataSiswa 
                                             >
                                                 Detail 
                                             </button>
-                                    
+                                            {!isDashboard && (
                                             <button 
                                                 onClick={() => navigate('/tambahSiswa', { state: { studentId: item.id } })}
                                                 className="bg-green-100 text-green-800 px-2 py-1 text-xs rounded hover:bg-green-200 transition-colors duration-200"
@@ -117,6 +117,7 @@ function DaftarSiswa({ className, isDashboard, isDaftarSiswa = false, dataSiswa 
                                                 <i className="ri-edit-line"></i>
                                                 <span> Edit</span>
                                             </button>
+                                            )}
                                             {!isDashboard && (
                                                 <button 
                                                     onClick={() => onDelete && onDelete(item.id, item.nama_siswa || item.nama)}

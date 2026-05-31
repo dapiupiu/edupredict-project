@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import BASE_URL from '../utils/api';
 import { useNavigate } from 'react-router-dom';
-import LoginSiswaInput from '../compenents/LoginSiswaInput';
+import LoginSiswaInput from '../components/LoginSiswaInput';
 
 function LoginSiswaPage() {
   const [NISN, setNISN] = useState('');

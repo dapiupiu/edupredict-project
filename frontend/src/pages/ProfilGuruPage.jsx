@@ -1,53 +1,120 @@
 import React, { useState, useEffect } from 'react';
 import BASE_URL from '../utils/api';
-import Sidebar from '../compenents/Sidebar';
-
+import Sidebar from '../components/Sidebar';
+import TabRingkasan from '../components/TabRingkasan';
+import TabEditProfil from '../components/TabEditProfil';
 function ProfilGuruPage() {
     const [open, setOpen] = useState(true);
+    const [activeTab, setActiveTab] = useState('ringkasan');
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
-    
-    // State untuk data profil
+    const [siswaBerisiko, setSiswaBerisiko] = useState([]);
+    const [notifikasi, setNotifikasi] = useState([]);
+    const [unreadCount, setUnreadCount] = useState(0);
+    const [selectedFile, setSelectedFile] = useState(null);
+    const [previewUrl, setPreviewUrl] = useState(null);
+
     const [profileData, setProfileData] = useState({
-        nama: '',
-        email: '',
-        role: '',
-        created_at: ''
+        nama: '', nip: '', nuptk: '', ttl: '',
+        pendidikanTerakhir: '', email: '', role: '', 
+        status: '', created_at: ''
     });
 
-    // State untuk form update
     const [formData, setFormData] = useState({
-        nama: '',
-        password_lama: '',
-        password_baru: '',
-        confirm_password: ''
+        nama: '', nip: '', nuptk: '', noHp:'', ttl: '',
+        pendidikanTerakhir: '', alamat:'', 
+        namaSekolah: '', school_type: '', kelas: '', jenjang: '',
+        password_lama: '', 
+        password_baru: '', 
+        confirm_password: '',
+        foto_profil: ''
     });
 
     useEffect(() => {
         fetchProfile();
+        fetchDashboardData();
     }, []);
 
     const fetchProfile = async () => {
         try {
             const token = localStorage.getItem('token');
-            if (!token) throw new Error("Token tidak ditemukan");
+            if (!token) throw new Error('Token tidak ditemukan');
 
             const response = await fetch(`${BASE_URL}/api/auth/me`, {
-                headers: { 'Authorization': `Bearer ${token}` }
+                headers: { Authorization: `Bearer ${token}` }
             });
             const result = await response.json();
 
             if (result.success) {
                 setProfileData(result.data);
-                setFormData(prev => ({ ...prev, nama: result.data.nama }));
+                setFormData({
+                    nama: result.data.nama || '',
+                    nip: result.data.nip || '',
+                    nuptk: result.data.nuptk || '',
+                    ttl: result.data.ttl || '',
+                    noHp: result.data.no_hp || '',
+                    alamat: result.data.alamat || '',
+                    pendidikanTerakhir: result.data.pendidikan_terakhir || result.data.pendidikanTerakhir || '',
+                    namaSekolah: result.data.nama_sekolah || '',
+                    school_type: result.data.school_type || '',
+                    kelas: result.data.kelas || '',
+                    jenjang: result.data.jenjang || '',
+                    password_lama: '',
+                    password_baru: '',
+                    confirm_password: '',
+                    foto_profil: result.data.foto_profil ? `${BASE_URL}/${result.data.foto_profil}` : ''
+                });
             } else {
                 setError(result.message);
             }
         } catch (err) {
-            setError("Gagal mengambil data profil.");
+            setError('Gagal mengambil data profil.');
         } finally {
             setLoading(false);
+        }
+    };
+
+    const fetchDashboardData = async () => {
+        try {
+            const token = localStorage.getItem('token');
+            if (!token) return;
+
+            const response = await fetch(`${BASE_URL}/api/guru/dashboard`, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            const result = await response.json();
+            if (result.success) {
+                // Deduplikasi siswa berisiko agar tidak ada nama ganda (ambil data terbaru)
+                const uniqueSiswaMap = new Map();
+                (result.data.siswa_berisiko || []).forEach(s => {
+                    const currentRecordedAt = new Date(s.last_recorded);
+                    if (!uniqueSiswaMap.has(s.id)) {
+                        uniqueSiswaMap.set(s.id, s);
+                    } else {
+                        const existingRecordedAt = new Date(uniqueSiswaMap.get(s.id).last_recorded);
+                        if (currentRecordedAt > existingRecordedAt) {
+                            uniqueSiswaMap.set(s.id, s);
+                        }
+                    }
+                });
+                setSiswaBerisiko(Array.from(uniqueSiswaMap.values()));
+
+                // Deduplikasi notifikasi/aktivitas berdasarkan konten (judul & pesan) 
+                // untuk menghindari pesan yang sama muncul berulang
+                const uniqueNotifMap = new Map();
+                (result.data.notifikasi?.terbaru || []).forEach(n => {
+                    const key = `${n.title}-${n.message}`;
+                    if (!uniqueNotifMap.has(key)) {
+                        uniqueNotifMap.set(key, n);
+                    }
+                });
+                setNotifikasi(Array.from(uniqueNotifMap.values()));
+
+                setUnreadCount(result.data.notifikasi?.unread || 0);
+            }
+        } catch (err) {
+            console.error('Gagal mengambil data dashboard untuk profil:', err);
         }
     };
 
@@ -56,133 +123,153 @@ function ProfilGuruPage() {
         setFormData(prev => ({ ...prev, [name]: value }));
     };
 
+    const handleFileChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            setError('');
+            setSuccess('');
+
+            // Validasi Format (JPG atau PNG)
+            const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+            if (!allowedTypes.includes(file.type)) {
+                setError('Format foto harus JPG atau PNG.');
+                e.target.value = ''; // Reset input agar tidak terpilih file yang salah
+                return;
+            }
+
+            // Validasi Ukuran (Maksimal 2MB)
+            if (file.size > 2 * 1024 * 1024) {
+                setError('Ukuran file maksimal 2MB.');
+                e.target.value = ''; // Reset input
+                return;
+            }
+            setSelectedFile(file);
+            setPreviewUrl(URL.createObjectURL(file));
+        }
+    };
+
     const handleUpdateProfile = async (e) => {
         e.preventDefault();
         setError('');
         setSuccess('');
 
         if (formData.password_baru && formData.password_baru !== formData.confirm_password) {
-            setError("Konfirmasi password baru tidak cocok.");
+            setError('Konfirmasi password baru tidak cocok.');
             return;
         }
 
         try {
             const token = localStorage.getItem('token');
+            const formDataToSend = new FormData();
+            formDataToSend.append('nama', formData.nama);
+            formDataToSend.append('nip', formData.nip);
+            formDataToSend.append('nuptk', formData.nuptk);
+            formDataToSend.append('ttl', formData.ttl);
+            formDataToSend.append('pendidikanTerakhir', formData.pendidikanTerakhir);
+            formDataToSend.append('noHp', formData.noHp);
+            formDataToSend.append('alamat', formData.alamat);
+            formDataToSend.append('namaSekolah', formData.namaSekolah);
+            formDataToSend.append('school_type', formData.school_type);
+            formDataToSend.append('kelas', formData.kelas);
+            formDataToSend.append('jenjang', formData.jenjang);
+            formDataToSend.append('password_lama', formData.password_lama);
+            formDataToSend.append('password_baru', formData.password_baru);
+            
+            if (selectedFile) {
+                formDataToSend.append('foto_profil', selectedFile);
+            }
+
             const response = await fetch(`${BASE_URL}/api/auth/profile`, {
                 method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-                body: JSON.stringify({
-                    nama: formData.nama,
-                    password_lama: formData.password_lama,
-                    password_baru: formData.password_baru
-                })
+                headers: { Authorization: `Bearer ${token}` },
+                body: formDataToSend
             });
 
             const result = await response.json();
             if (result.success) {
                 setSuccess(result.message);
                 setFormData(prev => ({ ...prev, password_lama: '', password_baru: '', confirm_password: '' }));
-                fetchProfile(); // Refresh data
+                setSelectedFile(null);
+                setPreviewUrl(null);
+                fetchProfile();
             } else {
                 setError(result.message);
             }
         } catch (err) {
-            setError("Terjadi kesalahan saat memperbarui profil.");
+            setError('Terjadi kesalahan saat memperbarui profil.');
         }
     };
+
+    const tabs = [
+        { id: 'ringkasan', label: 'Ringkasan', icon: 'ri-layout-grid-line', badge: siswaBerisiko.length > 0 ? siswaBerisiko.length : null, badgeColor: 'bg-red-100 text-red-600' },
+        { id: 'edit', label: 'Edit Profil', icon: 'ri-edit-line' },
+    ];
 
     return (
         <div className="flex min-h-screen bg-blue-50">
             <Sidebar open={open} setOpen={setOpen} />
-            <div className={`flex-1 p-3 sm:p-6 md:p-8 transition-all duration-500 ${open ? 'md:ml-64' : 'md:ml-16'} ml-16 min-h-screen`}>
-                <h1 className="text-3xl font-bold">Profil Guru</h1>
-                <p className="mt-2 text-gray-600">Kelola informasi akun dan pengaturan keamanan Anda</p>
+            <div className={`flex-1 p-4 sm:p-6 md:p-8 transition-all duration-500 ${open ? 'md:ml-64' : 'md:ml-16'} ml-16 min-h-screen`}>
 
-                {loading ? (
-                    <div className="flex justify-center items-center h-64 text-blue-600 font-medium">
-                        <i className="ri-loader-4-line animate-spin mr-2 text-2xl"></i> Memuat profil...
-                    </div>
-                ) : (
-                    <div className="mt-8 max-w-4xl grid grid-cols-1 lg:grid-cols-3 gap-8">
-                        {/* Kartu Informasi Akun */}
-                        <div className="lg:col-span-1">
-                            <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 text-center">
-                                <div className="w-24 h-24 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4 text-blue-600">
-                                    <i className="ri-user-fill text-5xl"></i>
-                                </div>
-                                <h2 className="text-xl font-bold text-gray-800">{profileData.nama}</h2>
-                                <p className="text-gray-500 text-sm mb-4">{profileData.email}</p>
-                                <div className="inline-block px-3 py-1 bg-blue-50 text-blue-700 text-xs font-bold rounded-full uppercase tracking-wider">
-                                    {profileData.role}
-                                </div>
-                                <div className="mt-6 pt-6 border-t border-gray-50 text-left space-y-3">
-                                    <div className="flex items-center gap-2 text-sm text-gray-600">
-                                        <i className="ri-calendar-line text-blue-500"></i>
-                                        <span>Bergabung: {new Date(profileData.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}</span>
-                                    </div>
-                                </div>
-                            </div>
+                {/* Header */}
+                <h1 className="text-2xl font-bold text-gray-900">Profil Guru</h1>
+                <p className="mt-1 text-sm text-gray-500">Kelola informasi akun, data wali kelas, dan pengaturan sistem</p>
+
+                {/* Tabs */}
+                <div className="mt-5 flex items-center gap-1 border-b border-gray-200">
+                    {tabs.map(tab => (
+                        <button
+                            key={tab.id}
+                            onClick={() => { setActiveTab(tab.id); setError(''); setSuccess(''); }}
+                            className={`flex items-center gap-2 px-4 py-2.5 text-sm font-medium border-b-2 transition-all -mb-px
+                                ${activeTab === tab.id
+                                    ? 'border-blue-600 text-blue-600'
+                                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                                }`}
+                        >
+                            <i className={`${tab.icon} text-base`}></i>
+                            {tab.label}
+                            {tab.badge && (
+                                <span className={`text-xs font-semibold px-1.5 py-0.5 rounded-full ${tab.badgeColor}`}>
+                                    {tab.badge}
+                                </span>
+                            )}
+                        </button>
+                    ))}
+                </div>
+
+                {/* Content */}
+                <div className="mt-6">
+                    {loading ? (
+                        <div className="flex justify-center items-center h-64 text-blue-600 font-medium">
+                            <i className="ri-loader-4-line animate-spin mr-2 text-2xl"></i> Memuat profil...
                         </div>
-
-                        {/* Form Pengaturan Profil */}
-                        <div className="lg:col-span-2 space-y-6">
-                            <div className="bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-gray-100">
-                                <h3 className="text-lg font-bold text-gray-800 mb-6 flex items-center gap-2">
-                                    <i className="ri-settings-3-line text-blue-500"></i>
-                                    Pengaturan Akun
-                                </h3>
-
-                                {error && <div className="mb-4 p-3 bg-red-50 text-red-600 border border-red-100 rounded-lg text-sm flex items-center gap-2">
-                                    <i className="ri-error-warning-line"></i> {error}
-                                </div>}
-                                {success && <div className="mb-4 p-3 bg-green-50 text-green-600 border border-green-100 rounded-lg text-sm flex items-center gap-2">
-                                    <i className="ri-check-line"></i> {success}
-                                </div>}
-
-                                <form onSubmit={handleUpdateProfile} className="space-y-4">
-                                    <div>
-                                        <label className="block text-sm font-medium text-gray-700 mb-1">Nama Lengkap</label>
-                                        <input type="text" name="nama" value={formData.nama} onChange={handleInputChange} className="w-full px-4 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-all" />
-                                    </div>
-
-                                    <div className="pt-4 border-t border-gray-50">
-                                        <h4 className="text-sm font-bold text-gray-800 mb-4">Ganti Password (Opsional)</h4>
-                                        <div className="space-y-4">
-                                            <div>
-                                                <label className="block text-xs font-medium text-gray-500 mb-1">Password Lama</label>
-                                                <input type="password" name="password_lama" value={formData.password_lama} onChange={handleInputChange} placeholder="Masukkan password saat ini" className="w-full px-4 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-all text-sm" />
-                                            </div>
-                                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                                <div>
-                                                    <label className="block text-xs font-medium text-gray-500 mb-1">Password Baru</label>
-                                                    <input type="password" name="password_baru" value={formData.password_baru} onChange={handleInputChange} placeholder="Minimal 8 karakter" className="w-full px-4 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-all text-sm" />
-                                                </div>
-                                                <div>
-                                                    <label className="block text-xs font-medium text-gray-500 mb-1">Konfirmasi Password Baru</label>
-                                                    <input type="password" name="confirm_password" value={formData.confirm_password} onChange={handleInputChange} placeholder="Ulangi password baru" className="w-full px-4 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-all text-sm" />
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div className="pt-6">
-                                        <button type="submit" className="w-full sm:w-auto bg-blue-600 text-white px-8 py-2.5 rounded-xl font-bold hover:bg-blue-700 transition-all shadow-lg shadow-blue-100 flex items-center justify-center gap-2">
-                                            <i className="ri-save-line"></i> Simpan Perubahan
-                                        </button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                )}
+                    ) : (
+                        <>
+                            {activeTab === 'ringkasan' && (
+                                <TabRingkasan 
+                                    profileData={profileData} 
+                                    siswaBerisiko={siswaBerisiko} 
+                                    notifikasi={notifikasi} 
+                                />
+                            )}
+                            {activeTab === 'edit' && (
+                                <TabEditProfil
+                                    profileData={profileData}
+                                    formData={formData}
+                                    handleInputChange={handleInputChange}
+                                    handleUpdateProfile={handleUpdateProfile}
+                                    handleFileChange={handleFileChange}
+                                    previewUrl={previewUrl}
+                                    error={error}
+                                    success={success}
+                                />
+                            )}
+                        </>
+                    )}
+                </div>
             </div>
         </div>
-    )
+    );
 }
-
-
 
 export default ProfilGuruPage;

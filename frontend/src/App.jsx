@@ -2,8 +2,8 @@ import React from 'react';
 import HomePage from './pages/HomePage';
 import LoginGuruPage from './pages/LoginGuruPage';
 import LoginSiswaPage from './pages/LoginSiswaPage';
-import Navbar from './compenents/Navbar';
-import Footer from './compenents/Footer';
+import Navbar from './components/Navbar';
+import Footer from './components/Footer';
 
 import RegistrasiPage from './pages/RegistrasiPage';
 import { Routes, Route, useLocation } from 'react-router-dom';

@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import BASE_URL from '../utils/api';
 import { useLocation } from 'react-router-dom';
-import Sidebar from '../compenents/Sidebar';
+import Sidebar from '../components/Sidebar';
 
-import PilihSiswa from '../compenents/PilihSiswa';
-import PrediksiAI from '../compenents/PrediksiAI';
+import PilihSiswa from '../components/PilihSiswa';
+import PrediksiAI from '../components/PrediksiAI';
 
 function MonitoringPage() {
     const [open, setOpen] = useState(true);
@@ -136,7 +136,7 @@ function MonitoringPage() {
                                     <p className="text-gray-400 font-semibold uppercase text-[10px]">Data Akademik</p>
                                     <p className="font-medium text-gray-800">Kehadiran: {selectedStudent.attendance || '0'}%</p>
                                     <p className="font-medium text-gray-800">Jam Belajar: {selectedStudent.hours_studied || '0'} j/mgg</p>
-                                    <p className="font-medium text-gray-800">Rata-rata nilai ujian sebelumnya: {selectedStudent.previous_scores || '0'}</p>
+                                    <p className="font-medium text-gray-800">Nilai Akademik Sebelumnya: {selectedStudent.previous_scores || '0'}</p>
                                     <p className="font-medium text-gray-800">Aktivitas Fisik: {selectedStudent.physical_activity || '0'} j/mgg</p>
                                 </div>
                                 <div className="space-y-1">
@@ -147,7 +147,7 @@ function MonitoringPage() {
                                         selectedStudent.motivation_level === 'Medium' ? 'Cukup Termotivasi' :
                                         selectedStudent.motivation_level === 'Low' ? 'Kurang Termotivasi' : '-'
                                     }</p>
-                                    <p className="font-medium text-gray-800">Sesi Bimbel: {selectedStudent.tutoring_sessions || '0'} sesi</p>
+                                    <p className="font-medium text-gray-800">Sesi Bimbingan belajar/bulan: {selectedStudent.tutoring_sessions || '0'} sesi</p>
                                     <p className="font-medium text-gray-800">Pengaruh Teman: {
                                         selectedStudent.peer_influence === 'Positive' ? 'Baik' :
                                         selectedStudent.peer_influence === 'Neutral' ? 'Biasa saja' :
@@ -162,7 +162,6 @@ function MonitoringPage() {
                                         selectedStudent.family_income === 'Medium' ? 'Menengah' :
                                         selectedStudent.family_income === 'Low' ? 'Rendah' : '-'
                                     }</p>
-                                    <p className="font-medium text-gray-800">Sekolah: {selectedStudent.school_type === 'Public' ? 'Negeri' : 'Swasta'}</p>
                                     <p className="font-medium text-gray-800">Kualitas Guru: {
                                         selectedStudent.teacher_quality === 'High' ? 'Sangat baik' :
                                         selectedStudent.teacher_quality === 'Medium' ? 'Cukup baik' :

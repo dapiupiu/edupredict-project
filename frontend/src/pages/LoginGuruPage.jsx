@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import BASE_URL from '../utils/api';
 import { useNavigate } from 'react-router-dom';
-import LoginGuruInput from '../compenents/LoginGuruInput';
+import LoginGuruInput from '../components/LoginGuruInput';
 
 function LoginGuruPage() {
   const [email, setEmail] = useState('');

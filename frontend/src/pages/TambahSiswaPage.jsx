@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import BASE_URL from "../utils/api";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import DataSiswaInput from "../compenents/DataSiswaInput";
-import StepTambahSiswa from "../compenents/StepTambahSiswa";
-import PrediksiAI from "../compenents/PrediksiAI";
+import DataSiswaInput from "../components/DataSiswaInput";
+import StepTambahSiswa from "../components/StepTambahSiswa";
+import PrediksiAI from "../components/PrediksiAI";
 
 function TambahSiswaPage() {
   const [step, setStep] = useState(1);

@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import BASE_URL from '../utils/api';
-import Sidebar from '../compenents/Sidebar';
-import StatCard from "../compenents/StatCard";
-import InsightAI from "../compenents/InsightAI";
-import DaftarSiswa from "../compenents/DaftarSiswa";
-import GrafikRisiko from "../compenents/GrafikRisiko";
+import Sidebar from '../components/Sidebar';
+import StatCard from "../components/StatCard";
+import InsightAI from "../components/InsightAI";
+import DaftarSiswa from "../components/DaftarSiswa";
+import GrafikRisiko from "../components/GrafikRisiko";
 import Swal from 'sweetalert2';
 
 function DashboardGuruPage() {
@@ -78,22 +78,16 @@ function DashboardGuruPage() {
                 const { ringkasan, siswa_berisiko, notifikasi } = resultDash.data;
 
                 // Transformasi data untuk grafik tren menggunakan data siswa_berisiko
-                const trenData = (siswa_berisiko || []).map(s => {
-                    let probs = {};
-                    try {
-                        // Gunakan probabilities jika ada, jika tidak gunakan confidence sebagai fallback
-                        probs = typeof s.probabilities === 'string' 
-                            ? JSON.parse(s.probabilities) 
-                            : (s.probabilities || {});
-                    } catch(e) {
-                        probs = {};
-                    }
+                const trenData = (siswa_berisiko || []).map(s => {                    
+                    // Menggunakan risk_category dan confidence langsung
+                    // Probabilities tidak lagi diperlukan untuk grafik ini
+                    // karena hanya menampilkan 1 balok per siswa
+
                     
                     return {
                         nama: (s.nama_siswa || 'Siswa').split(' ')[0],
-                        tinggi: probs.High || (s.risk_category === 'High' ? s.confidence : 0),
-                        sedang: probs.Medium || (s.risk_category === 'Medium' ? s.confidence : 0),
-                        rendah: probs.Low || (s.risk_category === 'Low' ? s.confidence : 0),
+                        risk_category: s.risk_category, // Kategori risiko ('High', 'Medium', 'Low')
+                        value: s.confidence // Nilai confidence sebagai tinggi balok
                     };
                 });
 
