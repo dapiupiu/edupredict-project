@@ -49,7 +49,14 @@ function MonitoringPage() {
               }
             }
           });
-          setDataSiswa(Array.from(uniqueStudentsMap.values()));
+
+          // Urutkan siswa berdasarkan nama secara alfabet (A-Z)
+          const sortedStudents = Array.from(uniqueStudentsMap.values()).sort((a, b) => {
+            const nameA = (a.nama_siswa || a.nama || "").toLowerCase();
+            const nameB = (b.nama_siswa || b.nama || "").toLowerCase();
+            return nameA.localeCompare(nameB);
+          });
+          setDataSiswa(sortedStudents);
         }
       } catch (err) {
         console.error("Fetch Students Error:", err);

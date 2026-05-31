@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useLocation, Link, useNavigate } from "react-router-dom";
 import PrediksiAI from "../components/PrediksiAI";
+import Swal from "sweetalert2";
 
 function DashboardSiswaPage() {
     const location = useLocation();
@@ -66,6 +67,21 @@ function DashboardSiswaPage() {
         parental_education_level: siswa?.parental_education_level || siswa?.pendidikan_ortu || latestRecord?.parental_education_level,
         risk_category: latestRecord?.risk_category || latestRecord?.status_risiko || latestRecord?.statusRisiko
     };
+
+    // Pop-up selamat datang saat siswa masuk
+    useEffect(() => {
+        if (data.nama_siswa) {
+            Swal.fire({
+                title: `👋 Selamat Datang, ${data.nama_siswa}!`,
+                text: "Senang melihatmu kembali. Yuk, cek progres belajarmu hari ini dan lihat sejauh mana kamu telah berkembang! 🚀",
+                icon: "success",
+                confirmButtonText: "Siap!",
+                confirmButtonColor: "#2563eb", // Warna biru-600 menyesuaikan tema
+                timer: 5000,
+                timerProgressBar: true
+            });
+        }
+    }, []); // Hanya dijalankan sekali saat komponen di-mount
 
     const translateMap = {
         'High': 'Tinggi', 'Medium': 'Sedang', 'Low': 'Rendah',
@@ -135,7 +151,7 @@ function DashboardSiswaPage() {
                             <div className="inline-flex items-center gap-2 px-3 py-1 bg-white/20 rounded-full text-xs font-bold uppercase tracking-wider mb-3">
                                 <i className="ri-user-line"></i> Portal Siswa
                             </div>
-                            <h1 className="text-3xl sm:text-4xl font-black mb-2">Selamat Datang, {data.nama_siswa || data.nama || 'Siswa'}! 👋</h1>
+                            <h1 className="text-3xl sm:text-4xl font-black mb-2">Hallo, {data.nama_siswa || data.nama || 'Siswa'}! 👋</h1>
                             <p className={`${currentTheme.detail} text-lg`}>NISN: {data.nisn || '-'} | Kelas: {data.kelas || '-'}</p>
                         </div>
                         <div className="bg-white/10 backdrop-blur-md p-5 rounded-2xl border border-white/20 flex items-center gap-4 sm:gap-6">
