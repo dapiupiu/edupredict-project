@@ -10,14 +10,22 @@ function TopBar() {
     const dropdownRef = useRef(null);
 
     useEffect(() => {
-        const storedUser = localStorage.getItem('user');
-        if (storedUser) {
-            try {
-                setUserData(JSON.parse(storedUser));
-            } catch (e) {
-                console.error("Failed to parse user data", e);
+        const loadUserData = () => {
+            const storedUser = localStorage.getItem('user');
+            if (storedUser) {
+                try {
+                    setUserData(JSON.parse(storedUser));
+                } catch (e) {
+                    console.error("Failed to parse user data", e);
+                }
             }
-        }
+        };
+
+        loadUserData();
+        
+        // Dengarkan perubahan pada localStorage untuk sinkronisasi antar komponen
+        window.addEventListener('storage', loadUserData);
+        return () => window.removeEventListener('storage', loadUserData);
     }, []);
 
     useEffect(() => {

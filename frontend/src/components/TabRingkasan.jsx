@@ -98,7 +98,11 @@ function TabRingkasan({ profileData, siswaBerisiko, notifikasi, onEditClick }) {
                                     <i className="ri-building-line text-blue-400 text-base w-4 text-center"></i>
                                     <div className="min-w-0 flex-1">
                                         <p className="text-xs text-gray-400">Nama Sekolah</p>
-                                        <p className="font-medium text-gray-800 truncate">{profileData.nama_sekolah || profileData.namaSekolah || '-'} | ({profileData.school_type || '-'})</p>
+                                        <p className="font-medium text-gray-800 truncate">
+                                            {profileData.nama_sekolah || profileData.namaSekolah || '-'} | {
+                                                profileData.school_type === 'Public' ? 'Negeri' : profileData.school_type === 'Private' ? 'Swasta' : profileData.school_type || '-'
+                                            }
+                                        </p>
                                     </div>
                                 </div>
                                 <div className="flex items-center gap-2 text-sm text-gray-600">

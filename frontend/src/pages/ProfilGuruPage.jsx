@@ -80,6 +80,12 @@ function ProfilGuruPage() {
 
             if (result.success) {
                 setProfileData(result.data);
+                
+                // Update localStorage agar TopBar dan komponen lain sinkron
+                localStorage.setItem('user', JSON.stringify(result.data));
+                // Memicu event agar TopBar (di tab yang sama) mendeteksi perubahan
+                window.dispatchEvent(new Event('storage'));
+
                 setFormData({
                     nama: result.data.nama || '',
                     email: result.data.email || '',
@@ -117,23 +123,6 @@ function ProfilGuruPage() {
             const result = await response.json();
             if (result.success) setDataSiswa(result.data);
         } catch (err) { console.error(err); }
-    };
-
-    const normalizeKelas = (kelas) => {
-        if (!kelas) return "";
-        let s = kelas.toUpperCase().replace(/\s+/g, "");
-        const romanMap = {
-            "XII": "12", "XI": "11", "X": "10",
-            "IX": "9", "VIII": "8", "VII": "7", "VI": "6",
-            "V": "5", "IV": "4", "III": "3", "II": "2", "I": "1"
-        };
-        const sortedRomans = Object.keys(romanMap).sort((a, b) => b.length - a.length);
-        for (const rom of sortedRomans) {
-            if (s.startsWith(rom)) {
-                return s.replace(rom, romanMap[rom]);
-            }
-        }
-        return s;
     };
 
     const fetchDashboardData = async () => {
@@ -222,14 +211,6 @@ function ProfilGuruPage() {
                 title: 'Validasi Gagal',
                 text: 'Nama dan Email tidak boleh kosong!',
             });
-            return;
-        }
-
-        // Validasi kesamaan kelas dengan siswa yang sudah ada
-        const normalizedNewKelas = normalizeKelas(formData.kelas);
-        const conflictingStudent = dataSiswa.find(s => normalizeKelas(s.kelas) !== normalizedNewKelas);
-        if (conflictingStudent && dataSiswa.length > 0) {
-            setError(`Kelas harus sama dengan data siswa yang sudah ada (${conflictingStudent.kelas}).`);
             return;
         }
 

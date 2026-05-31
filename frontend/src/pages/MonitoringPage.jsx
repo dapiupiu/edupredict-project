@@ -282,6 +282,7 @@ function MonitoringPage() {
                   siswa: selectedStudent.nama_siswa || selectedStudent.nama,
                   prediksi: selectedStudent,
                 }}
+                showNisn={true}
               />
             </div>
           </div>

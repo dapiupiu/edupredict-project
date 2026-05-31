@@ -201,6 +201,10 @@ function TambahSiswaPage() {
       newErrors.nisn = "NISN harus terdiri dari 10 digit angka";
     }
 
+    if (teacherProfile && teacherProfile.kelas && normalizeKelas(formData.kelas) !== normalizeKelas(teacherProfile.kelas)) {
+      newErrors.kelas = `Kelas siswa harus sama dengan kelas Anda sebagai Wali Kelas (${teacherProfile.kelas})`;
+    }
+
     if (
       formData.hours_studied &&
       (formData.hours_studied < 0 || formData.hours_studied > 36)
@@ -402,7 +406,7 @@ function TambahSiswaPage() {
               Hasil Analisis AI
             </h2>
 
-            <PrediksiAI predictionResult={predictionResult} />
+            <PrediksiAI predictionResult={predictionResult} showNisn={false} />
 
             <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-end">
               <button

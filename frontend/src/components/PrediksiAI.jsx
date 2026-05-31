@@ -6,6 +6,7 @@ function PrediksiAI({
   hideDistribusi = false,
   fullWidth = false,
   isSiswa = false,
+  showNisn = true,
 }) {
   if (!predictionResult || !predictionResult.prediksi) {
     return (
@@ -44,6 +45,8 @@ function PrediksiAI({
     Physical_Activity: "Aktivitas Fisik",
     Parental_Education_Level: "Pendidikan Orang Tua",
   };
+
+  const riskLabel = risk_category === "High" ? "Tinggi" : risk_category === "Medium" ? "Sedang" : "Rendah";
 
   // Determine colors based on risk_category
   let headerBgColor = "bg-gray-100";
@@ -197,11 +200,14 @@ function PrediksiAI({
         >
           <div>
             <h1 className={`text-3xl font-bold ${headerTextColor}`}>
-              {siswa}
+              {siswa} - Risiko {riskLabel}
             </h1>
-            <p className={`text-base font-bold ${headerConfidenceColor} mt-1 opacity-90`}>
-              NISN: {prediksi.nisn || '-'} | Status Risiko: {risk_category === "High" ? "Tinggi" : risk_category === "Medium" ? "Sedang" : "Rendah"}
-            </p>
+
+            {showNisn && (
+              <p className={`text-base font-bold ${headerConfidenceColor} mt-1 opacity-90`}>
+                NISN: {prediksi.nisn || '-'}
+              </p>
+            )}
 
             <p className={`text-xl ${headerConfidenceColor} mt-2`}>
               {riskStatusText}

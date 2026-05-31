@@ -177,8 +177,8 @@ function TabEditProfil({ profileData, formData, handleInputChange, handleUpdateP
                                     onChange={handleInputChange}
                                     className={"w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-all text-sm "}>
                                     <option value="">Pilih Tipe Sekolah</option>
-                                    <option value="Negeri">Negeri</option>
-                                    <option value="Swasta">Swasta</option>
+                                    <option value="Public">Negeri</option>
+                                    <option value="Private">Swasta</option>
                                 </select>
                             </div>
                         </div>
@@ -188,6 +188,7 @@ function TabEditProfil({ profileData, formData, handleInputChange, handleUpdateP
                                 <input
                                     type="text" name="kelas" value={formData.kelas}
                                     onChange={handleInputChange}
+                                    placeholder="cth: 12 IPA 1"
                                     className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-all text-sm"
                                 />
                             </div>
