@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import BASE_URL from "../utils/api";
 import { useLocation } from "react-router-dom";
-import Sidebar from "../compenents/Sidebar";
+import Sidebar from "../components/Sidebar";
 
-import PilihSiswa from "../compenents/PilihSiswa";
-import PrediksiAI from "../compenents/PrediksiAI";
+import PilihSiswa from "../components/PilihSiswa";
+import PrediksiAI from "../components/PrediksiAI";
 
 function MonitoringPage() {
   const [open, setOpen] = useState(true);
