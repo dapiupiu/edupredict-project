@@ -64,7 +64,7 @@ function DaftarSiswa({ className, isDashboard, isDaftarSiswa = false, dataSiswa 
                                                 <span className={`w-3 h-3 rounded-full flex-shrink-0 ${
                                                     (item.risk_category || item.statusRisiko) === 'High' ? 'bg-red-500 shadow-sm shadow-red-200' :
                                                     (item.risk_category || item.statusRisiko) === 'Medium' || (item.risk_category || item.statusRisiko) === 'Sedang' ? 'bg-yellow-500 shadow-sm shadow-yellow-200' :
-                                                    'bg-green-500 shadow-sm shadow-green-200'
+                                                    (item.risk_category || item.statusRisiko) === 'Low' || (item.risk_category || item.statusRisiko) === 'Rendah' ? 'bg-green-500 shadow-sm shadow-green-200' : 'bg-gray-300'
                                                 }`}></span>
                                             )}
                                             <span>{item.nama_siswa || item.nama}</span>
@@ -134,7 +134,7 @@ function DaftarSiswa({ className, isDashboard, isDaftarSiswa = false, dataSiswa 
                             ))
                         ) : (
                             <tr>
-                                <td colSpan={isDashboard ? 3 : 8} className="border border-gray-200 px-6 py-4 text-center text-gray-500">
+                                <td colSpan={isDashboard ? 3 : 7} className="border border-gray-200 px-6 py-4 text-center text-gray-500">
                                     {displayMessage}
                                 </td>
                             </tr>

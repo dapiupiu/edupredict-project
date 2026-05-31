@@ -120,7 +120,7 @@ function TabEditProfil({ profileData, formData, handleInputChange, handleUpdateP
                             <div>
                                 <label className="block text-sm font-medium text-gray-700 mb-1">No. HP</label>
                                 <input
-                                    type="text" name="noHp" value={formData.noHp}
+                                    type="text" name="no_hp" value={formData.no_hp}
                                     onChange={handleInputChange}
                                     className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-all text-sm"
                                 />
@@ -139,7 +139,7 @@ function TabEditProfil({ profileData, formData, handleInputChange, handleUpdateP
                             <div>
                                 <label className="block text-sm font-medium text-gray-700 mb-1">Pendidikan Terakhir</label>
                                 <input
-                                    type="text" name="pendidikanTerakhir" value={formData.pendidikanTerakhir}
+                                    type="text" name="pendidikan_terakhir" value={formData.pendidikan_terakhir}
                                     onChange={handleInputChange}
                                     className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-all text-sm"
                                 />
@@ -164,7 +164,7 @@ function TabEditProfil({ profileData, formData, handleInputChange, handleUpdateP
                             <div>
                                 <label className="block text-sm font-medium text-gray-700 mb-1">Nama Sekolah</label>
                                 <input
-                                    type="text" name="namaSekolah" value={formData.namaSekolah}
+                                    type="text" name="nama_sekolah" value={formData.nama_sekolah}
                                     onChange={handleInputChange}
                                     className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-all text-sm"
                                 />

@@ -17,15 +17,15 @@ function ProfilGuruPage() {
 
     const [profileData, setProfileData] = useState({
         nama: '', nip: '', nuptk: '', ttl: '',
-        pendidikanTerakhir: '', email: '', role: '', 
+        pendidikan_terakhir: '', email: '', role: '', 
         status: '', created_at: '', no_hp: '', alamat: '',
         nama_sekolah: '', school_type: '', kelas: '', jenjang: ''
     });
 
     const [formData, setFormData] = useState({
-        nama: '', nip: '', nuptk: '', noHp:'', ttl: '',
-        pendidikanTerakhir: '', alamat:'', 
-        namaSekolah: '', school_type: '', kelas: '', jenjang: '',
+        nama: '', email: '', nip: '', nuptk: '', no_hp:'', ttl: '',
+        pendidikan_terakhir: '', alamat:'', 
+        nama_sekolah: '', school_type: '', kelas: '', jenjang: '',
         password_lama: '', 
         password_baru: '', 
         confirm_password: '',
@@ -51,13 +51,14 @@ function ProfilGuruPage() {
                 setProfileData(result.data);
                 setFormData({
                     nama: result.data.nama || '',
+                    email: result.data.email || '',
                     nip: result.data.nip || '',
                     nuptk: result.data.nuptk || '',
                     ttl: result.data.ttl || '',
-                    noHp: result.data.no_hp || '',
+                    no_hp: result.data.no_hp || '',
                     alamat: result.data.alamat || '',
-                    pendidikanTerakhir: result.data.pendidikan_terakhir || result.data.pendidikanTerakhir || '',
-                    namaSekolah: result.data.nama_sekolah || '',
+                    pendidikan_terakhir: result.data.pendidikan_terakhir || '',
+                    nama_sekolah: result.data.nama_sekolah || '',
                     school_type: result.data.school_type || '',
                     kelas: result.data.kelas || '',
                     jenjang: result.data.jenjang || '',
@@ -154,8 +155,24 @@ function ProfilGuruPage() {
         setError('');
         setSuccess('');
 
+        // Validasi field wajib
+        if (!formData.nama.trim() || !formData.email.trim()) {
+            setError('Nama dan Email wajib diisi.');
+            Swal.fire({
+                icon: 'error',
+                title: 'Validasi Gagal',
+                text: 'Nama dan Email tidak boleh kosong!',
+            });
+            return;
+        }
+
         if (formData.password_baru && formData.password_baru !== formData.confirm_password) {
             setError('Konfirmasi password baru tidak cocok.');
+            Swal.fire({
+                icon: 'warning',
+                title: 'Periksa Kembali',
+                text: 'Konfirmasi password baru tidak cocok.',
+            });
             return;
         }
 
@@ -163,13 +180,14 @@ function ProfilGuruPage() {
             const token = localStorage.getItem('token');
             const formDataToSend = new FormData();
             formDataToSend.append('nama', formData.nama);
+            formDataToSend.append('email', formData.email);
             formDataToSend.append('nip', formData.nip);
             formDataToSend.append('nuptk', formData.nuptk);
             formDataToSend.append('ttl', formData.ttl);
-            formDataToSend.append('pendidikanTerakhir', formData.pendidikanTerakhir);
-            formDataToSend.append('noHp', formData.noHp);
+            formDataToSend.append('pendidikan_terakhir', formData.pendidikan_terakhir);
+            formDataToSend.append('no_hp', formData.no_hp);
             formDataToSend.append('alamat', formData.alamat);
-            formDataToSend.append('namaSekolah', formData.namaSekolah);
+            formDataToSend.append('nama_sekolah', formData.nama_sekolah);
             formDataToSend.append('school_type', formData.school_type);
             formDataToSend.append('kelas', formData.kelas);
             formDataToSend.append('jenjang', formData.jenjang);
@@ -188,6 +206,17 @@ function ProfilGuruPage() {
 
             const result = await response.json();
             if (result.success) {
+                // Feedback Pop-up Interaktif
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Profil Diperbarui!',
+                    text: result.message,
+                    showConfirmButton: false,
+                    timer: 2000,
+                    timerProgressBar: true,
+                    background: '#ffffff',
+                });
+
                 setSuccess(result.message);
                 setFormData(prev => ({ ...prev, password_lama: '', password_baru: '', confirm_password: '' }));
                 setSelectedFile(null);
@@ -195,9 +224,19 @@ function ProfilGuruPage() {
                 fetchProfile();
             } else {
                 setError(result.message);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Pembaruan Gagal',
+                    text: result.message,
+                });
             }
         } catch (err) {
             setError('Terjadi kesalahan saat memperbarui profil.');
+            Swal.fire({
+                icon: 'error',
+                title: 'Error Jaringan',
+                text: 'Gagal terhubung ke server. Silakan coba lagi nanti.',
+            });
         }
     };
 

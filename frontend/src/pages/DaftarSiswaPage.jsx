@@ -166,7 +166,9 @@ function DaftarSiswaPage() {
                 method: 'DELETE',
                 headers: { 'Authorization': `Bearer ${token}` }
             });
-            if (!response.ok) throw new Error(result.message); // result is not defined here, should be data
+            
+            const result = await response.json();
+            if (!response.ok) throw new Error(result.message || "Gagal menghapus siswa.");
             setDataSiswa(prevData => prevData.filter(student => student.id !== id)); // Update state
             alert(`Siswa ${name} berhasil dihapus.`); // Tambahkan notifikasi sukses
 
