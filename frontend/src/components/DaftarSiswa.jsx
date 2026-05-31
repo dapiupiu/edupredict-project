@@ -37,7 +37,7 @@ function DaftarSiswa({ className, isDashboard, isDaftarSiswa = false, dataSiswa 
                             {!isDashboard && ( // Perhatikan bahwa ini adalah bagian dari conditional rendering
                                 <>
                                     <th scope="col" className="border border-gray-200 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Pendidikan Ortu
+                                        Jenis Kelamin
                                     </th>
                                     <th scope="col" className="border border-gray-200 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                         Status Risiko
@@ -81,10 +81,7 @@ function DaftarSiswa({ className, isDashboard, isDaftarSiswa = false, dataSiswa 
                                     {!isDashboard && (
                                         <> 
                                             <td className="border border-gray-200 px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                                {item.parental_education_level === 'High School' ? 'SMA/SMK' : 
-                                                 item.parental_education_level === 'College' ? 'Diploma/S1' : 
-                                                 item.parental_education_level === 'Postgraduate' ? 'S2/S3' : 
-                                                 (item.parental_education_level || item.pendidikanOrtu)}
+                                                {(item.gender || item.jenisKelamin) === 'Male' ? 'Laki-laki' : (item.gender || item.jenisKelamin) === 'Female' ? 'Perempuan' : '-'}
                                             </td>
                                              <td className={`border border-gray-200 px-6 py-4 whitespace-nowrap text-sm font-bold ${
                                                 (item.risk_category || item.statusRisiko) === 'High' ? 'text-red-600' :
