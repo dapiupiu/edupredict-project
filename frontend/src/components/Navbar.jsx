@@ -1,7 +1,7 @@
 import React from 'react';
 import { NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import logoImg from '../assets/logo.png';
+import logoEdupredict from '../assets/logo-edupredict.png';
 
 
 function Navbar() {
@@ -12,20 +12,27 @@ function Navbar() {
     const navigate = useNavigate();
     const location = useLocation();
 
+    // Handle scroll effects: Navbar shadow and ScrollSpy manual reset for top
     useEffect(() => {
-        const onScroll = () => setScrolled(window.scrollY > 50);
+        const onScroll = () => {
+            setScrolled(window.scrollY > 50);
+            // Jika user scroll kembali ke paling atas (Hero), pastikan menu 'Beranda' aktif
+            if (location.pathname === '/' && window.scrollY < 150) {
+                setActiveSection('beranda');
+            }
+        };
         window.addEventListener("scroll", onScroll);
         return () => window.removeEventListener('scroll', onScroll);
-    }, []);
+    }, [location.pathname]);
 
     // Logic ScrollSpy: Mendeteksi section yang sedang aktif saat scroll
     useEffect(() => {
         if (location.pathname !== '/') return;
 
-        const sections = ['beranda', 'fitur', 'panduan'];
+        const sections = ['beranda', 'fitur', 'antarmuka', 'panduan', 'tim'];
         const observerOptions = {
             root: null,
-            rootMargin: '-50% 0px -50% 0px', // Aktif ketika section ada di tengah layar
+            rootMargin: '-30% 0px -30% 0px', // Lebih responsif saat berpindah section
             threshold: 0
         };
 
@@ -58,16 +65,22 @@ function Navbar() {
     };
 
     const getNavClass = (id) => {
-        const isActive = location.pathname === '/' && activeSection === id;
+        let isActive = location.pathname === '/' && activeSection === id;
+
+        // Logika khusus: menu 'Fitur' tetap aktif saat berada di section 'Antarmuka Sistem'
+        if (id === 'fitur' && activeSection === 'antarmuka') {
+            isActive = true;
+        }
+
         return `relative transition-all duration-300 cursor-pointer font-medium ${isActive ? 'text-blue-900 after:w-full' : 'text-slate-600 after:w-0'} after:absolute after:bottom-0 after:left-0 after:h-0.5 after:bg-blue-900 after:transition-all after:duration-300 hover:after:w-full hover:text-blue-900`;
     };
 
     return (
         <div className={`navbar fixed w-full transition-all py-4 bg-blue-100 z-50 ${scrolled ? "border-b-2 border-stone-100" : ""}`}>
             <div className="container mx-auto px-4">
-                <div className="navbar-box flex items-center justify-between py-2">
-                    <div className="logo-box flex items-center gap-3">
-                        <img src={logoImg} alt="logo" className="w-12 h-12 object-contain" />
+                <div className="navbar-box flex items-center justify-between py-0">
+                    <div className="logo-box flex items-center gap-3 cursor-pointer" onClick={() => scrollTo('beranda')}>
+                        <img src={logoEdupredict} alt="logo" className="w-16 h-16 object-contain flex-shrink-0" />
                         <h1 className="text-2xl font-bold text-blue-900">Edu Predict</h1>
                     </div>
                     <div className={`Nav-items flex lg:gap-12 gap-8 absolute md:static left-1/2 -translate-x-1/2 md:left-0 md:-translate-x-0 flex-col md:flex-row w-full text-center ${menuActive ? "top-16 opacity-100" : "-top-72 opacity-0"} md:w-auto py-10 md:py-0 transition-all md:transition-none bg-blue-100 md:opacity-100 items-center`}>

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import BASE_URL from '../utils/api';
 import { NavLink } from 'react-router-dom';
+import logoEdupredict from '../assets/logo-edupredict.png';
 
 function LupaPasswordPage() {
     const [email, setEmail] = useState('');
@@ -73,7 +74,7 @@ function LupaPasswordPage() {
         return (
             <div className="mx-auto w-full max-w-xl my-10 px-6 py-10 sm:px-8 bg-white rounded-3xl border-2 border-gray-100 shadow-lg">
                 <div className="flex items-center gap-3">
-                    <i className="ri-brain-fill ri-2x leading-none text-sky-600"></i>
+                    <img src={logoEdupredict} alt="logo" className="w-16 h-16 object-contain flex-shrink-0" />
                     <h1 className="text-3xl font-semibold text-blue-800">EduPredict</h1>
                 </div>
                 <h1 className="text-3xl sm:text-4xl font-semibold mt-4">Lupa Password?</h1>

@@ -4,6 +4,8 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import DataSiswaInput from "../components/DataSiswaInput";
 import StepTambahSiswa from "../components/StepTambahSiswa";
 import PrediksiAI from "../components/PrediksiAI";
+import logoEdupredict from "../assets/logo-edupredict.png";
+
 
 function TambahSiswaPage() {
   const [step, setStep] = useState(1);
@@ -379,7 +381,7 @@ function TambahSiswaPage() {
         </Link>
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10">
           <div className="flex items-center gap-3">
-            <i className="ri-brain-fill ri-2x leading-none text-blue-800"></i>
+            <img src={logoEdupredict} alt="logo" className="w-16 h-16 object-contain flex-shrink-0" />
             <h1 className="text-2xl font-bold text-blue-900">EduPredict</h1>
           </div>
         </div>

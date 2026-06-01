@@ -18,7 +18,7 @@ function DataSiswaInput({ formData, errors, isLoading, onChange, onSubmit, onCan
               type="text" 
               maxLength="10"
               inputMode="numeric"
-              placeholder="Masukkan 10 digit NISN"
+              placeholder="Masukkan 10 digit angka"
               value={formData.nisn} 
               onChange={onChange('nisn')} 
               className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition-all ${errors.nisn ? 'border-red-500' : 'border-gray-300'}`} />

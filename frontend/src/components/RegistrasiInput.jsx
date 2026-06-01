@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import logoEdupredict from '../assets/logo-edupredict.png';
 
 function RegistrasiInput({
     email,
@@ -22,7 +23,7 @@ function RegistrasiInput({
     return (
         <div className="mx-auto w-full max-w-2xl my-10 px-6 py-10 sm:px-8 bg-white rounded-3xl border-2 border-gray-100 shadow-lg">
             <div className="flex items-center gap-3">
-                <i className="ri-brain-fill ri-2x leading-none text-sky-600"></i>
+                <img src={logoEdupredict} alt="logo" className="w-16 h-16 object-contain flex-shrink-0" />
                 <h1 className="text-3xl font-semibold text-blue-800">EduPredict</h1>
             </div>
             <div className="mt-4 inline-flex p-2 font-medium text-blue-800 bg-blue-100 px-4 rounded-3xl gap-2">

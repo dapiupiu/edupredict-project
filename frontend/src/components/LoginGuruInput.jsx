@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import logoEdupredict from '../assets/logo-edupredict.png';
 
 function LoginGuruInput({ email, password, errors, apiError, isLoading, rememberMe, onEmailChange, onPasswordChange, onRememberMeChange, onSubmit }) {
     const [showPassword, setShowPassword] = useState(false);
@@ -9,7 +10,7 @@ function LoginGuruInput({ email, password, errors, apiError, isLoading, remember
         <div className="mx-auto w-full max-w-xl my-10 px-6 py-10 sm:px-8 bg-white rounded-3xl border-2 border-gray-100 shadow-lg">
             {/* logo edupredict */}
             <div className="flex items-center gap-3">
-                <i className="ri-brain-fill ri-2x leading-none text-sky-600"></i>
+                <img src={logoEdupredict} alt="logo" className="w-16 h-16 object-contain flex-shrink-0" />
                 <h1 className="text-3xl font-semibold text-blue-800">EduPredict</h1>
             </div>
             {/* logo edupredict */}

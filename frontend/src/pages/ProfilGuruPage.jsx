@@ -304,7 +304,7 @@ function ProfilGuruPage() {
                 <p className="mt-1 text-sm text-gray-500">Kelola informasi akun, data wali kelas, dan pengaturan sistem</p>
 
                 {/* Tabs */}
-                <div className="mt-5 flex items-center gap-1 border-b border-gray-20">
+                <div className="mt-5 flex items-center gap-1 border-b border-gray-200">
                     {tabs.map(tab => (
                         <button
                             key={tab.id}

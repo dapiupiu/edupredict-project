@@ -59,7 +59,7 @@ function HomePage() {
             </div>
 
             {/* Preview Section */}
-            <div className="bg-blue-50 py-20 border-t border-blue-50">
+            <div className="bg-blue-50 py-20 border-t border-blue-50" id="antarmuka">
                 <div className="container mx-auto px-8">
                     <div className="text-center max-w-2xl mx-auto mb-16">
                         <span className="text-blue-800 font-semibold text-sm uppercase tracking-widest">Antarmuka Sistem</span>
@@ -150,7 +150,7 @@ function HomePage() {
                                 <i className="ri-user-line text-2xl text-white"></i>
                             </div>
                             <h3 className="text-xl font-bold mb-1">Kaka Davi Dharmawan</h3>
-                            <p className="text-blue-700 text-sm font-medium mb-3">Project Leader, Project Manager, Data Scientist (CDCC221D6Y1015)</p>
+                            <p className="text-blue-700 text-sm font-medium mb-3">Data Scientist (CDCC221D6Y1015)</p>
                             <div className="flex items-center gap-3">
                                 <p className="text-blue-900 font-medium text-2xl mb-3">
                                 <a href="https://www.linkedin.com/in/kakadavidharmawan/" target="_blank" rel="noopener noreferrer" className="text-2xl mb-3 text-blue-800 hover:text-sky-700 transition-colors duration-300">

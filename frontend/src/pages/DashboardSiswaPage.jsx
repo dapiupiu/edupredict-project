@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { useLocation, Link, useNavigate } from "react-router-dom";
 import PrediksiAI from "../components/PrediksiAI";
 import Swal from "sweetalert2";
+import logoEdupredict from "../assets/logo-edupredict.png";
 
 function DashboardSiswaPage() {
     const location = useLocation();
@@ -141,7 +142,7 @@ function DashboardSiswaPage() {
             {/* Header Navbar untuk Siswa */}
             <nav className="bg-white border-b border-blue-100 p-4 px-6 sm:px-12 flex justify-between items-center sticky top-0 z-50 print:hidden">
                 <div className="flex items-center gap-3">
-                    <i className="ri-brain-fill text-3xl text-blue-600"></i>
+                    <img src={logoEdupredict} alt="logo" className="w-16 h-16 object-contain flex-shrink-0" />
                     <h1 className="text-2xl font-black text-blue-900 tracking-tight">EduPredict</h1>
                 </div>
                 <div className="flex items-center gap-3">

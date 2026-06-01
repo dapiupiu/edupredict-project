@@ -47,7 +47,7 @@ function Footer() {
                 </div>
                 <div className="mt-10 h-px bg-blue-800"></div>
                 <div className='mt-6 text-sm text-blue-300'>
-                    &copy; {new Date().getFullYear()} Edu Predict
+                    &copy; {new Date().getFullYear()} Edu Predict CC26-PSU080 · Capstone Project
                 </div>
             </div>
         </div>

@@ -3,6 +3,7 @@ import { PiStudent } from "react-icons/pi";
 import { VscGraphLine } from "react-icons/vsc";
 import { MdMenuOpen } from "react-icons/md";
 import { Link, useNavigate, useLocation } from 'react-router-dom';
+import logoEdupredict from '../assets/logo-edupredict.png';
 
 function Sidebar({ open, setOpen }) {
     const navigate = useNavigate();
@@ -35,7 +36,7 @@ function Sidebar({ open, setOpen }) {
             {/* header sidebar */}
             <div className={`flex items-center mt-8 ${open ? 'justify-between px-5' : 'justify-center'}`}>
                 <div className={`flex items-center gap-2 transition-all duration-300 ${!open && 'hidden'}`}>
-                    <i className="ri-brain-fill ri-2x leading-none text-blue-800"></i>
+                    <img src={logoEdupredict} alt="logo" className="w-16 h-16 object-contain flex-shrink-0" />
                     <h1 className="text-2xl font-bold text-blue-900">EduPredict</h1>
                 </div>
                 <MdMenuOpen size={30} className={`cursor-pointer transition-transform duration-300 ${!open && 'rotate-180'}`} onClick={() => setOpen(!open)}/>
