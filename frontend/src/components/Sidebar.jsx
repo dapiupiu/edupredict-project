@@ -2,10 +2,11 @@ import React from 'react';
 import { PiStudent } from "react-icons/pi";
 import { VscGraphLine } from "react-icons/vsc";
 import { MdMenuOpen } from "react-icons/md";
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 
 function Sidebar({ open, setOpen }) {
     const navigate = useNavigate();
+    const location = useLocation();
 
     const handleLogout = (e) => {
         e.preventDefault();
@@ -16,6 +17,18 @@ function Sidebar({ open, setOpen }) {
             navigate('/');
         }
     };
+
+    // Fungsi helper untuk mengecek apakah path sedang aktif
+    const isActive = (path) => {
+        // Khusus untuk menu Siswa, kita anggap aktif juga jika sedang di halaman Tambah Siswa
+        if (path === '/daftarSiswa' && location.pathname === '/tambahSiswa') {
+            return true;
+        }
+        return location.pathname === path;
+    };
+
+    const activeClass = "bg-blue-600 text-white shadow-lg shadow-blue-200";
+    const inactiveClass = "text-gray-600 hover:bg-white hover:text-blue-700";
 
     return (
         <div className={`bg-blue-100 shadow-md h-screen fixed left-0 top-0 duration-500 z-50 ${open ? 'w-64' : 'w-16'}`}>
@@ -31,7 +44,7 @@ function Sidebar({ open, setOpen }) {
             <nav className="p-5">
                 <ul className="space-y-2">
                     <li className="relative group">
-                        <Link to="/dashboardGuru" className={`flex items-center p-2 rounded-lg hover:bg-gray-100 ${open ? 'gap-3' : 'justify-center'}`}>
+                        <Link to="/dashboardGuru" className={`flex items-center p-2 rounded-lg transition-all duration-300 ${isActive('/dashboardGuru') ? activeClass : inactiveClass} ${open ? 'gap-3' : 'justify-center'}`}>
                             <div className="w-6 h-6 flex items-center justify-center flex-shrink-0">
                                 <i className="ri-home-line text-2xl"></i>
                             </div>
@@ -44,7 +57,7 @@ function Sidebar({ open, setOpen }) {
                         )}
                     </li>
                     <li className="relative group">
-                        <Link to="/daftarSiswa" className={`flex items-center p-2 rounded-lg hover:bg-gray-100 ${open ? 'gap-3' : 'justify-center'}`}>
+                        <Link to="/daftarSiswa" className={`flex items-center p-2 rounded-lg transition-all duration-300 ${isActive('/daftarSiswa') ? activeClass : inactiveClass} ${open ? 'gap-3' : 'justify-center'}`}>
                             <div className="w-6 h-6 flex items-center justify-center flex-shrink-0">
                                 <PiStudent size={24} />
                             </div>
@@ -57,7 +70,7 @@ function Sidebar({ open, setOpen }) {
                         )}
                     </li>
                     <li className="relative group">
-                        <Link to="/monitoringSiswa" className={`flex items-center p-2 rounded-lg hover:bg-gray-100 ${open ? 'gap-3' : 'justify-center'}`}>
+                        <Link to="/monitoringSiswa" className={`flex items-center p-2 rounded-lg transition-all duration-300 ${isActive('/monitoringSiswa') ? activeClass : inactiveClass} ${open ? 'gap-3' : 'justify-center'}`}>
                             <div className="w-6 h-6 flex items-center justify-center flex-shrink-0">
                                 <VscGraphLine size={24} />
                             </div>
@@ -70,7 +83,7 @@ function Sidebar({ open, setOpen }) {
                         )}
                     </li>
                     <li className="relative group">
-                        <Link to="/profilGuru" className={`flex items-center p-2 rounded-lg hover:bg-gray-100 ${open ? 'gap-3' : 'justify-center'}`}>
+                        <Link to="/profilGuru" className={`flex items-center p-2 rounded-lg transition-all duration-300 ${isActive('/profilGuru') ? activeClass : inactiveClass} ${open ? 'gap-3' : 'justify-center'}`}>
                             <div className="w-6 h-6 flex items-center justify-center flex-shrink-0">
                                 <i className="ri-user-line text-2xl"></i>
                             </div>
@@ -89,7 +102,7 @@ function Sidebar({ open, setOpen }) {
                 <a 
                     href="#" 
                     onClick={handleLogout}
-                    className={`flex items-center p-2 rounded-lg hover:bg-gray-100 ${open ? 'gap-3' : 'justify-center'}`}
+                    className={`flex items-center p-2 rounded-lg hover:bg-red-100 ${open ? 'gap-3' : 'justify-center'}`}
                 >
                     <div className="w-6 h-6 flex items-center justify-center flex-shrink-0">
                         <i className="ri-logout-box-r-line text-2xl"></i>

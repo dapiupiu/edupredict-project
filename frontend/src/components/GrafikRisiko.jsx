@@ -70,9 +70,9 @@ function GrafikRisiko({ data = [] }) {
                     <BarChart data={data} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                         <XAxis dataKey="nama" tick={{ fontSize: 10, fontWeight: 'bold' }} />
                         <YAxis tick={{ fontSize: 12 }} domain={[0, 100]} /> {/* Y-axis untuk persentase confidence */}
-                        <Tooltip content={<CustomTooltip />} />
+                        <Tooltip content={<CustomTooltip />}/>
                         {/* Hanya satu Bar yang ditampilkan, warnanya dinamis berdasarkan kategori risiko */}
-                        <Bar dataKey="value" radius={[4, 4, 0, 0]} barSize={40}>
+                        <Bar dataKey="value" radius={[4, 4, 0, 0]} barSize={40} className="cursor-pointer">
                             {data.map((entry, index) => (
                                 <Cell key={`cell-${index}`} fill={getRiskColor(entry.risk_category)} />
                             ))}
@@ -90,10 +90,6 @@ function GrafikRisiko({ data = [] }) {
                 <div className="flex items-center gap-2">
                     <div className="w-3 h-3 rounded bg-[#f97316]"></div>
                     <span className="text-[10px] sm:text-xs font-bold text-gray-500 uppercase tracking-wider">Risiko Sedang</span>
-                </div>
-                <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 rounded bg-[#22c55e]"></div>
-                    <span className="text-[10px] sm:text-xs font-bold text-gray-500 uppercase tracking-wider">Risiko Rendah</span>
                 </div>
             </div>
 

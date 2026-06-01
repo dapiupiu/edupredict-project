@@ -18,35 +18,35 @@ function PageNavigation({ currentPage, totalPages, onPageChange }) {
   };
 
   return (
-    <div className="mt-6">
-      <div className="flex justify-center sm:justify-end">
+    <div className="mt-10 flex justify-center">
+      <div className="flex items-center gap-1 bg-white p-1.5 rounded-2xl shadow-sm border border-gray-100">
         
-        <div className="flex items-center rounded-md overflow-hidden shadow-sm border bg-white">
-          
-          {/* Tombol kiri */}
-          <button
-            onClick={prevPage}
-            disabled={currentPage === 1}
-            className="px-2 py-1.5 border-r hover:bg-gray-100 transition-colors"
-          >
-            <ChevronLeft size={18} />
-          </button>
+        {/* Tombol kiri */}
+        <button
+          onClick={prevPage}
+          disabled={currentPage === 1}
+          className="w-10 h-10 flex items-center justify-center rounded-xl text-gray-400 hover:bg-blue-50 hover:text-blue-600 disabled:opacity-20 disabled:cursor-not-allowed transition-all active:scale-90 cursor-pointer"
+          title="Halaman Sebelumnya"
+        >
+          <ChevronLeft size={20} />
+        </button>
 
-          {/* Info halaman */}
-          <div className="px-3 py-1 text-xs sm:text-sm font-medium text-gray-700">
-            Halaman {currentPage} dari {totalPages}
-          </div>
-
-          {/* Tombol kanan */}
-          <button
-            onClick={nextPage}
-            disabled={currentPage === totalPages}
-            className="px-2 py-1.5 border-l hover:bg-gray-100 transition-colors"
-          >
-            <ChevronRight size={18} />
-          </button>
-
+        {/* Info halaman */}
+        <div className="px-4 py-1 text-sm font-bold text-gray-700 flex items-center gap-2">
+          <span className="text-blue-600">{currentPage}</span>
+          <span className="text-gray-200 font-light">/</span>
+          <span className="text-gray-400 font-medium">{totalPages}</span>
         </div>
+
+        {/* Tombol kanan */}
+        <button
+          onClick={nextPage}
+          disabled={currentPage === totalPages}
+          className="w-10 h-10 flex items-center justify-center rounded-xl text-gray-400 hover:bg-blue-50 hover:text-blue-600 disabled:opacity-20 disabled:cursor-not-allowed transition-all active:scale-90 cursor-pointer"
+          title="Halaman Selanjutnya"
+        >
+          <ChevronRight size={20} />
+        </button>
 
       </div>
     </div>

@@ -210,13 +210,13 @@ function TabEditProfil({ profileData, formData, handleInputChange, handleUpdateP
                             <button
                                 type="button"
                                 onClick={() => window.location.reload()}
-                                className="w-full sm:w-auto bg-white px-6 py-2.5 rounded-xl font-bold text-gray-500 hover:text-gray-700 hover:bg-gray-50 transition-all shadow-md text-sm"
+                                className="w-full sm:w-auto bg-white border border-gray-300 px-6 py-2.5 rounded-xl font-bold text-gray-700 hover:bg-gray-50 hover:border-gray-400 transition-all shadow-sm text-sm cursor-pointer"
                             >
                                 Batal
                             </button>
                             <button
                                 type="submit"
-                                className="w-full sm:w-auto bg-blue-600 text-white px-8 py-2.5 rounded-xl font-bold hover:bg-blue-700 active:scale-95 transition-all shadow-lg shadow-blue-100 flex items-center justify-center gap-2 text-sm"
+                                className="w-full sm:w-auto bg-blue-600 text-white px-8 py-2.5 rounded-xl font-bold hover:bg-blue-700 active:scale-95 transition-all shadow-lg shadow-blue-100 flex items-center justify-center gap-2 text-sm cursor-pointer"
                             >
                                 <i className="ri-save-line"></i> Simpan Informasi
                             </button>
@@ -266,13 +266,13 @@ function TabEditProfil({ profileData, formData, handleInputChange, handleUpdateP
                             <button
                                 type="button"
                                 onClick={() => window.location.reload()}
-                                className="w-full sm:w-auto bg-white px-6 py-2.5 rounded-xl font-bold text-gray-500 hover:text-gray-700 hover:bg-gray-50 transition-all shadow-md text-sm"
+                                className="w-full sm:w-auto bg-white border border-gray-300 px-6 py-2.5 rounded-xl font-bold text-gray-700 hover:bg-gray-50 hover:border-gray-400 transition-all shadow-sm text-sm cursor-pointer"
                             >
                                 Batal
                             </button>
                             <button
                                 type="submit"
-                                className="w-full sm:w-auto bg-blue-600 text-white px-8 py-2.5 rounded-xl font-bold hover:bg-blue-700 active:scale-95 transition-all shadow-lg shadow-blue-100 flex items-center justify-center gap-2 text-sm"
+                                className="w-full sm:w-auto bg-blue-600 text-white px-8 py-2.5 rounded-xl font-bold hover:bg-blue-700 active:scale-95 transition-all shadow-lg shadow-blue-100 flex items-center justify-center gap-2 text-sm cursor-pointer"
                             >
                                 <i className="ri-save-line"></i> Simpan Password
                             </button>

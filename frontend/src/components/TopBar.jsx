@@ -78,7 +78,7 @@ function TopBar() {
                 {/* Notifikasi */}
                 <button 
                     onClick={() => navigate('/profilGuru', { state: { activeTab: 'ringkasan', scrollTo: 'notifikasi' } })}
-                    className="relative text-gray-400 hover:text-blue-600 transition-colors outline-none"
+                    className="relative text-gray-400 hover:text-blue-600 transition-colors outline-none cursor-pointer"
                 >
                     <i className="ri-notification-3-line text-lg"></i>
                     <span className="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
@@ -112,14 +112,14 @@ function TopBar() {
                         <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-xl border border-gray-100 py-2 z-50">
                             <button 
                                 onClick={() => { navigate('/profilGuru'); setDropdownOpen(false); }}
-                                className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-blue-50 transition-colors"
+                                className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-blue-50 transition-colors cursor-pointer"
                             >
                                 <i className="ri-user-line text-blue-500 text-lg"></i>
                                 <span>Profil Saya</span>
                             </button>
                             <button 
                                 onClick={() => { navigate('/profilGuru', { state: { activeTab: 'edit', scrollTo: 'password' } }); setDropdownOpen(false); }}
-                                className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-blue-50 transition-colors"
+                                className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-blue-50 transition-colors cursor-pointer"
                             >
                                 <i className="ri-lock-password-line text-blue-500 text-lg"></i>
                                 <span>Ganti Password</span>
@@ -127,7 +127,7 @@ function TopBar() {
                             <div className="h-px bg-gray-100 my-1 mx-2"></div>
                             <button 
                                 onClick={handleLogout}
-                                className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition-colors"
+                                className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition-colors cursor-pointer"
                             >
                                 <i className="ri-logout-box-r-line text-lg"></i>
                                 <span>Keluar</span>

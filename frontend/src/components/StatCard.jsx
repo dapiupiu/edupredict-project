@@ -40,7 +40,7 @@ function StatCard({ title, total, type }) {
     const style = styles[type] || styles.total;
 
     return (
-        <div className={`${style.bg} rounded-xl shadow p-5 flex items-center gap-4 transition-all duration-300 hover:scale-[1.02]`}>
+        <div className={`${style.bg} rounded-xl shadow p-5 flex items-center gap-4 transition-all duration-300 hover:scale-[1.02] cursor-pointer`}>
             {/* Bagian Icon di sebelah kiri */}
             <div className={`${style.iconBg} w-12 h-12 flex items-center justify-center rounded-lg flex-shrink-0`}>
                 <i className={`${style.icon} ${style.iconColor} text-2xl`}></i>

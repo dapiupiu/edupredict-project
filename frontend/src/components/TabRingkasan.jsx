@@ -15,7 +15,7 @@ function TabRingkasan({ profileData, siswaBerisiko, notifikasi, onEditClick }) {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-6">
             {/* Kolom Kiri — Info Profil */}
             <div className="lg:col-span-1">
-                <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 text-center h-full flex flex-col">
+                <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 text-center">
                     <div className="relative w-16 h-16 mx-auto mb-3">
                         {profileData.foto_profil ? (
                             <img src={`${BASE_URL}/${profileData.foto_profil}`} alt="Profil" className="w-16 h-16 rounded-full object-cover border-2 border-blue-50" />
@@ -123,10 +123,10 @@ function TabRingkasan({ profileData, siswaBerisiko, notifikasi, onEditClick }) {
                             </div>
                         </div>
                         
-                        <div className="pt-6 mt-auto">
+                        <div className="pt-6">
                             <button
                                 onClick={onEditClick}
-                                className="w-full py-2.5 px-4 bg-blue-50 text-blue-600 hover:bg-blue-100 font-bold rounded-xl transition-all flex items-center justify-center gap-2 text-sm border border-blue-100"
+                                className="w-full py-2.5 px-4 bg-blue-50 text-blue-600 hover:bg-blue-100 font-bold rounded-xl transition-all flex items-center justify-center gap-2 text-sm border border-blue-100 cursor-pointer"
                             >
                                 <i className="ri-edit-line"></i>
                                 Edit Profil

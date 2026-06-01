@@ -102,14 +102,14 @@ function DaftarSiswa({ className, isDashboard, isDaftarSiswa = false, dataSiswa 
                                         <div className="flex gap-2 justify-center">
                                             <button 
                                                 onClick={() => navigate('/monitoringSiswa', { state: { studentId: item.id } })}
-                                                className="bg-blue-100 text-blue-800 px-2 py-1 text-xs rounded hover:bg-blue-200 transition-colors duration-200"
+                                                className="bg-blue-100 text-blue-800 px-2 py-1 text-xs rounded hover:bg-blue-200 transition-colors duration-200 cursor-pointer"
                                             >
                                                 Detail 
                                             </button>
                                             {!isDashboard && (
                                             <button 
                                                 onClick={() => navigate('/tambahSiswa', { state: { studentId: item.id } })}
-                                                className="bg-green-100 text-green-800 px-2 py-1 text-xs rounded hover:bg-green-200 transition-colors duration-200"
+                                                className="bg-green-100 text-green-800 px-2 py-1 text-xs rounded hover:bg-green-200 transition-colors duration-200 cursor-pointer"
                                             >
                                                 <i className="ri-edit-line"></i>
                                                 <span> Edit</span>
@@ -118,7 +118,7 @@ function DaftarSiswa({ className, isDashboard, isDaftarSiswa = false, dataSiswa 
                                             {!isDashboard && (
                                                 <button 
                                                     onClick={() => onDelete && onDelete(item.id, item.nama_siswa || item.nama)}
-                                                    className="bg-red-50 text-red-600 px-2 py-1 text-xs rounded hover:bg-red-100 transition-colors duration-200 flex items-center gap-1"
+                                                    className="bg-red-50 text-red-600 px-2 py-1 text-xs rounded hover:bg-red-100 transition-colors duration-200 flex items-center gap-1 cursor-pointer"
                                                     title="Hapus Data"
                                                 >
                                                     <i className="ri-delete-bin-line"></i>
@@ -141,9 +141,14 @@ function DaftarSiswa({ className, isDashboard, isDaftarSiswa = false, dataSiswa 
 
             </div>
             {!isDaftarSiswa && (
-                <Link to="/daftarSiswa" className=" text-blue-800 flex justify-end mt-10 px-3 py-1 rounded hover:underline transition-colors duration-200 ">
-                    Lihat Semua
-                </Link>
+                <div className="flex justify-end mt-10">
+                    <Link 
+                        to="/daftarSiswa" 
+                        className="relative text-blue-800 font-light transition-all duration-300 cursor-pointer after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-blue-800 after:transition-all after:duration-300 hover:after:w-full"
+                    >
+                        Lihat Semua
+                    </Link>
+                </div>
             )}
 
         </div>
