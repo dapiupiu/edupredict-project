@@ -1,6 +1,6 @@
 import heroImg from '../assets/hero.png';
-import guruPreview from '../assets/dashboard_guru.png';
-import siswaPreview from '../assets/dashboard_siswa.png';
+import guruPreview from '../assets/dashboard-guru.png';
+import siswaPreview from '../assets/dashboard-siswa.png';
 import { Link } from 'react-router-dom';
 
 function HomePage() {
@@ -17,7 +17,7 @@ function HomePage() {
                         <h1 className="font-bold mb-4 lg:text-6xl text-5xl leading-tight">Deteksi Dini <br /><span className="text-blue-800 font-extrabold">Masa Depan Pasti</span></h1>
                         <p className="text-base leading-relaxed text-slate-500 max-w-md mx-auto md:mx-0">Sistem yang dirancang untuk membantu tenaga pendidik dalam mendeteksi risiko akademik siswa secara proaktif berdasarkan data dan analisis yang akurat.</p>
                         <div className="mt-8">
-                            <Link to="login-guru" className="bg-amber-400 text-blue-900 px-8 py-4 rounded-xl text-lg font-black hover:bg-amber-500 hover:scale-105 transition-all duration-300 shadow-lg shadow-amber-200/50 inline-flex items-center gap-2 border-2 border-amber-500/20">Mulai Deteksi <i className="ri-search-ai-line"></i></Link>
+                            <Link to="/login-guru" className="bg-amber-400 text-blue-900 px-8 py-4 rounded-xl text-lg font-black hover:bg-amber-500 hover:scale-105 transition-all duration-300 shadow-lg shadow-amber-200/50 inline-flex items-center gap-2 border-2 border-amber-500/20">Mulai Deteksi <i className="ri-search-ai-line"></i></Link>
                         </div>
                     </div>
                     <img src={heroImg} alt="hero" className="md:block hidden w-full" />
