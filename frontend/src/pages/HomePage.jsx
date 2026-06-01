@@ -150,13 +150,17 @@ function HomePage() {
                                 <i className="ri-user-line text-2xl text-white"></i>
                             </div>
                             <h3 className="text-xl font-bold mb-1">Kaka Davi Dharmawan</h3>
-                            <p className="text-blue-700 text-sm font-medium mb-3">Data Scientist (CDCC221D6Y1015)</p>
+                            <p className="text-slate-500 text-sm font-medium mb-2">Data Scientist</p>
+                            <div className="mb-4">
+                                <span className="bg-blue-50 text-blue-700 text-[10px] font-bold px-3 py-1 rounded-full border border-blue-100 shadow-sm">CDCC221D6Y1015</span>
+                            </div>
                             <div className="flex items-center gap-3">
-                                <p className="text-blue-900 font-medium text-2xl mb-3">
-                                <a href="https://www.linkedin.com/in/kakadavidharmawan/" target="_blank" rel="noopener noreferrer" className="text-2xl mb-3 text-blue-800 hover:text-sky-700 transition-colors duration-300">
-                                    <i className="ri-linkedin-box-fill"></i></a>
-                                <a href="https://github.com/dapiupiu" target="_blank" rel="noopener noreferrer" className="text-2xl mb-3 text-slate-800 hover:text-gray-700 transition-colors duration-300">
-                                    <i className="ri-github-fill"></i></a></p>
+                                <a href="https://www.linkedin.com/in/kakadavidharmawan/" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-blue-700 hover:bg-blue-600 hover:text-white transition-all duration-300 shadow-sm">
+                                    <i className="ri-linkedin-box-fill text-xl"></i>
+                                </a>
+                                <a href="https://github.com/dapiupiu" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-800 hover:bg-slate-900 hover:text-white transition-all duration-300 shadow-sm">
+                                    <i className="ri-github-fill text-xl"></i>
+                                </a>
                             </div>
                         </div>
                         <div className="bg-white p-8 rounded-2xl border border-blue-100 transition-all duration-300 hover:-translate-y-2 hover:shadow-xl cursor-pointer flex flex-col items-center text-center">
@@ -164,13 +168,17 @@ function HomePage() {
                                 <i className="ri-user-line text-2xl text-white"></i>
                             </div>
                             <h3 className="text-xl font-bold mb-1">Sandi Maulana</h3>
-                            <p className="text-blue-700 text-sm font-medium mb-3">AI Engineer (CACC277D6Y0059)</p>
+                            <p className="text-slate-500 text-sm font-medium mb-2">AI Engineer</p>
+                            <div className="mb-4">
+                                <span className="bg-blue-50 text-blue-700 text-[10px] font-bold px-3 py-1 rounded-full border border-blue-100 shadow-sm">CACC277D6Y0059</span>
+                            </div>
                             <div className="flex items-center gap-3">
-                                <p className="text-blue-900 font-medium text-2xl mb-3">
-                                <a href="https://www.linkedin.com/in/sndimlanaa/" target="_blank" rel="noopener noreferrer" className="text-2xl mb-3 text-blue-800 hover:text-sky-700 transition-colors duration-300">
-                                    <i className="ri-linkedin-box-fill"></i></a>
-                                <a href="https://github.com/bluemorphomenelaus" target="_blank" rel="noopener noreferrer" className="text-2xl mb-3 text-slate-800 hover:text-gray-700 transition-colors duration-300">
-                                    <i className="ri-github-fill"></i></a></p>
+                                <a href="https://www.linkedin.com/in/sndimlanaa/" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-blue-700 hover:bg-blue-600 hover:text-white transition-all duration-300 shadow-sm">
+                                    <i className="ri-linkedin-box-fill text-xl"></i>
+                                </a>
+                                <a href="https://github.com/bluemorphomenelaus" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-800 hover:bg-slate-900 hover:text-white transition-all duration-300 shadow-sm">
+                                    <i className="ri-github-fill text-xl"></i>
+                                </a>
                             </div>
                         </div>
                         <div className="bg-white p-8 rounded-2xl border border-blue-100 transition-all duration-300 hover:-translate-y-2 hover:shadow-xl cursor-pointer flex flex-col items-center text-center">
@@ -178,13 +186,17 @@ function HomePage() {
                                 <i className="ri-user-line text-2xl text-white"></i>
                             </div>
                             <h3 className="text-xl font-bold mb-1">Andhika Firmansyah</h3>
-                            <p className="text-blue-700 text-sm font-medium mb-3">Full-Stack Web (CFCC255D6Y1408)</p>
+                            <p className="text-slate-500 text-sm font-medium mb-2">Full-Stack Web</p>
+                            <div className="mb-4">
+                                <span className="bg-blue-50 text-blue-700 text-[10px] font-bold px-3 py-1 rounded-full border border-blue-100 shadow-sm">CFCC255D6Y1408</span>
+                            </div>
                             <div className="flex items-center gap-3">
-                                <p className="text-blue-900 font-medium text-2xl mb-3">
-                                <a href="https://www.linkedin.com/in/andhika-firmansyah-b63530235/" target="_blank" rel="noopener noreferrer" className="text-2xl mb-3 text-blue-800 hover:text-sky-700 transition-colors duration-300">
-                                    <i className="ri-linkedin-box-fill"></i></a>
-                                <a href="https://github.com/raelkertiaa" target="_blank" rel="noopener noreferrer" className="text-2xl mb-3 text-slate-800 hover:text-gray-700 transition-colors duration-300">
-                                    <i className="ri-github-fill"></i></a></p>
+                                <a href="https://www.linkedin.com/in/andhika-firmansyah-b63530235/" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-blue-700 hover:bg-blue-600 hover:text-white transition-all duration-300 shadow-sm">
+                                    <i className="ri-linkedin-box-fill text-xl"></i>
+                                </a>
+                                <a href="https://github.com/raelkertiaa" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-800 hover:bg-slate-900 hover:text-white transition-all duration-300 shadow-sm">
+                                    <i className="ri-github-fill text-xl"></i>
+                                </a>
                             </div>
                         </div>
                         <div className="bg-white p-8 rounded-2xl border border-blue-100 transition-all duration-300 hover:-translate-y-2 hover:shadow-xl cursor-pointer flex flex-col items-center text-center">
@@ -192,13 +204,17 @@ function HomePage() {
                                 <i className="ri-user-line text-2xl text-white"></i>
                             </div>
                             <h3 className="text-xl font-bold mb-1">Dwi Shugita Syaka Dewi</h3>
-                            <p className="text-blue-700 text-sm font-medium mb-3">Data Scientist (CDCC006D6X2523)</p>
+                            <p className="text-slate-500 text-sm font-medium mb-2">Data Scientist</p>
+                            <div className="mb-4">
+                                <span className="bg-blue-50 text-blue-700 text-[10px] font-bold px-3 py-1 rounded-full border border-blue-100 shadow-sm">CDCC006D6X2523</span>
+                            </div>
                             <div className="flex items-center gap-3">
-                                <p className="text-blue-900 font-medium text-2xl mb-3">
-                                <a href="https://www.linkedin.com/in/dwi-shugita-syaka-dewi-a11a17291/" target="_blank" rel="noopener noreferrer" className="text-2xl mb-3 text-blue-800 hover:text-sky-700 transition-colors duration-300">
-                                    <i className="ri-linkedin-box-fill"></i></a>
-                                <a href="https://github.com/syakadewii" target="_blank" rel="noopener noreferrer" className="text-2xl mb-3 text-slate-800 hover:text-gray-700 transition-colors duration-300">
-                                    <i className="ri-github-fill"></i></a></p>
+                                <a href="https://www.linkedin.com/in/dwi-shugita-syaka-dewi-a11a17291/" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-blue-700 hover:bg-blue-600 hover:text-white transition-all duration-300 shadow-sm">
+                                    <i className="ri-linkedin-box-fill text-xl"></i>
+                                </a>
+                                <a href="https://github.com/syakadewii" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-800 hover:bg-slate-900 hover:text-white transition-all duration-300 shadow-sm">
+                                    <i className="ri-github-fill text-xl"></i>
+                                </a>
                             </div>
                         </div>
                         <div className="bg-white p-8 rounded-2xl border border-blue-100 transition-all duration-300 hover:-translate-y-2 hover:shadow-xl cursor-pointer flex flex-col items-center text-center">
@@ -206,13 +222,17 @@ function HomePage() {
                                 <i className="ri-user-line text-2xl text-white"></i>
                             </div>
                             <h3 className="text-xl font-bold mb-1">Rintami Salsabila</h3>
-                            <p className="text-blue-700 text-sm font-medium mb-3">AI Engineer (CACC255D6X0703)</p>
+                            <p className="text-slate-500 text-sm font-medium mb-2">AI Engineer</p>
+                            <div className="mb-4">
+                                <span className="bg-blue-50 text-blue-700 text-[10px] font-bold px-3 py-1 rounded-full border border-blue-100 shadow-sm">CACC255D6X0703</span>
+                            </div>
                             <div className="flex items-center gap-3">
-                                <p className="text-blue-900 font-medium text-2xl mb-3">
-                                <a href="https://www.linkedin.com/in/rintami-salsabila/" target="_blank" rel="noopener noreferrer" className="text-2xl mb-3 text-blue-800 hover:text-sky-700 transition-colors duration-300">
-                                    <i className="ri-linkedin-box-fill"></i></a>
-                                <a href="https://github.com/rintami" target="_blank" rel="noopener noreferrer" className="text-2xl mb-3 text-slate-800 hover:text-gray-700 transition-colors duration-300">
-                                    <i className="ri-github-fill"></i></a></p>
+                                <a href="https://www.linkedin.com/in/rintami-salsabila/" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-blue-700 hover:bg-blue-600 hover:text-white transition-all duration-300 shadow-sm">
+                                    <i className="ri-linkedin-box-fill text-xl"></i>
+                                </a>
+                                <a href="https://github.com/rintami" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-800 hover:bg-slate-900 hover:text-white transition-all duration-300 shadow-sm">
+                                    <i className="ri-github-fill text-xl"></i>
+                                </a>
                             </div>
                         </div>
                         <div className="bg-white p-8 rounded-2xl border border-blue-100 transition-all duration-300 hover:-translate-y-2 hover:shadow-xl cursor-pointer flex flex-col items-center text-center">
@@ -220,13 +240,17 @@ function HomePage() {
                                 <i className="ri-user-line text-2xl text-white"></i>
                             </div>
                             <h3 className="text-xl font-bold mb-1">Nur Ayu Aini Amalia</h3>
-                            <p className="text-blue-700 text-sm font-medium mb-3">Full-Stack Web (CFCC155D6X2028)</p>
+                            <p className="text-slate-500 text-sm font-medium mb-2">Full-Stack Web</p>
+                            <div className="mb-4">
+                                <span className="bg-blue-50 text-blue-700 text-[10px] font-bold px-3 py-1 rounded-full border border-blue-100 shadow-sm">CFCC155D6X2028</span>
+                            </div>
                             <div className="flex items-center gap-3">
-                                <p className="text-blue-900 font-medium text-2xl mb-3">
-                                <a href="https://www.linkedin.com/in/nur-ayu-aini-amalia-517a702a6/" target="_blank" rel="noopener noreferrer" className="text-2xl mb-3 text-blue-800 hover:text-sky-700 transition-colors duration-300">
-                                    <i className="ri-linkedin-box-fill"></i></a>
-                                <a href="https://github.com/Ayni2605" target="_blank" rel="noopener noreferrer" className="text-2xl mb-3 text-slate-800 hover:text-gray-700 transition-colors duration-300">
-                                    <i className="ri-github-fill"></i></a> </p>
+                                <a href="https://www.linkedin.com/in/nur-ayu-aini-amalia-517a702a6/" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-blue-700 hover:bg-blue-600 hover:text-white transition-all duration-300 shadow-sm">
+                                    <i className="ri-linkedin-box-fill text-xl"></i>
+                                </a>
+                                <a href="https://github.com/Ayni2605" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-800 hover:bg-slate-900 hover:text-white transition-all duration-300 shadow-sm">
+                                    <i className="ri-github-fill text-xl"></i>
+                                </a>
                             </div>
                         </div>
                     </div>
