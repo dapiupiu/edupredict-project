@@ -163,7 +163,7 @@ function HomePage() {
                             <div className="bg-blue-900 w-14 h-14 rounded-xl flex items-center justify-center mb-6">
                                 <i className="ri-user-line text-2xl text-white"></i>
                             </div>
-                            <h3 className="text-xl font-bold mb-1">Sandi Maulanaa</h3>
+                            <h3 className="text-xl font-bold mb-1">Sandi Maulana</h3>
                             <p className="text-blue-700 text-sm font-medium mb-3">AI Engineer (CACC277D6Y0059)</p>
                             <div className="flex items-center gap-3">
                                 <p className="text-blue-900 font-medium text-2xl mb-3">
