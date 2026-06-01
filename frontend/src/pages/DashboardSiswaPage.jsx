@@ -85,20 +85,16 @@ function DashboardSiswaPage() {
 
     const translateMap = {
         'High': 'Tinggi', 'Medium': 'Sedang', 'Low': 'Rendah',
-        'High School': 'SMA/SMK', 'College': 'Diploma/S1', 'Postgraduate': 'S2/S3',
         'Positive': 'Baik', 'Neutral': 'Biasa saja', 'Negative': 'Buruk',
         'Yes': 'Ada', 'No': 'Tidak',
-        'Public': 'Negeri', 'Private': 'Swasta'
+        'Male': 'Laki-laki', 'Female': 'Perempuan',
     };
 
     const translate = (val, field = "") => {
         if (!val) return '-';
         
         const specificTranslations = {
-            income: { 'Medium': 'Menengah', 'Low': 'Rendah', 'High': 'Tinggi' },
             motivation: { 'Low': 'Kurang termotivasi', 'Medium': 'Cukup termotivasi', 'High': 'Sangat termotivasi' },
-            teacher: { 'Low': 'Kurang baik', 'Medium': 'Cukup baik', 'High': 'Sangat baik' },
-            involvement: { 'Low': 'Jarang terlibat', 'Medium': 'Cukup terlibat', 'High': 'Sangat terlibat' },
             resources: { 'Low': 'Terbatas', 'Medium': 'Cukup', 'High': 'Lengkap' }
         };
 
@@ -227,6 +223,7 @@ function DashboardSiswaPage() {
                             Ringkasan data belajar
                         </h2>
                         <div className="space-y-5">
+                            <DetailItem label="Jenis Kelamin" value={translate(data.gender)} />
                             <DetailItem label="Jam Tidur/malam" value={`${data.sleep_hours || 0} j/mlm`} />
                             <DetailItem label="Aktivitas Fisik/minggu" value={`${data.physical_activity || 0} j/mgg`} />
                             <DetailItem label="Tingkat Motivasi Belajar" value={translate(data.motivation_level, 'motivation')} />
