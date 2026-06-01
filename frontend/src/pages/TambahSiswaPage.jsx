@@ -35,10 +35,8 @@ function TambahSiswaPage() {
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [existingStudents, setExistingStudents] = useState([]);
-  const [teacherProfile, setTeacherProfile] = useState(null);
   const [createdStudentId, setCreatedStudentId] = useState(null);
   const [predictionResult, setPredictionResult] = useState(null);
-  const [oodWarnings, setOodWarnings] = useState([]);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -114,7 +112,6 @@ function TambahSiswaPage() {
         const res = await fetch(`${BASE_URL}/api/auth/me`, { headers: { Authorization: `Bearer ${token}` } });
         const result = await res.json();
         if (result.success) {
-          setTeacherProfile(result.data);
           // Autofill kelas jika sedang menambah siswa baru (bukan mode edit)
           if (!location.state?.studentId && result.data.kelas) {
             setFormData(prev => ({ ...prev, kelas: result.data.kelas }));
@@ -134,30 +131,12 @@ function TambahSiswaPage() {
     if (errors[field]) setErrors((prev) => ({ ...prev, [field]: null }));
   };
 
-  // Fungsi normalisasi kelas: 9A -> 9A, IXA -> 9A
-  const normalizeKelas = (kelas) => {
-    if (!kelas) return "";
-    let s = kelas.toUpperCase().replace(/\s+/g, "");
-    const romanMap = {
-      "XII": "12", "XI": "11", "X": "10",
-      "IX": "9", "VIII": "8", "VII": "7", "VI": "6",
-      "V": "5", "IV": "4", "III": "3", "II": "2", "I": "1"
-    };
-    const sortedRomans = Object.keys(romanMap).sort((a, b) => b.length - a.length);
-    for (const rom of sortedRomans) {
-      if (s.startsWith(rom)) {
-        return s.replace(rom, romanMap[rom]);
-      }
-    }
-    return s;
-  };
 
   const validateForm = () => {
     const newErrors = {};
     const requiredFields = [
       "nama_siswa",
       "nisn",
-      "kelas",
       "gender",
       "parental_education_level",
       "hours_studied",
@@ -203,9 +182,6 @@ function TambahSiswaPage() {
       newErrors.nisn = "NISN harus terdiri dari 10 digit angka";
     }
 
-    if (teacherProfile && teacherProfile.kelas && normalizeKelas(formData.kelas) !== normalizeKelas(teacherProfile.kelas)) {
-      newErrors.kelas = `Kelas siswa harus sama dengan kelas Anda sebagai Wali Kelas (${teacherProfile.kelas})`;
-    }
 
     if (
       formData.hours_studied &&
@@ -343,16 +319,6 @@ function TambahSiswaPage() {
         throw new Error(dataPredict.message);
       }
 
-      // Set OOD warnings jika ada nilai yang di-clamp
-      if (
-        dataPredict.data?.is_ood &&
-        dataPredict.data?.ood_warnings?.length > 0
-      ) {
-        setOodWarnings(dataPredict.data.ood_warnings);
-      } else {
-        setOodWarnings([]);
-      }
-
       setPredictionResult(dataPredict.data);
       setStep(2);
       window.scrollTo(0, 0);
@@ -467,10 +433,10 @@ function TambahSiswaPage() {
                 </div>
                 <div>
                   <p className="text-xs text-gray-500 uppercase font-semibold tracking-wider">
-                    Kehadiran
+                    Kehadiran 
                   </p>
                   <p className="font-bold text-gray-800">
-                    {formData.attendance}%
+                    {formData.attendance}% 
                   </p>
                 </div>
                 <div>
