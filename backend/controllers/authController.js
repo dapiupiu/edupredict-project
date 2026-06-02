@@ -14,20 +14,23 @@ const getPasswordValidationMessage = () => {
 
 // POST /api/auth/register
 const register = async (req, res) => {
-  const { email, password, namaLengkap, username } = req.body;
+  const { email, password, namaLengkap, username, kelas } = req.body;
   const nama = namaLengkap || username;
 
-  if (!nama || !email || !password) {
+  if (!nama || !email || !password || !kelas) {
     return res.status(400).json({
       success: false,
-      message: "Nama, email, dan password wajib diisi.",
+      message: "Nama, email, password, dan wali kelas wajib diisi.",
     });
   }
 
-  if (!isStrongPassword(password)) {
+  const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d).{8,}$/;
+
+  if (!passwordRegex.test(password)) {
     return res.status(400).json({
       success: false,
-      message: getPasswordValidationMessage(),
+      message:
+        "Password minimal 8 karakter dan harus mengandung kombinasi huruf serta angka.",
     });
   }
 
@@ -47,15 +50,21 @@ const register = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const [result] = await db.query(
-      `INSERT INTO users (nama, email, password_hash, role)
-       VALUES (?, ?, ?, 'guru')`,
-      [nama, email, hashedPassword],
+      `INSERT INTO users (nama, email, password_hash, role, kelas)
+       VALUES (?, ?, ?, 'guru', ?)`,
+      [nama, email, hashedPassword, kelas.trim()],
     );
 
     return res.status(201).json({
       success: true,
       message: "Registrasi berhasil. Silakan login.",
-      data: { id: result.insertId, nama, email, role: "guru" },
+      data: {
+        id: result.insertId,
+        nama,
+        email,
+        role: "guru",
+        kelas: kelas.trim(),
+      },
     });
   } catch (err) {
     console.error("Register Error:", err);
