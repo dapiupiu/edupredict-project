@@ -132,91 +132,105 @@ function TambahSiswaPage() {
   };
 
 
-  const validateForm = () => {
-    const newErrors = {};
-    const requiredFields = [
-      "nama_siswa",
-      "nisn",
-      "gender",
-      "parental_education_level",
-      "hours_studied",
-      "attendance",
-      "previous_scores",
-      "sleep_hours",
-      "tutoring_sessions",
-      "physical_activity",
-      "parental_involvement",
-      "access_to_resources",
-      "motivation_level",
-      "internet_access",
-      "family_income",
-      "peer_influence",
-      "teacher_quality",
-    ];
+ const validateForm = () => {
+  const newErrors = {};
 
-    requiredFields.forEach((field) => {
-      if (
-        !formData[field] ||
-        (typeof formData[field] === "string" && !formData[field].trim())
-      ) {
-        newErrors[field] = "Bagian ini harus diisi";
-      }
-    });
+  const requiredFields = [
+    "nama_siswa",
+    "nisn",
+    "gender",
+    "parental_education_level",
+    "hours_studied",
+    "attendance",
+    "previous_scores",
+    "sleep_hours",
+    "tutoring_sessions",
+    "physical_activity",
+    "parental_involvement",
+    "access_to_resources",
+    "motivation_level",
+    "internet_access",
+    "family_income",
+    "peer_influence",
+    "teacher_quality",
+  ];
 
-    const isDuplicateNisn = existingStudents.some(
-      (s) =>
-        String(s.nisn) === String(formData.nisn) && s.id !== createdStudentId,
-    );
-    const isDuplicateNama = existingStudents.some(
-      (s) =>
-        s.nama_siswa.toLowerCase().trim() ===
-          formData.nama_siswa.toLowerCase().trim() && s.id !== createdStudentId,
-    );
-
-    if (isDuplicateNisn)
-      newErrors.nisn = "NISN tersebut sudah terdapat di daftar siswa";
-    if (isDuplicateNama)
-      newErrors.nama_siswa = "Nama tersebut sudah terdapat di daftar siswa";
-
-    if (formData.nisn && !/^\d{10}$/.test(formData.nisn)) {
-      newErrors.nisn = "NISN harus terdiri dari 10 digit angka";
+  requiredFields.forEach((field) => {
+    if (
+      !formData[field] ||
+      (typeof formData[field] === "string" && !formData[field].trim())
+    ) {
+      newErrors[field] = "Bagian ini harus diisi";
     }
+  });
 
+  const isDuplicateNisn = existingStudents.some(
+    (s) => String(s.nisn) === String(formData.nisn) && s.id !== createdStudentId,
+  );
 
-    if (
-      formData.hours_studied &&
-      (formData.hours_studied < 0 || formData.hours_studied > 36)
-    )
-      newErrors.hours_studied = "Maksimal 36 jam";
-    if (
-      formData.attendance &&
-      (formData.attendance < 0 || formData.attendance > 100)
-    )
-      newErrors.attendance = "Skala: 0 - 100";
-    if (
-      formData.previous_scores &&
-      (formData.previous_scores < 0 || formData.previous_scores > 100)
-    )
-      newErrors.previous_scores = "Skala: 0 - 100";
-    if (
-      formData.sleep_hours &&
-      (formData.sleep_hours < 0 || formData.sleep_hours > 24)
-    )
-      newErrors.sleep_hours = "Maksimal 24 jam";
-      
-    if (
-      formData.tutoring_sessions &&
-      (formData.tutoring_sessions < 0 || formData.tutoring_sessions > 4)
-    )
-      newErrors.tutoring_sessions = "Maksimal 4 sesi";
-    if (
-      formData.physical_activity &&
-      (formData.physical_activity < 0 || formData.physical_activity > 6)
-    )
-      newErrors.physical_activity = "Maksimal 6";
+  const isDuplicateNama = existingStudents.some(
+    (s) =>
+      s.nama_siswa.toLowerCase().trim() ===
+        formData.nama_siswa.toLowerCase().trim() && s.id !== createdStudentId,
+  );
 
-    return newErrors;
+  if (isDuplicateNisn) {
+    newErrors.nisn = "NISN tersebut sudah terdapat di daftar siswa";
+  }
+
+  if (isDuplicateNama) {
+    newErrors.nama_siswa = "Nama tersebut sudah terdapat di daftar siswa";
+  }
+
+  if (formData.nisn && !/^\d{10}$/.test(formData.nisn)) {
+    newErrors.nisn = "NISN harus terdiri dari 10 digit angka";
+  }
+
+  const numericRules = {
+    hours_studied: {
+      min: 0,
+      max: 36,
+      message: "Jam belajar harus berada pada rentang 0 - 36",
+    },
+    attendance: {
+      min: 0,
+      max: 100,
+      message: "Kehadiran harus berada pada rentang 0 - 100",
+    },
+    previous_scores: {
+      min: 0,
+      max: 100,
+      message: "Nilai rapor harus berada pada rentang 0 - 100",
+    },
+    sleep_hours: {
+      min: 0,
+      max: 10,
+      message: "Jam tidur harus berada pada rentang 0 - 10",
+    },
+    tutoring_sessions: {
+      min: 0,
+      max: 7,
+      message: "Sesi bimbingan harus berada pada rentang 0 - 7",
+    },
+    physical_activity: {
+      min: 0,
+      max: 6,
+      message: "Aktivitas fisik harus berada pada rentang 0 - 6",
+    },
   };
+
+  Object.entries(numericRules).forEach(([field, rule]) => {
+    if (formData[field] !== "" && formData[field] !== null) {
+      const value = Number(formData[field]);
+
+      if (Number.isNaN(value) || value < rule.min || value > rule.max) {
+        newErrors[field] = rule.message;
+      }
+    }
+  });
+
+  return newErrors;
+};
 
   const handlePredict = async (e) => {
     e.preventDefault();

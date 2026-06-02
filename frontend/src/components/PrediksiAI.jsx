@@ -229,9 +229,13 @@ function PrediksiAI({
           ? `Keterlibatan orang tua ${catLabel[val] || val} — dukungan keluarga yang baik.`
           : null,
         Access_to_Resources:
-          val === "Yes"
-            ? `Akses sumber belajar tersedia — mendukung proses belajar mandiri.`
-            : null,
+          val === "High"
+            ? `Akses sumber belajar lengkap — sangat mendukung proses belajar mandiri.`
+            : val === "Medium"
+              ? `Akses sumber belajar cukup — masih mendukung proses belajar, tetapi bisa ditingkatkan.`
+              : val === "Low"
+                ? `Akses sumber belajar terbatas — perlu dukungan tambahan agar proses belajar lebih optimal.`
+                : null,
         Internet_Access:
           val === "Yes"
             ? `Memiliki akses internet — memudahkan eksplorasi belajar.`
@@ -306,10 +310,13 @@ function PrediksiAI({
         : `Keterlibatan orang tua perlu ditingkatkan.`,
 
       Access_to_Resources:
-        val === "No"
-          ? `Akses sumber belajar tidak tersedia — keterbatasan ini menyulitkan belajar mandiri di rumah.`
-          : `Pemanfaatan sumber belajar perlu dioptimalkan.`,
-
+        val === "Low"
+          ? `Akses sumber belajar terbatas — keterbatasan ini dapat menyulitkan proses belajar mandiri.`
+          : val === "Medium"
+            ? `Akses sumber belajar cukup — perlu dioptimalkan agar hasil belajar lebih stabil.`
+            : val === "High"
+              ? `Akses sumber belajar lengkap — namun AI tetap mendeteksi faktor ini perlu dipantau bersama faktor lain.`
+              : `Pemanfaatan sumber belajar perlu dioptimalkan.`,
       Internet_Access:
         val === "No"
           ? `Tidak memiliki akses internet di rumah — membatasi eksplorasi materi dan referensi belajar.`
@@ -340,136 +347,223 @@ function PrediksiAI({
     );
   };
 
+  const statusStyles = {
+    good: {
+      color: "text-green-700",
+      dot: "bg-green-500",
+      border: "border-green-200",
+      bg: "bg-green-50",
+    },
+    warning: {
+      color: "text-orange-700",
+      dot: "bg-orange-500",
+      border: "border-orange-200",
+      bg: "bg-orange-50",
+    },
+    danger: {
+      color: "text-red-700",
+      dot: "bg-red-500",
+      border: "border-red-200",
+      bg: "bg-red-50",
+    },
+  };
+
+  const normalizeFactorStatus = (status) => {
+    const value = String(status || "")
+      .trim()
+      .toLowerCase();
+
+    if (["good", "baik", "aman", "positive", "positif"].includes(value)) {
+      return "good";
+    }
+
+    if (
+      [
+        "warning",
+        "warn",
+        "cukup",
+        "sedang",
+        "medium",
+        "moderate",
+        "average",
+        "neutral",
+        "netral",
+      ].includes(value)
+    ) {
+      return "warning";
+    }
+
+    if (
+      [
+        "danger",
+        "bad",
+        "poor",
+        "rendah",
+        "low",
+        "negative",
+        "negatif",
+        "buruk",
+      ].includes(value)
+    ) {
+      return "danger";
+    }
+
+    return null;
+  };
+
+  const normalizeFactorKey = (keyRaw) => {
+    const idToEnKey = {
+      Kehadiran: "Attendance",
+      "Jam Belajar": "Hours_Studied",
+      "Jam Tidur": "Sleep_Hours",
+      "Jam tidur": "Sleep_Hours",
+      "Nilai akademik": "Previous_Scores",
+      "Nilai Rapor Sebelumnya": "Previous_Scores",
+      "Sesi Bimbingan Belajar": "Tutoring_Sessions",
+      "Aktivitas Fisik": "Physical_Activity",
+      "Tingkat Motivasi": "Motivation_Level",
+      "Motivasi belajar": "Motivation_Level",
+      "Akses Internet": "Internet_Access",
+      "Akses Sumber Belajar": "Access_to_Resources",
+      "Pengaruh Teman": "Peer_Influence",
+      "Pendapatan Keluarga": "Family_Income",
+      "Kualitas Pengajaran Guru": "Teacher_Quality",
+      "Keterlibatan Orang Tua": "Parental_Involvement",
+      "Pendidikan Orang Tua": "Parental_Education_Level",
+    };
+
+    return idToEnKey[keyRaw] || keyRaw;
+  };
+
+  const getColorFromValue = (keyRaw) => {
+    const key = normalizeFactorKey(keyRaw);
+    const val = getRawValue(key);
+    const n = parseFloat(val);
+
+    if (!Number.isNaN(n)) {
+      if (key === "Attendance") {
+        if (n < 75) return statusStyles.danger;
+        if (n < 85) return statusStyles.warning;
+        return statusStyles.good;
+      }
+
+      if (key === "Hours_Studied") {
+        if (n < 10) return statusStyles.danger;
+        if (n < 20) return statusStyles.warning;
+        return statusStyles.good;
+      }
+
+      if (key === "Previous_Scores") {
+        if (n < 65) return statusStyles.danger;
+        if (n < 80) return statusStyles.warning;
+        return statusStyles.good;
+      }
+
+      if (key === "Sleep_Hours") {
+        if (n < 6 || n > 10) return statusStyles.danger;
+        if (n < 7 || n > 9) return statusStyles.warning;
+        return statusStyles.good;
+      }
+
+      if (key === "Tutoring_Sessions") {
+        if (n === 0) return statusStyles.danger;
+        if (n < 2) return statusStyles.warning;
+        return statusStyles.good;
+      }
+
+      if (key === "Physical_Activity") {
+        if (n < 1) return statusStyles.danger;
+        if (n < 3) return statusStyles.warning;
+        return statusStyles.good;
+      }
+    }
+
+    const normalizedVal = String(val || "")
+      .trim()
+      .toLowerCase();
+
+    if (
+      ["low", "no", "negative", "rendah", "tidak", "negatif"].includes(
+        normalizedVal,
+      )
+    ) {
+      return statusStyles.danger;
+    }
+
+    if (
+      ["medium", "neutral", "sedang", "cukup", "netral"].includes(normalizedVal)
+    ) {
+      return statusStyles.warning;
+    }
+
+    if (
+      ["high", "yes", "positive", "tinggi", "ya", "positif"].includes(
+        normalizedVal,
+      )
+    ) {
+      return statusStyles.good;
+    }
+
+    if (risk_category === "High") return statusStyles.danger;
+    if (risk_category === "Medium") return statusStyles.warning;
+    return statusStyles.good;
+  };
+
   // Format risk_factors dari AI: [{factor, value, status, note}]
   const formattedFactors =
     risk_factors && risk_factors.length > 0
       ? risk_factors.map((factor) => {
-          // Warna per-faktor berdasarkan field "status" dari AI
-          // good/high/above → hijau | average/medium/moderate → orange | poor/low/below → merah
           const isObject = typeof factor === "object" && factor !== null;
-          const statusRaw = isObject
-            ? String(factor.status || "").toLowerCase()
-            : "";
-          const isGood = ["good", "high", "above", "ok", "excellent"].some(
-            (s) => statusRaw.includes(s),
-          );
-          const isBad = ["poor", "low", "below", "bad", "danger"].some((s) =>
-            statusRaw.includes(s),
-          );
-          const isMed = ["average", "medium", "moderate", "warning"].some((s) =>
-            statusRaw.includes(s),
-          );
-          // Fallback untuk format lama (string): tentukan warna dari nilai aktual siswa
-          const getColorFromValue = (keyRaw) => {
-            const idToEnKey = {
-              Kehadiran: "Attendance",
-              "Jam Belajar": "Hours_Studied",
-              "Jam tidur": "Sleep_Hours",
-              "Nilai akademik": "Previous_Scores",
-              "Nilai Rapor Sebelumnya": "Previous_Scores",
-              "Sesi Bimbingan Belajar": "Tutoring_Sessions",
-              "Aktivitas Fisik": "Physical_Activity",
-              "Tingkat Motivasi": "Motivation_Level",
-              "Motivasi belajar": "Motivation_Level",
-              "Akses Internet": "Internet_Access",
-              "Akses Sumber Belajar": "Access_to_Resources",
-              "Pengaruh Teman": "Peer_Influence",
-              "Pendapatan Keluarga": "Family_Income",
-              "Kualitas Pengajaran Guru": "Teacher_Quality",
-              "Keterlibatan Orang Tua": "Parental_Involvement",
-            };
-            const key = idToEnKey[keyRaw] || keyRaw;
-            const val = getRawValue(key);
-            const n = parseFloat(val);
-            const thresholds = {
-              Attendance: { bad: 75, mid: 85 },
-              Hours_Studied: { bad: 10, mid: 20 },
-              Previous_Scores: { bad: 65, mid: 80 },
-              Sleep_Hours: { bad: 6, mid: 8 },
-              Tutoring_Sessions: { bad: 0, mid: 2 },
-              Physical_Activity: { bad: 1, mid: 3 },
-            };
-            const catBad = { Low: true };
-            const catGood = { High: true, Yes: true, Positive: true };
-            const catMid = { Medium: true, Neutral: true };
-
-            if (!isNaN(n) && thresholds[key]) {
-              const t = thresholds[key];
-              if (n < t.bad)
-                return { color: "text-red-700", dot: "bg-red-500" };
-              if (n < t.mid)
-                return { color: "text-orange-700", dot: "bg-orange-500" };
-              return { color: "text-green-700", dot: "bg-green-500" };
-            }
-            if (catBad[val])
-              return { color: "text-red-700", dot: "bg-red-500" };
-            if (catMid[val])
-              return { color: "text-orange-700", dot: "bg-orange-500" };
-            if (catGood[val])
-              return { color: "text-green-700", dot: "bg-green-500" };
-            return null;
-          };
-
-          let factorColor, factorDot;
-          if (isGood) {
-            factorColor = "text-green-700";
-            factorDot = "bg-green-500";
-          } else if (isBad) {
-            factorColor = "text-red-700";
-            factorDot = "bg-red-500";
-          } else if (isMed) {
-            factorColor = "text-orange-700";
-            factorDot = "bg-orange-500";
-          } else {
-            // Format lama (string) — derive warna dari nilai aktual siswa
-            const factorKeyTemp = isObject ? factor.factor || "" : factor;
-            const derived = getColorFromValue(factorKeyTemp);
-            if (derived) {
-              factorColor = derived.color;
-              factorDot = derived.dot;
-            } else if (risk_category === "High") {
-              factorColor = "text-red-700";
-              factorDot = "bg-red-500";
-            } else if (risk_category === "Medium") {
-              factorColor = "text-orange-700";
-              factorDot = "bg-orange-500";
-            } else {
-              factorColor = "text-green-700";
-              factorDot = "bg-green-500";
-            }
-          }
-
-          // Faktor bisa string (fallback hardcode) atau object dari AI
           const factorKey = isObject ? factor.factor || "" : factor;
+
           const title =
             factorTranslation[factorKey] || factorKey.replace(/_/g, " ") || "";
 
-          // Gunakan note dari AI kalau ada, fallback ke getFactorDescription
+          // Prioritas warna:
+          // 1. status dari AI: good / warning / danger
+          // 2. fallback dari nilai aktual siswa
+          // 3. fallback dari risk_category global
+          const statusKey = isObject
+            ? normalizeFactorStatus(factor.status)
+            : null;
+
+          const style = statusKey
+            ? statusStyles[statusKey]
+            : getColorFromValue(factorKey);
+
           const description =
             isObject && factor.note
               ? factor.note
               : getFactorDescription(factorKey, risk_category === "Low");
 
-          // Nilai aktual dari AI (misal "78%", "Low", dsb)
           const valueLabel =
-            isObject && factor.value ? `Nilai: ${factor.value}` : null;
+            isObject &&
+            factor.value !== undefined &&
+            factor.value !== null &&
+            String(factor.value).trim() !== ""
+              ? `Nilai: ${factor.value}`
+              : null;
 
           return {
             title,
             description,
             valueLabel,
-            color: factorColor,
-            dot: factorDot,
+            color: style.color,
+            dot: style.dot,
+            border: style.border,
+            bg: style.bg,
           };
         })
       : [
           {
             title: "Tidak ada faktor risiko dominan terdeteksi.",
-            value: isSiswa
+            description: isSiswa
               ? "Wah hebat! Kamu menunjukkan pola belajar yang sangat positif di semua aspek."
               : "Siswa menunjukkan pola belajar yang sangat positif di semua aspek.",
             color: "text-green-700",
             dot: "bg-green-600",
+            border: "border-green-200",
+            bg: "bg-green-50",
           },
         ];
 
@@ -583,7 +677,12 @@ function PrediksiAI({
 
           <div className="space-y-4">
             {formattedFactors.map((factor, index) => (
-              <div key={index} className="bg-gray-50 rounded-xl p-4">
+              <div
+                key={index}
+                className={`${factor.bg || "bg-gray-50"} border ${
+                  factor.border || "border-gray-100"
+                } rounded-xl p-4`}
+              >
                 <div className="flex items-center gap-3 mb-1">
                   <div
                     className={`w-3 h-3 rounded-full flex-shrink-0 ${factor.dot}`}

@@ -103,6 +103,57 @@ const inputAcademic = async (req, res) => {
     });
   }
 
+  const numericRules = {
+    hours_studied: {
+      min: 0,
+      max: 36,
+      message: "Jam belajar harus berada pada rentang 0 - 36.",
+    },
+    attendance: {
+      min: 0,
+      max: 100,
+      message: "Kehadiran harus berada pada rentang 0 - 100.",
+    },
+    previous_scores: {
+      min: 0,
+      max: 100,
+      message: "Nilai sebelumnya harus berada pada rentang 0 - 100.",
+    },
+    sleep_hours: {
+      min: 0,
+      max: 10,
+      message: "Jam tidur harus berada pada rentang 0 - 10.",
+    },
+    tutoring_sessions: {
+      min: 0,
+      max: 7,
+      message: "Sesi bimbingan harus berada pada rentang 0 - 7.",
+    },
+    physical_activity: {
+      min: 0,
+      max: 6,
+      message: "Aktivitas fisik harus berada pada rentang 0 - 6.",
+    },
+  };
+
+  const validationErrors = {};
+
+  Object.entries(numericRules).forEach(([field, rule]) => {
+    const value = Number(requiredFields[field]);
+
+    if (Number.isNaN(value) || value < rule.min || value > rule.max) {
+      validationErrors[field] = rule.message;
+    }
+  });
+
+  if (Object.keys(validationErrors).length > 0) {
+    return res.status(400).json({
+      success: false,
+      message: "Data akademik tidak valid.",
+      errors: validationErrors,
+    });
+  }
+
   try {
     // ── STEP 1: Cek siswa ───────────────────────────────
     const [studentRows] = await db.query(

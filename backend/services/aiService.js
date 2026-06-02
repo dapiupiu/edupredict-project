@@ -1,18 +1,20 @@
-const axios = require('axios');
+const axios = require("axios");
 
 const AI_SERVICE_URL = process.env.AI_SERVICE_URL;
 
 const normalizeRiskCategory = (value) => {
-  const risk = String(value || '').toLowerCase();
-  if (risk === 'low' || risk === 'rendah') return 'Low';
-  if (risk === 'medium' || risk === 'sedang') return 'Medium';
-  if (risk === 'high' || risk === 'tinggi') return 'High';
-  return 'Medium';
+  const risk = String(value || "").toLowerCase();
+
+  if (risk === "low" || risk === "rendah") return "Low";
+  if (risk === "medium" || risk === "sedang") return "Medium";
+  if (risk === "high" || risk === "tinggi") return "High";
+
+  return "Medium";
 };
 
 const predictRiskWithAI = async (payload) => {
   if (!AI_SERVICE_URL) {
-    throw new Error('AI_SERVICE_URL belum diatur di .env');
+    throw new Error("AI_SERVICE_URL belum diatur di .env");
   }
 
   const aiPayload = {
@@ -33,21 +35,21 @@ const predictRiskWithAI = async (payload) => {
         Peer_Influence: payload.Peer_Influence,
         Physical_Activity: payload.Physical_Activity,
         Parental_Education_Level: payload.Parental_Education_Level,
-      }
-    }
+      },
+    },
   };
 
   const response = await axios.post(
     `${AI_SERVICE_URL}/api/v1/predict`,
     aiPayload,
     {
-      timeout: 15000,
-      headers: { 'Content-Type': 'application/json' },
-    }
+      timeout: 30000,
+      headers: { "Content-Type": "application/json" },
+    },
   );
 
   if (!response.data?.results?.[0]?.prediction?.risk_category) {
-    throw new Error('Response AI tidak valid');
+    throw new Error("Response AI tidak valid");
   }
 
   const result = response.data.results[0];
@@ -61,7 +63,7 @@ const predictRiskWithAI = async (payload) => {
       High: result.probabilities?.High || 0,
     },
     risk_factors: [],
-    source: 'ai',
+    source: "ai",
   };
 };
 
@@ -70,12 +72,15 @@ const analyzeDominantFactors = async (payload) => {
     const response = await axios.post(
       `${AI_SERVICE_URL}/api/v1/analyze/dominant-factors`,
       payload,
-      { timeout: 30000, headers: { 'Content-Type': 'application/json' } }
+      {
+        timeout: 30000,
+        headers: { "Content-Type": "application/json" },
+      },
     );
-    // Response: { success, student, source, factors: [{factor, value, status, note}] }
+
     return response.data.factors || [];
   } catch (err) {
-    console.error('Dominant factors error:', err.message);
+    console.error("Dominant factors error:", err.message);
     return [];
   }
 };
@@ -85,14 +90,21 @@ const analyzeRecommendations = async (payload) => {
     const response = await axios.post(
       `${AI_SERVICE_URL}/api/v1/analyze/recommendations`,
       payload,
-      { timeout: 30000, headers: { 'Content-Type': 'application/json' } }
+      {
+        timeout: 30000,
+        headers: { "Content-Type": "application/json" },
+      },
     );
-    // Response: { success, student, source, recommendations: [{text}] }
+
     return response.data.recommendations || [];
   } catch (err) {
-    console.error('Recommendations error:', err.message);
+    console.error("Recommendations error:", err.message);
     return [];
   }
 };
 
-module.exports = { predictRiskWithAI, analyzeDominantFactors, analyzeRecommendations };
+module.exports = {
+  predictRiskWithAI,
+  analyzeDominantFactors,
+  analyzeRecommendations,
+};
