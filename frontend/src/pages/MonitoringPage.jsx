@@ -191,11 +191,13 @@ function MonitoringPage() {
                     {/* FIX: pakai access_to_resources bukan learning_resource_access */}
                     <p className="font-medium text-gray-800">
                       Akses sumber belajar:{" "}
-                      {selectedStudent.access_to_resources === "Yes"
-                        ? "Ada"
-                        : selectedStudent.access_to_resources === "No"
-                          ? "Tidak"
-                          : "-"}
+                      {selectedStudent.access_to_resources === "High"
+                        ? "Lengkap"
+                        : selectedStudent.access_to_resources === "Medium"
+                          ? "Cukup"
+                          : selectedStudent.access_to_resources === "Low"
+                            ? "Terbatas"
+                            : "-"}
                     </p>
                   </div>
                   <div className="space-y-1">
