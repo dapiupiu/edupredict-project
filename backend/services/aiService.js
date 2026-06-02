@@ -70,8 +70,9 @@ const analyzeDominantFactors = async (payload) => {
     const response = await axios.post(
       `${AI_SERVICE_URL}/api/v1/analyze/dominant-factors`,
       payload,
-      { timeout: 15000, headers: { 'Content-Type': 'application/json' } }
+      { timeout: 30000, headers: { 'Content-Type': 'application/json' } }
     );
+    // Response: { success, student, source, factors: [{factor, value, status, note}] }
     return response.data.factors || [];
   } catch (err) {
     console.error('Dominant factors error:', err.message);
@@ -84,8 +85,9 @@ const analyzeRecommendations = async (payload) => {
     const response = await axios.post(
       `${AI_SERVICE_URL}/api/v1/analyze/recommendations`,
       payload,
-      { timeout: 15000, headers: { 'Content-Type': 'application/json' } }
+      { timeout: 30000, headers: { 'Content-Type': 'application/json' } }
     );
+    // Response: { success, student, source, recommendations: [{text}] }
     return response.data.recommendations || [];
   } catch (err) {
     console.error('Recommendations error:', err.message);

@@ -210,15 +210,16 @@ const inputAcademic = async (req, res) => {
     const [predictionResult] = await db.query(
       `INSERT INTO predictions
     (student_id, academic_record_id, risk_category, confidence,
-     probabilities, risk_factors, raw_input)
-   VALUES (?, ?, ?, ?, ?, ?, ?)`,
+     probabilities, risk_factors, recommendations, raw_input)
+   VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         studentId,
         academicRecordId,
         prediksi.risk_category,
         prediksi.confidence,
         JSON.stringify(prediksi.probabilities || {}),
-        JSON.stringify(dominantFactors), // ← dari AI langsung
+        JSON.stringify(dominantFactors), // [{factor, value, status, note}]
+        JSON.stringify(recommendations), // [{text}] — disimpan ke DB
         JSON.stringify(clampedInput),
       ],
     );
