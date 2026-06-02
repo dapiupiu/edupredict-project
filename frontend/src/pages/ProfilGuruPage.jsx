@@ -214,6 +214,32 @@ function ProfilGuruPage() {
             return;
         }
 
+        // Validasi Ganti Password
+        if (formData.password_baru) {
+            // Pastikan password lama diisi
+            if (!formData.password_lama) {
+                const msg = 'Password lama wajib diisi untuk melakukan perubahan kata sandi.';
+                setError(msg);
+                Swal.fire({ icon: 'warning', title: 'Validasi Gagal', text: msg });
+                return;
+            }
+            // Validasi format: Minimal 8 karakter, ada huruf dan ada angka
+            const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d).{8,}$/;
+            if (!passwordRegex.test(formData.password_baru)) {
+                const msg = 'Password baru minimal 8 karakter dan harus mengandung kombinasi huruf serta angka.';
+                setError(msg);
+                Swal.fire({ icon: 'warning', title: 'Format Password Lemah', text: msg });
+                return;
+            }
+            // Pastikan password baru tidak sama dengan password lama
+            if (formData.password_baru === formData.password_lama) {
+                const msg = 'Password baru tidak boleh sama dengan password lama.';
+                setError(msg);
+                Swal.fire({ icon: 'warning', title: 'Validasi Gagal', text: msg });
+                return;
+            }
+        }
+
         if (formData.password_baru && formData.password_baru !== formData.confirm_password) {
             setError('Konfirmasi password baru tidak cocok.');
             Swal.fire({

@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import logoEdupredict from '../assets/logo-edupredict.png';
 
 function RegistrasiInput({
     email,
+    kelas,
     password,
     confirmPassword,
     namaLengkap,
@@ -12,6 +13,7 @@ function RegistrasiInput({
     apiError,
     isLoading,
     onEmailChange,
+    onKelasChange,
     onPasswordChange,
     onConfirmPasswordChange,
     onNamaLengkapChange,
@@ -23,7 +25,7 @@ function RegistrasiInput({
     return (
         <div className="mx-auto w-full max-w-2xl my-10 px-6 py-10 sm:px-8 bg-white rounded-3xl border-2 border-gray-100 shadow-lg">
             <div className="flex items-center gap-3">
-                <img src={logoEdupredict} alt="logo" className="w-16 h-16 object-contain flex-shrink-0" />
+                <Link to="/"><img src={logoEdupredict} alt="logo" className="w-16 h-16 object-contain flex-shrink-0" /></Link>
                 <h1 className="text-3xl font-semibold text-blue-800">EduPredict</h1>
             </div>
             <div className="mt-4 inline-flex p-2 font-medium text-blue-800 bg-blue-100 px-4 rounded-3xl gap-2">
@@ -47,11 +49,21 @@ function RegistrasiInput({
                     <input type="text" value={namaLengkap} onChange={onNamaLengkapChange} placeholder="masukkan nama lengkap" className="w-full border-2 border-gray-100 shadow-md rounded-xl p-4 mt-1 bg-transparent" />
                     {errors.namaLengkap && <p className="mt-1 text-sm text-red-500">{errors.namaLengkap}</p>}
                 </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
                 <div className="mt-4">
                     <label className="text-base sm:text-lg font-medium">Email</label>
                     <input type="email" value={email} onChange={onEmailChange} placeholder="masukkan email anda" className="w-full border-2 border-gray-100 shadow-md rounded-xl p-4 mt-1 bg-transparent" />
                     {errors.email && <p className="mt-1 text-sm text-red-500">{errors.email}</p>}
                 </div>
+                <div className="mt-4">
+                    <label className="text-base sm:text-lg font-medium">Wali Kelas <span className="text-sm text-gray-500">(contoh:9b)</span></label>
+                    <input type="text" value={kelas} onChange={onKelasChange} placeholder="masukkan kelas yang diampu" className="w-full border-2 border-gray-100 shadow-md rounded-xl p-4 mt-1 bg-transparent" />
+                    {errors.kelas && <p className="mt-1 text-sm text-red-500">{errors.kelas}</p>}
+                </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
                 <div className="mt-4 relative">
                     <label className="text-base sm:text-lg font-medium">Password</label>
                     <div className="relative">
@@ -72,6 +84,7 @@ function RegistrasiInput({
                     </div>
                     {errors.confirmPassword && <p className="mt-1 text-sm text-red-500">{errors.confirmPassword}</p>}
                 </div>
+                </div>
 
                 <div className="mt-8 flex flex-col gap-y-4">
                     <button type="submit" disabled={isLoading} className={`bg-blue-900 text-white py-3 rounded-xl hover:bg-stone-900 flex items-center justify-center gap-2 ${isLoading ? 'opacity-70 cursor-not-allowed' : ''}`}>
@@ -79,7 +92,7 @@ function RegistrasiInput({
                     </button>
                     <div className="mt-2 flex justify-between items-center">
                         <p className="font-medium text-base">Sudah punya akun?</p>
-                        <NavLink to="/login-guru" className="font-medium text-base text-blue-500">Masuk</NavLink>
+                        <Link to="/login-guru" className="font-medium text-base text-blue-500">Masuk</Link>
                     </div>
                 </div>
             </form>
@@ -89,6 +102,7 @@ function RegistrasiInput({
 
 RegistrasiInput.propTypes = {
     email: PropTypes.string.isRequired,
+    kelas: PropTypes.string.isRequired,
     password: PropTypes.string.isRequired,
     confirmPassword: PropTypes.string.isRequired,
     namaLengkap: PropTypes.string.isRequired,
@@ -96,6 +110,7 @@ RegistrasiInput.propTypes = {
     apiError: PropTypes.string,
     isLoading: PropTypes.bool,
     onEmailChange: PropTypes.func.isRequired,
+    onKelasChange: PropTypes.func.isRequired,
     onPasswordChange: PropTypes.func.isRequired,
     onConfirmPasswordChange: PropTypes.func.isRequired,
     onNamaLengkapChange: PropTypes.func.isRequired,

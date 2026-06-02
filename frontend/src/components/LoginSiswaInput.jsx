@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import logoEdupredict from '../assets/logo-edupredict.png';
 
@@ -7,7 +7,7 @@ function LoginSiswaInput({ NISN, errors, apiError, apiSuccess, isLoading, onNISN
     return (
         <div className="mx-auto w-full max-w-xl my-10 px-6 py-10 sm:px-8 bg-white rounded-3xl border-2 border-gray-100 shadow-lg">
             <div className="flex items-center gap-3">
-                <img src={logoEdupredict} alt="logo" className="w-16 h-16 object-contain flex-shrink-0" />
+                <Link to="/"><img src={logoEdupredict} alt="logo" className="w-16 h-16 object-contain flex-shrink-0" /> </Link> 
                 <h1 className="text-3xl font-semibold text-blue-800">EduPredict</h1>
             </div>
             <div className="mt-4 flex p-2 font-medium text-blue-800 bg-blue-100 w-fit px-4 rounded-3xl gap-2">
@@ -57,7 +57,7 @@ function LoginSiswaInput({ NISN, errors, apiError, apiSuccess, isLoading, onNISN
                     <div className="flex-1 h-px bg-gray-300"></div>
                 </div>
                  {/* atau */}
-                <NavLink to="/login-guru" className="text-center border-2 border-blue-900 text-blue-900 py-3 rounded-xl hover:bg-blue-50">Masuk sebagai Guru</NavLink>
+                <Link to="/login-guru" className="text-center border-2 border-blue-900 text-blue-900 py-3 rounded-xl hover:bg-blue-50">Masuk sebagai Guru</Link>
             </div>
             </form>
         </div>

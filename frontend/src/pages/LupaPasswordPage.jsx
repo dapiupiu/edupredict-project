@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import BASE_URL from '../utils/api';
-import { NavLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import logoEdupredict from '../assets/logo-edupredict.png';
 
 function LupaPasswordPage() {
@@ -74,7 +74,7 @@ function LupaPasswordPage() {
         return (
             <div className="mx-auto w-full max-w-xl my-10 px-6 py-10 sm:px-8 bg-white rounded-3xl border-2 border-gray-100 shadow-lg">
                 <div className="flex items-center gap-3">
-                    <img src={logoEdupredict} alt="logo" className="w-16 h-16 object-contain flex-shrink-0" />
+                    <Link to="/"><img src={logoEdupredict} alt="logo" className="w-16 h-16 object-contain flex-shrink-0" /></Link> 
                     <h1 className="text-3xl font-semibold text-blue-800">EduPredict</h1>
                 </div>
                 <h1 className="text-3xl sm:text-4xl font-semibold mt-4">Lupa Password?</h1>
@@ -116,7 +116,7 @@ function LupaPasswordPage() {
                         </button>
                         <div className="mt-4 text-center flex items-center justify-center gap-2">
                             <i className="ri-arrow-left-long-line"></i>
-                            <NavLink to="/login-guru" className="font-medium text-base text-blue-500"> Kembali ke login</NavLink>
+                            <Link to="/login-guru" className="font-medium text-base text-blue-500"> Kembali ke login</Link>
                         </div>
                     </div>
                 </form>

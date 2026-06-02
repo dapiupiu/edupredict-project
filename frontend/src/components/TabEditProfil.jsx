@@ -206,14 +206,8 @@ function TabEditProfil({ profileData, formData, handleInputChange, handleUpdateP
                                 </select>
                             </div>
                         </div>
-                        <div className="pt-6 border-t border-gray-100 mt-6 flex flex-col sm:flex-row items-center gap-3 sm:justify-end">
-                            <button
-                                type="button"
-                                onClick={() => window.location.reload()}
-                                className="w-full sm:w-auto bg-white border border-gray-300 px-6 py-2.5 rounded-xl font-bold text-gray-700 hover:bg-gray-50 hover:border-gray-400 transition-all shadow-sm text-sm cursor-pointer"
-                            >
-                                Batal
-                            </button>
+                        <div className="pt-6 border-t border-gray-100 mt-6 items-center gap-3 sm:justify-end">
+                        
                             <button
                                 type="submit"
                                 className="w-full sm:w-auto bg-blue-600 text-white px-8 py-2.5 rounded-xl font-bold hover:bg-blue-700 active:scale-95 transition-all shadow-lg shadow-blue-100 flex items-center justify-center gap-2 text-sm cursor-pointer"
@@ -262,14 +256,7 @@ function TabEditProfil({ profileData, formData, handleInputChange, handleUpdateP
                             </div>
                         </div>
 
-                        <div className="pt-6 border-t border-gray-100 mt-6 flex flex-col sm:flex-row items-center gap-3 sm:justify-end">
-                            <button
-                                type="button"
-                                onClick={() => window.location.reload()}
-                                className="w-full sm:w-auto bg-white border border-gray-300 px-6 py-2.5 rounded-xl font-bold text-gray-700 hover:bg-gray-50 hover:border-gray-400 transition-all shadow-sm text-sm cursor-pointer"
-                            >
-                                Batal
-                            </button>
+                        <div className="pt-6 border-t border-gray-100 mt-6 items-center gap-3 sm:justify-end">
                             <button
                                 type="submit"
                                 className="w-full sm:w-auto bg-blue-600 text-white px-8 py-2.5 rounded-xl font-bold hover:bg-blue-700 active:scale-95 transition-all shadow-lg shadow-blue-100 flex items-center justify-center gap-2 text-sm cursor-pointer"

@@ -107,10 +107,33 @@ function DashboardSiswaPage() {
     };
 
     const handleLogout = () => {
-        if (window.confirm("Apakah Anda yakin ingin keluar?")) {
-            navigate('/login-siswa');
-        }
-    };
+            Swal.fire({
+                title: 'Apakah Anda yakin?',
+                text: "Anda akan keluar dari dashboard dan kembali ke halaman utama.",
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#2563eb',
+                cancelButtonColor: '#ef4444',
+                confirmButtonText: 'Ya, Keluar',
+                cancelButtonText: 'Batal',
+                background: '#ffffff',
+                borderRadius: '1.25rem'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    localStorage.removeItem('token');
+                    localStorage.removeItem('user');
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Berhasil!',
+                        text: 'Anda telah keluar.',
+                        showConfirmButton: false,
+                        timer: 1500
+                    }).then(() => {
+                        navigate('/');
+                    });
+                }
+            });
+        };
 
     const handlePrint = () => {
         const originalTitle = document.title;

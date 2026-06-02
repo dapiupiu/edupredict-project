@@ -8,6 +8,7 @@ function RegistrasiPage() {
     const [registrasiData, setRegistrasiData] = useState({
         email: '',
         password: '',
+        kelas: '', 
         confirmPassword: '',
         namaLengkap: '',
     });
@@ -19,7 +20,7 @@ function RegistrasiPage() {
 
     // Destructuring agar variabel bisa langsung digunakan tanpa registrasiData.xxx
     const {
-        email, password, confirmPassword, namaLengkap
+        email, kelas, password, confirmPassword, namaLengkap
     } = registrasiData;
 
     // Fungsi handler input yang lebih ringkas
@@ -31,9 +32,11 @@ function RegistrasiPage() {
         const newErrors = {};
         if (!namaLengkap.trim()) newErrors.namaLengkap = 'Nama lengkap tidak boleh kosong';
         if (!email.trim()) newErrors.email = 'Email tidak boleh kosong';
-        else if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z]+\.[a-zA-Z]{2,}$/.test(email)) newErrors.email = 'Format email tidak valid';
+        else if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z]+\.[a-zA-Z]{2,}$/.test(email)) newErrors.email = 'Format email tidak valid'; 
+        if (!kelas) newErrors.kelas = 'Kelas tidak boleh kosong';
+        const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d).{8,}$/;
         if (!password) newErrors.password = 'Password tidak boleh kosong';
-        else if (password.length < 8) newErrors.password = 'Password minimal 8 karakter';
+        else if (!passwordRegex.test(password)) newErrors.password = 'Password minimal 8 karakter (kombinasi huruf & angka)';
         if (!confirmPassword) newErrors.confirmPassword = 'Konfirmasi password tidak boleh kosong';
         else if (password !== confirmPassword) newErrors.confirmPassword = 'Password tidak cocok';
         return newErrors;
@@ -56,7 +59,7 @@ function RegistrasiPage() {
             const response = await fetch(API_URL, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, password, namaLengkap }),
+                body: JSON.stringify({ email, password, namaLengkap, kelas }),
             });
             const data = await response.json();
 
@@ -94,6 +97,7 @@ function RegistrasiPage() {
         <div className="w-full min-h-screen bg-blue-100 flex items-center justify-center p-4">
             <RegistrasiInput
                 email={email}
+                kelas={kelas}
                 password={password}
                 confirmPassword={confirmPassword}
                 namaLengkap={namaLengkap}
@@ -101,6 +105,7 @@ function RegistrasiPage() {
                 apiError={apiError}
                 isLoading={isLoading}
                 onEmailChange={handleInputChange('email')}
+                onKelasChange={handleInputChange('kelas')}
                 onPasswordChange={handleInputChange('password')}
                 onConfirmPasswordChange={handleInputChange('confirmPassword')}
                 onNamaLengkapChange={handleInputChange('namaLengkap')}
