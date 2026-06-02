@@ -6,7 +6,6 @@ import StepTambahSiswa from "../components/StepTambahSiswa";
 import PrediksiAI from "../components/PrediksiAI";
 import logoEdupredict from "../assets/logo-edupredict.png";
 
-
 function TambahSiswaPage() {
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
@@ -109,15 +108,19 @@ function TambahSiswaPage() {
     const fetchTeacher = async () => {
       try {
         const token = localStorage.getItem("token");
-        const res = await fetch(`${BASE_URL}/api/auth/me`, { headers: { Authorization: `Bearer ${token}` } });
+        const res = await fetch(`${BASE_URL}/api/auth/me`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
         const result = await res.json();
         if (result.success) {
           // Autofill kelas jika sedang menambah siswa baru (bukan mode edit)
           if (!location.state?.studentId && result.data.kelas) {
-            setFormData(prev => ({ ...prev, kelas: result.data.kelas }));
+            setFormData((prev) => ({ ...prev, kelas: result.data.kelas }));
           }
         }
-      } catch (err) { console.error("Gagal ambil profil guru:", err); }
+      } catch (err) {
+        console.error("Gagal ambil profil guru:", err);
+      }
     };
     fetchTeacher();
   }, []);
@@ -125,112 +128,112 @@ function TambahSiswaPage() {
   const handleInputChange = (field) => (e) => {
     const value = e.target.value;
     // Validasi saat mengetik: hanya angka dan maks 10 digit untuk NISN
-    if (field === 'nisn' && (!/^\d*$/.test(value) || value.length > 10)) return;
-    
+    if (field === "nisn" && (!/^\d*$/.test(value) || value.length > 10)) return;
+
     setFormData((prev) => ({ ...prev, [field]: value }));
     if (errors[field]) setErrors((prev) => ({ ...prev, [field]: null }));
   };
 
+  const validateForm = () => {
+    const newErrors = {};
 
- const validateForm = () => {
-  const newErrors = {};
+    const requiredFields = [
+      "nama_siswa",
+      "nisn",
+      "gender",
+      "parental_education_level",
+      "hours_studied",
+      "attendance",
+      "previous_scores",
+      "sleep_hours",
+      "tutoring_sessions",
+      "physical_activity",
+      "parental_involvement",
+      "access_to_resources",
+      "motivation_level",
+      "internet_access",
+      "family_income",
+      "peer_influence",
+      "teacher_quality",
+    ];
 
-  const requiredFields = [
-    "nama_siswa",
-    "nisn",
-    "gender",
-    "parental_education_level",
-    "hours_studied",
-    "attendance",
-    "previous_scores",
-    "sleep_hours",
-    "tutoring_sessions",
-    "physical_activity",
-    "parental_involvement",
-    "access_to_resources",
-    "motivation_level",
-    "internet_access",
-    "family_income",
-    "peer_influence",
-    "teacher_quality",
-  ];
-
-  requiredFields.forEach((field) => {
-    if (
-      !formData[field] ||
-      (typeof formData[field] === "string" && !formData[field].trim())
-    ) {
-      newErrors[field] = "Bagian ini harus diisi";
-    }
-  });
-
-  const isDuplicateNisn = existingStudents.some(
-    (s) => String(s.nisn) === String(formData.nisn) && s.id !== createdStudentId,
-  );
-
-  const isDuplicateNama = existingStudents.some(
-    (s) =>
-      s.nama_siswa.toLowerCase().trim() ===
-        formData.nama_siswa.toLowerCase().trim() && s.id !== createdStudentId,
-  );
-
-  if (isDuplicateNisn) {
-    newErrors.nisn = "NISN tersebut sudah terdapat di daftar siswa";
-  }
-
-  if (isDuplicateNama) {
-    newErrors.nama_siswa = "Nama tersebut sudah terdapat di daftar siswa";
-  }
-
-  if (formData.nisn && !/^\d{10}$/.test(formData.nisn)) {
-    newErrors.nisn = "NISN harus terdiri dari 10 digit angka";
-  }
-
-  const numericRules = {
-    hours_studied: {
-      min: 0,
-      max: 36,
-      message: "Jam belajar harus berada pada rentang 0 - 36",
-    },
-    attendance: {
-      min: 0,
-      max: 100,
-      message: "Kehadiran harus berada pada rentang 0 - 100",
-    },
-    previous_scores: {
-      min: 0,
-      max: 100,
-      message: "Nilai rapor harus berada pada rentang 0 - 100",
-    },
-    sleep_hours: {
-      min: 0,
-      max: 10,
-      message: "Jam tidur harus berada pada rentang 0 - 10",
-    },
-    tutoring_sessions: {
-      min: 0,
-      max: 7,
-      message: "Sesi bimbingan harus berada pada rentang 0 - 7",
-    },
-    physical_activity: {
-      min: 0,
-      max: 6,
-      message: "Aktivitas fisik harus berada pada rentang 0 - 6",
-    },
-  };
-
-  Object.entries(numericRules).forEach(([field, rule]) => {
-    if (formData[field] !== "" && formData[field] !== null) {
-      const value = Number(formData[field]);
-
-      if (Number.isNaN(value) || value < rule.min || value > rule.max) {
-        newErrors[field] = rule.message;
+    requiredFields.forEach((field) => {
+      if (
+        !formData[field] ||
+        (typeof formData[field] === "string" && !formData[field].trim())
+      ) {
+        newErrors[field] = "Bagian ini harus diisi";
       }
-    }
-  });
+    });
 
-  return newErrors;
-};
+    const isDuplicateNisn = existingStudents.some(
+      (s) =>
+        String(s.nisn) === String(formData.nisn) && s.id !== createdStudentId,
+    );
+
+    const isDuplicateNama = existingStudents.some(
+      (s) =>
+        s.nama_siswa.toLowerCase().trim() ===
+          formData.nama_siswa.toLowerCase().trim() && s.id !== createdStudentId,
+    );
+
+    if (isDuplicateNisn) {
+      newErrors.nisn = "NISN tersebut sudah terdapat di daftar siswa";
+    }
+
+    if (isDuplicateNama) {
+      newErrors.nama_siswa = "Nama tersebut sudah terdapat di daftar siswa";
+    }
+
+    if (formData.nisn && !/^\d{10}$/.test(formData.nisn)) {
+      newErrors.nisn = "NISN harus terdiri dari 10 digit angka";
+    }
+
+    const numericRules = {
+      hours_studied: {
+        min: 0,
+        max: 36,
+        message: "Jam belajar harus berada pada rentang 0 - 36",
+      },
+      attendance: {
+        min: 0,
+        max: 100,
+        message: "Kehadiran harus berada pada rentang 0 - 100",
+      },
+      previous_scores: {
+        min: 0,
+        max: 100,
+        message: "Nilai rapor harus berada pada rentang 0 - 100",
+      },
+      sleep_hours: {
+        min: 0,
+        max: 10,
+        message: "Jam tidur harus berada pada rentang 0 - 10",
+      },
+      tutoring_sessions: {
+        min: 0,
+        max: 7,
+        message: "Sesi bimbingan harus berada pada rentang 0 - 7",
+      },
+      physical_activity: {
+        min: 0,
+        max: 6,
+        message: "Aktivitas fisik harus berada pada rentang 0 - 6",
+      },
+    };
+
+    Object.entries(numericRules).forEach(([field, rule]) => {
+      if (formData[field] !== "" && formData[field] !== null) {
+        const value = Number(formData[field]);
+
+        if (Number.isNaN(value) || value < rule.min || value > rule.max) {
+          newErrors[field] = rule.message;
+        }
+      }
+    });
+
+    return newErrors;
+  };
 
   const handlePredict = async (e) => {
     e.preventDefault();
@@ -361,7 +364,11 @@ function TambahSiswaPage() {
         </Link>
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10">
           <div className="flex items-center gap-3">
-            <img src={logoEdupredict} alt="logo" className="w-16 h-16 object-contain flex-shrink-0" />
+            <img
+              src={logoEdupredict}
+              alt="logo"
+              className="w-16 h-16 object-contain flex-shrink-0"
+            />
             <h1 className="text-2xl font-bold text-blue-900">EduPredict</h1>
           </div>
         </div>
@@ -447,10 +454,10 @@ function TambahSiswaPage() {
                 </div>
                 <div>
                   <p className="text-xs text-gray-500 uppercase font-semibold tracking-wider">
-                    Kehadiran 
+                    Kehadiran
                   </p>
                   <p className="font-bold text-gray-800">
-                    {formData.attendance}% 
+                    {formData.attendance}%
                   </p>
                 </div>
                 <div>

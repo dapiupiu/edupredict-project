@@ -4,6 +4,14 @@ const db = require("../config/db");
 const path = require("path");
 const fs = require("fs");
 
+const isStrongPassword = (password) => {
+  return /^(?=.*[a-zA-Z])(?=.*\d).{8,}$/.test(password || "");
+};
+
+const getPasswordValidationMessage = () => {
+  return "Password minimal 8 karakter dan harus mengandung kombinasi huruf serta angka.";
+};
+
 // POST /api/auth/register
 const register = async (req, res) => {
   const { email, password, namaLengkap, username } = req.body;
@@ -16,17 +24,17 @@ const register = async (req, res) => {
     });
   }
 
-  if (password.length < 8) {
+  if (!isStrongPassword(password)) {
     return res.status(400).json({
       success: false,
-      message: "Password minimal 8 karakter.",
+      message: getPasswordValidationMessage(),
     });
   }
 
   try {
     const [existingUser] = await db.query(
       "SELECT id FROM users WHERE email = ? LIMIT 1",
-      [email]
+      [email],
     );
 
     if (existingUser.length > 0) {
@@ -41,7 +49,7 @@ const register = async (req, res) => {
     const [result] = await db.query(
       `INSERT INTO users (nama, email, password_hash, role)
        VALUES (?, ?, ?, 'guru')`,
-      [nama, email, hashedPassword]
+      [nama, email, hashedPassword],
     );
 
     return res.status(201).json({
@@ -72,7 +80,7 @@ const login = async (req, res) => {
   try {
     const [rows] = await db.query(
       "SELECT * FROM users WHERE email = ? AND role = 'guru' LIMIT 1",
-      [email]
+      [email],
     );
 
     if (rows.length === 0) {
@@ -93,7 +101,7 @@ const login = async (req, res) => {
     const token = jwt.sign(
       { id: user.id, nama: user.nama, email: user.email, role: user.role },
       process.env.JWT_SECRET,
-      { expiresIn: process.env.JWT_EXPIRES_IN || "8h" }
+      { expiresIn: process.env.JWT_EXPIRES_IN || "8h" },
     );
 
     res.status(200).json({
@@ -101,7 +109,12 @@ const login = async (req, res) => {
       message: "Login berhasil.",
       data: {
         token,
-        user: { id: user.id, nama: user.nama, email: user.email, role: user.role },
+        user: {
+          id: user.id,
+          nama: user.nama,
+          email: user.email,
+          role: user.role,
+        },
       },
     });
   } catch (err) {
@@ -115,27 +128,73 @@ const login = async (req, res) => {
 
 // POST /api/auth/forgot-password
 const forgotPassword = async (req, res) => {
-  const { email } = req.body;
+  const { email, password_baru, confirm_password } = req.body;
 
-  if (!email) {
-    return res
-      .status(400)
-      .json({ success: false, message: "Email wajib diisi." });
+  if (!email || !password_baru || !confirm_password) {
+    return res.status(400).json({
+      success: false,
+      message: "Email, password baru, dan konfirmasi password wajib diisi.",
+    });
+  }
+
+  if (!isStrongPassword(password_baru)) {
+    return res.status(400).json({
+      success: false,
+      message: getPasswordValidationMessage(),
+    });
+  }
+
+  if (password_baru !== confirm_password) {
+    return res.status(400).json({
+      success: false,
+      message: "Konfirmasi password tidak cocok.",
+    });
   }
 
   try {
-    await db.query("SELECT id FROM users WHERE email = ? LIMIT 1", [email]);
+    const [rows] = await db.query(
+      "SELECT id, password_hash FROM users WHERE email = ? AND role = 'guru' LIMIT 1",
+      [email],
+    );
+
+    if (rows.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "Email tersebut belum terdaftar. Silakan daftar akun dulu.",
+      });
+    }
+
+    const user = rows[0];
+
+    const isSamePassword = await bcrypt.compare(
+      password_baru,
+      user.password_hash,
+    );
+
+    if (isSamePassword) {
+      return res.status(400).json({
+        success: false,
+        message: "Password baru tidak boleh sama dengan password lama.",
+      });
+    }
+
+    const hashedPassword = await bcrypt.hash(password_baru, 10);
+
+    await db.query(
+      "UPDATE users SET password_hash = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?",
+      [hashedPassword, user.id],
+    );
 
     return res.status(200).json({
       success: true,
-      message: "Jika email terdaftar, instruksi reset password akan dikirimkan.",
-      note: "Fitur pengiriman email reset password belum diaktifkan.",
+      message:
+        "Password berhasil direset. Silakan login menggunakan password baru.",
     });
   } catch (err) {
     console.error("Forgot Password Error:", err);
     return res.status(500).json({
       success: false,
-      message: "Terjadi kesalahan saat memproses permintaan reset password.",
+      message: "Terjadi kesalahan saat memproses reset password.",
     });
   }
 };
@@ -150,7 +209,7 @@ const getMe = async (req, res) => {
          no_hp, alamat, nama_sekolah, school_type,
          kelas, jenjang, foto_profil
        FROM users WHERE id = ? LIMIT 1`,
-      [req.user.id]
+      [req.user.id],
     );
 
     if (rows.length === 0) {
@@ -216,6 +275,14 @@ const updateProfile = async (req, res) => {
           message: "Password lama wajib diisi untuk mengganti password.",
         });
       }
+
+      if (!isStrongPassword(password_baru)) {
+        return res.status(400).json({
+          success: false,
+          message: getPasswordValidationMessage(),
+        });
+      }
+
       const isMatch = await bcrypt.compare(password_lama, user.password_hash);
       if (!isMatch) {
         return res
@@ -249,13 +316,22 @@ const updateProfile = async (req, res) => {
            foto_profil = ?
          WHERE id = ?`,
         [
-          nama, email, newPasswordHash,
-          nip || null, nuptk || null, ttl || null,
-          pendidikan_terakhir || null, no_hp || null, alamat || null,
-          nama_sekolah || null, school_type || null, kelas || null, jenjang || null,
+          nama,
+          email,
+          newPasswordHash,
+          nip || null,
+          nuptk || null,
+          ttl || null,
+          pendidikan_terakhir || null,
+          no_hp || null,
+          alamat || null,
+          nama_sekolah || null,
+          school_type || null,
+          kelas || null,
+          jenjang || null,
           fotoProfil,
           req.user.id,
-        ]
+        ],
       );
     } else {
       await db.query(
@@ -267,13 +343,21 @@ const updateProfile = async (req, res) => {
            foto_profil = ?
          WHERE id = ?`,
         [
-          nama, email,
-          nip || null, nuptk || null, ttl || null,
-          pendidikan_terakhir || null, no_hp || null, alamat || null,
-          nama_sekolah || null, school_type || null, kelas || null, jenjang || null,
+          nama,
+          email,
+          nip || null,
+          nuptk || null,
+          ttl || null,
+          pendidikan_terakhir || null,
+          no_hp || null,
+          alamat || null,
+          nama_sekolah || null,
+          school_type || null,
+          kelas || null,
+          jenjang || null,
           fotoProfil,
           req.user.id,
-        ]
+        ],
       );
     }
 
