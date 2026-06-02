@@ -7,6 +7,7 @@ const {
   createStudent,
   updateStudent,
   deleteStudent,
+  getStudentsReport,
 } = require('../controllers/guruController');
 
 const {
@@ -29,10 +30,13 @@ router.get('/dashboard', getDashboard);
 router.put('/notifications/:id/read', markNotifRead);
 
 // ── CRUD Siswa ────────────────────────────────────────────
-router.get('/students',     getAllStudents);
-router.get('/students/:id', getStudentById);
-router.post('/students',    createStudent);
-router.put('/students/:id', updateStudent);
+// PENTING: /students/report harus SEBELUM /students/:id
+// agar Express tidak salah baca "report" sebagai :id
+router.get('/students/report', getStudentsReport);
+router.get('/students',        getAllStudents);
+router.get('/students/:id',    getStudentById);
+router.post('/students',       createStudent);
+router.put('/students/:id',    updateStudent);
 router.delete('/students/:id', deleteStudent);
 
 // ── Input Akademik & Histori ──────────────────────────────

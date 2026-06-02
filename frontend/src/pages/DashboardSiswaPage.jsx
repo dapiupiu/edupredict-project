@@ -7,7 +7,7 @@ import logoEdupredict from "../assets/logo-edupredict.png";
 function DashboardSiswaPage() {
     const location = useLocation();
     const navigate = useNavigate();
-    
+
     // Mengambil data dari state navigasi (dikirim dari LoginSiswaPage)
     const studentData = location.state?.studentData;
 
@@ -28,48 +28,40 @@ function DashboardSiswaPage() {
         );
     }
 
-    const { siswa, histori } = studentData;
-    // Ambil record terbaru (bisa index 0 atau index terakhir tergantung urutan backend)
-    // Kita cari yang memiliki tanggal terbaru jika ada recorded_at
-    const sortedHistori = histori && Array.isArray(histori) 
-        ? [...histori].sort((a, b) => new Date(b.recorded_at) - new Date(a.recorded_at)) 
-        : [];
-    
-    // Ambil record terbaru dan parse data JSON-nya agar siap digunakan
-    const rawLatest = sortedHistori.length > 0 ? sortedHistori[0] : {};
-    
-    const rawProbabilities = typeof rawLatest.probabilities === 'string' 
-        ? JSON.parse(rawLatest.probabilities) 
-        : (rawLatest.probabilities || {});
+    // FIX NO. 5: Baca dari prediksi_terbaru yang sudah disiapkan backend,
+    // bukan sort histori manual yang rawan error kalau histori kosong/null.
+    const { siswa, prediksi_terbaru } = studentData;
 
-    // Normalisasi kunci probabilitas agar sesuai dengan standar komponen PrediksiAI (Capitalized)
+    // Parse probabilities & risk_factors dari prediksi_terbaru (bisa string JSON dari DB)
+    const rawProbabilities = prediksi_terbaru
+        ? typeof prediksi_terbaru.probabilities === "string"
+            ? (() => { try { return JSON.parse(prediksi_terbaru.probabilities); } catch { return {}; } })()
+            : (prediksi_terbaru.probabilities || {})
+        : {};
+
     const probabilities = {
         High: rawProbabilities.High ?? rawProbabilities.high ?? 0,
         Medium: rawProbabilities.Medium ?? rawProbabilities.medium ?? 0,
-        Low: rawProbabilities.Low ?? rawProbabilities.low ?? 0
+        Low: rawProbabilities.Low ?? rawProbabilities.low ?? 0,
     };
 
-    const risk_factors = typeof rawLatest.risk_factors === 'string'
-        ? JSON.parse(rawLatest.risk_factors)
-        : (rawLatest.risk_factors || []);
+    const risk_factors = prediksi_terbaru
+        ? typeof prediksi_terbaru.risk_factors === "string"
+            ? (() => { try { return JSON.parse(prediksi_terbaru.risk_factors); } catch { return []; } })()
+            : (prediksi_terbaru.risk_factors || [])
+        : [];
 
-    const latestRecord = {
-        ...rawLatest,
+    // Gabungkan data siswa + prediksi terbaru menjadi satu objek untuk PrediksiAI dan card info
+    const data = {
+        ...siswa,
+        ...(prediksi_terbaru || {}),
         probabilities,
-        risk_factors
+        risk_factors,
+        nama_siswa: siswa?.nama_siswa || siswa?.nama,
+        nisn: siswa?.nisn,
     };
 
-    // Gabungkan data untuk kemudahan akses dengan dukungan alias (key mapping)
-    const data = { 
-        ...siswa, 
-        ...latestRecord,
-        nama_siswa: siswa?.nama_siswa || siswa?.nama || latestRecord?.nama_siswa,
-        nisn: siswa?.nisn || siswa?.Nisn || latestRecord?.nisn,
-        parental_education_level: siswa?.parental_education_level || siswa?.pendidikan_ortu || latestRecord?.parental_education_level,
-        risk_category: latestRecord?.risk_category || latestRecord?.status_risiko || latestRecord?.statusRisiko
-    };
-
-    // Pop-up selamat datang saat siswa masuk
+    // Pop-up selamat datang
     useEffect(() => {
         if (data.nama_siswa) {
             Swal.fire({
@@ -77,32 +69,27 @@ function DashboardSiswaPage() {
                 text: "Senang melihatmu kembali. Yuk, cek progres belajarmu hari ini dan lihat sejauh mana kamu telah berkembang! 🚀",
                 icon: "success",
                 confirmButtonText: "Siap!",
-                confirmButtonColor: "#2563eb", // Warna biru-600 menyesuaikan tema
+                confirmButtonColor: "#2563eb",
                 timer: 5000,
-                timerProgressBar: true
+                timerProgressBar: true,
             });
         }
-    }, []); // Hanya dijalankan sekali saat komponen di-mount
+    }, []);
 
     const translateMap = {
-        'High': 'Tinggi', 'Medium': 'Sedang', 'Low': 'Rendah',
-        'Positive': 'Baik', 'Neutral': 'Biasa saja', 'Negative': 'Buruk',
-        'Yes': 'Ada', 'No': 'Tidak',
-        'Male': 'Laki-laki', 'Female': 'Perempuan',
+        High: "Tinggi", Medium: "Sedang", Low: "Rendah",
+        Positive: "Baik", Neutral: "Biasa saja", Negative: "Buruk",
+        Yes: "Ada", No: "Tidak",
+        Male: "Laki-laki", Female: "Perempuan",
     };
 
     const translate = (val, field = "") => {
-        if (!val) return '-';
-        
+        if (!val) return "-";
         const specificTranslations = {
-            motivation: { 'Low': 'Kurang termotivasi', 'Medium': 'Cukup termotivasi', 'High': 'Sangat termotivasi' },
-            resources: { 'Low': 'Terbatas', 'Medium': 'Cukup', 'High': 'Lengkap' }
+            motivation: { Low: "Kurang termotivasi", Medium: "Cukup termotivasi", High: "Sangat termotivasi" },
+            resources: { Low: "Terbatas", Medium: "Cukup", High: "Lengkap" },
         };
-
-        if (field && specificTranslations[field] && specificTranslations[field][val]) {
-            return specificTranslations[field][val];
-        }
-
+        if (field && specificTranslations[field]?.[val]) return specificTranslations[field][val];
         return translateMap[val] || val;
     };
 
@@ -137,20 +124,22 @@ function DashboardSiswaPage() {
 
     const handlePrint = () => {
         const originalTitle = document.title;
-        document.title = `Laporan_Prediksi_${data.nama_siswa || 'Siswa'}_${data.nisn || ''}`;
+        document.title = `Laporan_Prediksi_${data.nama_siswa || "Siswa"}_${data.nisn || ""}`;
         window.print();
         document.title = originalTitle;
     };
 
-    // Logika tema warna dinamis berdasarkan kategori risiko
     const riskThemes = {
         High: { gradient: "from-red-600 to-red-700 shadow-red-200", subText: "text-red-100", detail: "text-red-50" },
         Medium: { gradient: "from-orange-500 to-orange-600 shadow-orange-200", subText: "text-orange-100", detail: "text-orange-50" },
-        Low: { gradient: "from-green-600 to-green-700 shadow-green-200", subText: "text-green-100", detail: "text-green-50" }
+        Low: { gradient: "from-green-600 to-green-700 shadow-green-200", subText: "text-green-100", detail: "text-green-50" },
     };
 
-    const currentTheme = riskThemes[data.risk_category] || 
+    const currentTheme = riskThemes[data.risk_category] ||
         { gradient: "from-blue-600 to-indigo-700 shadow-blue-200", subText: "text-blue-200", detail: "text-blue-100" };
+
+    // Jika belum ada prediksi sama sekali
+    const hasPrediksi = !!data.risk_category;
 
     return (
         <div className="min-h-screen bg-blue-50">
@@ -162,32 +151,35 @@ function DashboardSiswaPage() {
                     * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
                 }
             `}} />
-            {/* Header Navbar untuk Siswa */}
+
+            {/* Header Navbar */}
             <nav className="bg-white border-b border-blue-100 p-4 px-6 sm:px-12 flex justify-between items-center sticky top-0 z-50 print:hidden">
                 <div className="flex items-center gap-3">
                     <img src={logoEdupredict} alt="logo" className="w-16 h-16 object-contain flex-shrink-0" />
                     <h1 className="text-2xl font-black text-blue-900 tracking-tight">EduPredict</h1>
                 </div>
                 <div className="flex items-center gap-3">
-                    <button 
-                        onClick={handlePrint}
-                        className="bg-blue-50 text-blue-600 px-4 py-2 rounded-xl font-bold hover:bg-blue-100 transition-all flex items-center gap-2 text-sm"
-                    >
-                        <i className="ri-printer-line"></i> 
-                        <span className="hidden sm:inline">Cetak Laporan</span>
-                    </button>
-                    <button 
+                    {hasPrediksi && (
+                        <button
+                            onClick={handlePrint}
+                            className="bg-blue-50 text-blue-600 px-4 py-2 rounded-xl font-bold hover:bg-blue-100 transition-all flex items-center gap-2 text-sm"
+                        >
+                            <i className="ri-printer-line"></i>
+                            <span className="hidden sm:inline">Cetak Laporan</span>
+                        </button>
+                    )}
+                    <button
                         onClick={handleLogout}
                         className="bg-red-50 text-red-600 px-4 py-2 rounded-xl font-bold hover:bg-red-100 transition-all flex items-center gap-2 text-sm"
                     >
-                        <i className="ri-logout-box-r-line"></i> 
+                        <i className="ri-logout-box-r-line"></i>
                         <span className="hidden sm:inline">Keluar</span>
                     </button>
                 </div>
             </nav>
 
             <div className="max-w-6xl mx-auto p-4 sm:p-8 print:p-0 print:max-w-full">
-                {/* Header Khusus Cetak (Hanya muncul saat di-print) */}
+                {/* Header cetak */}
                 <div className="hidden print:block mb-8 text-center border-b-2 border-blue-900 pb-4">
                     <h1 className="text-3xl font-black text-blue-900">LAPORAN PREDIKSI AKADEMIK SISWA</h1>
                     <p className="text-gray-500 font-bold uppercase tracking-widest mt-1">Sistem Deteksi Dini EduPredict</p>
@@ -201,22 +193,27 @@ function DashboardSiswaPage() {
                             <div className="inline-flex items-center gap-2 px-3 py-1 bg-white/20 rounded-full text-xs font-bold uppercase tracking-wider mb-3">
                                 <i className="ri-user-line"></i> Portal Siswa
                             </div>
-                            <h1 className="text-3xl sm:text-4xl font-black mb-2">Hallo, {data.nama_siswa || data.nama || 'Siswa'}! 👋</h1>
-                            <p className={`${currentTheme.detail} text-lg`}>NISN: {data.nisn || '-'} | Kelas: {data.kelas || '-'}</p>
+                            <h1 className="text-3xl sm:text-4xl font-black mb-2">Hallo, {data.nama_siswa || "Siswa"}! 👋</h1>
+                            <p className={`${currentTheme.detail} text-lg`}>NISN: {data.nisn || "-"} | Kelas: {data.kelas || "-"}</p>
                         </div>
-                        <div className="bg-white/10 backdrop-blur-md p-5 rounded-2xl border border-white/20 flex items-center gap-4 sm:gap-6">
-                            <div className="text-right">
-                                <p className={`text-xs font-bold ${currentTheme.subText} uppercase mb-1`}>Status Risiko</p>
-                                <p className="text-2xl font-black">
-                                    {translate(data.risk_category || 'Low')}
-                                </p>
+                        {hasPrediksi ? (
+                            <div className="bg-white/10 backdrop-blur-md p-5 rounded-2xl border border-white/20 flex items-center gap-4 sm:gap-6">
+                                <div className="text-right">
+                                    <p className={`text-xs font-bold ${currentTheme.subText} uppercase mb-1`}>Status Risiko</p>
+                                    <p className="text-2xl font-black">{translate(data.risk_category)}</p>
+                                </div>
+                                <div className="h-12 w-px bg-white/20"></div>
+                                <div className="text-center">
+                                    <p className={`text-[10px] font-bold ${currentTheme.subText} uppercase mb-1`}>Kepercayaan AI</p>
+                                    <p className="text-3xl font-black">{data.confidence || 0}%</p>
+                                </div>
                             </div>
-                            <div className="h-12 w-px bg-white/20"></div>
-                            <div className="text-center">
-                                <p className={`text-[10px] font-bold ${currentTheme.subText} uppercase mb-1`}>Kepercayaan AI</p>
-                                <p className="text-3xl font-black">{data.confidence || 0}%</p>
+                        ) : (
+                            <div className="bg-white/10 backdrop-blur-md p-5 rounded-2xl border border-white/20">
+                                <p className="text-white/80 text-sm font-medium">Belum ada data prediksi.</p>
+                                <p className="text-white/60 text-xs mt-1">Hubungi guru untuk input data akademik.</p>
                             </div>
-                        </div>
+                        )}
                     </div>
                 </div>
 
@@ -229,16 +226,26 @@ function DashboardSiswaPage() {
                 </div>
 
                 <div className="space-y-8">
-                    {/* 3. Analisis AI (Faktor & Rekomendasi) */}
-                    <PrediksiAI 
-                        predictionResult={{ 
-                            siswa: data.nama_siswa || data.nama || 'Siswa',
-                            prediksi: data 
-                        }}
-                        isSiswa={true}
-                        hideHeader={true}
-                        fullWidth={true} 
-                    />
+                    {/* 3. Analisis AI */}
+                    {hasPrediksi ? (
+                        <PrediksiAI
+                            predictionResult={{
+                                siswa: data.nama_siswa || "Siswa",
+                                prediksi: data,
+                            }}
+                            isSiswa={true}
+                            hideHeader={true}
+                            fullWidth={true}
+                        />
+                    ) : (
+                        <div className="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 text-center">
+                            <i className="ri-robot-line text-5xl text-gray-300 mb-4 block"></i>
+                            <h3 className="text-lg font-bold text-gray-500">Analisis AI Belum Tersedia</h3>
+                            <p className="text-gray-400 text-sm mt-2">
+                                Data akademikmu belum diinput oleh guru. Hubungi wali kelas untuk mendapatkan analisis prediksi.
+                            </p>
+                        </div>
+                    )}
 
                     {/* 4. Detail Data Input Card */}
                     <div className="bg-white p-8 rounded-3xl shadow-sm border border-gray-100">
@@ -250,9 +257,9 @@ function DashboardSiswaPage() {
                             <DetailItem label="Jenis Kelamin" value={translate(data.gender)} />
                             <DetailItem label="Jam Tidur/malam" value={`${data.sleep_hours || 0} j/mlm`} />
                             <DetailItem label="Aktivitas Fisik/minggu" value={`${data.physical_activity || 0} j/mgg`} />
-                            <DetailItem label="Tingkat Motivasi Belajar" value={translate(data.motivation_level, 'motivation')} />
+                            <DetailItem label="Tingkat Motivasi Belajar" value={translate(data.motivation_level, "motivation")} />
                             <DetailItem label="Akses Internet di rumah" value={translate(data.internet_access)} />
-                            <DetailItem label="Akses Sumber Belajar" value={translate(data.access_to_resources, 'resources')} />
+                            <DetailItem label="Akses Sumber Belajar" value={translate(data.access_to_resources, "resources")} />
                             <DetailItem label="Pengaruh Teman" value={translate(data.peer_influence)} />
                         </div>
                         <div className="mt-8 p-5 bg-blue-50 rounded-2xl border border-blue-100">
@@ -262,9 +269,14 @@ function DashboardSiswaPage() {
                             </p>
                         </div>
                     </div>
-                    
+
                     <div className="p-2 flex items-center justify-end">
-                        <span className="text-xs font-bold text-gray-400 italic">Update Terakhir: {data.recorded_at ? new Date(data.recorded_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }) : '-'}</span>
+                        <span className="text-xs font-bold text-gray-400 italic">
+                            Update Terakhir:{" "}
+                            {data.recorded_at
+                                ? new Date(data.recorded_at).toLocaleDateString("id-ID", { day: "numeric", month: "long", year: "numeric" })
+                                : "-"}
+                        </span>
                     </div>
                 </div>
             </div>
@@ -273,14 +285,12 @@ function DashboardSiswaPage() {
 }
 
 function StatBox({ title, value, icon, color }) {
-    // Mapping warna statis untuk Tailwind agar tidak terkena purge
     const colorClasses = {
         blue: "bg-blue-50 text-blue-600",
         amber: "bg-amber-50 text-amber-600",
         emerald: "bg-emerald-50 text-emerald-600",
-        indigo: "bg-indigo-50 text-indigo-600"
+        indigo: "bg-indigo-50 text-indigo-600",
     };
-
     return (
         <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-50 flex items-center gap-5 transition-all hover:shadow-md">
             <div className={`w-14 h-14 rounded-2xl flex items-center justify-center text-3xl ${colorClasses[color] || "bg-gray-50 text-gray-600"}`}>

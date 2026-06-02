@@ -1,9 +1,5 @@
 const db = require("../config/db");
 
-// ─────────────────────────────────────────────────────────
-//  GET /api/guru/students
-//  Ambil semua siswa beserta prediksi terbaru
-// ─────────────────────────────────────────────────────────
 const getAllStudents = async (req, res) => {
   try {
     const [rows] = await db.query(
@@ -28,12 +24,7 @@ const getAllStudents = async (req, res) => {
      s.nama_siswa ASC`,
       [req.user.id],
     );
-
-    res.status(200).json({
-      success: true,
-      total: rows.length,
-      data: rows,
-    });
+    res.status(200).json({ success: true, total: rows.length, data: rows });
   } catch (err) {
     console.error("getAllStudents error:", err);
     res
@@ -42,27 +33,19 @@ const getAllStudents = async (req, res) => {
   }
 };
 
-// ─────────────────────────────────────────────────────────
-//  GET /api/guru/students/:id
-//  Ambil detail 1 siswa + histori akademik & prediksi
-// ─────────────────────────────────────────────────────────
 const getStudentById = async (req, res) => {
   const { id } = req.params;
-
   try {
-    // Data statis siswa
     const [studentRows] = await db.query(
       `SELECT * FROM students WHERE id = ? LIMIT 1`,
       [id],
     );
-
     if (studentRows.length === 0) {
       return res
         .status(404)
         .json({ success: false, message: "Siswa tidak ditemukan." });
     }
 
-    // Histori akademik + prediksi (10 record terbaru)
     const [histori] = await db.query(
       `SELECT
          ar.id AS record_id,
@@ -83,7 +66,8 @@ const getStudentById = async (req, res) => {
          p.risk_category,
          p.confidence,
          p.probabilities,
-         p.risk_factors
+         p.risk_factors,
+         p.recommendations
        FROM academic_records ar
        LEFT JOIN predictions p ON p.academic_record_id = ar.id
        WHERE ar.student_id = ?
@@ -96,7 +80,7 @@ const getStudentById = async (req, res) => {
       success: true,
       data: {
         siswa: studentRows[0],
-        histori: histori.reverse(), // ascending untuk grafik
+        histori: histori.reverse(),
       },
     });
   } catch (err) {
@@ -107,10 +91,6 @@ const getStudentById = async (req, res) => {
   }
 };
 
-// ─────────────────────────────────────────────────────────
-//  POST /api/guru/students
-//  Tambah siswa baru
-// ─────────────────────────────────────────────────────────
 const createStudent = async (req, res) => {
   const {
     nisn,
@@ -123,7 +103,6 @@ const createStudent = async (req, res) => {
     learning_disabilities,
   } = req.body;
 
-  // Validasi field wajib
   if (
     !nisn ||
     !nama_siswa ||
@@ -151,25 +130,24 @@ const createStudent = async (req, res) => {
   }
 
   try {
-    // Cek NISN sudah ada atau belum
     const [existing] = await db.query(
       "SELECT id FROM students WHERE nisn = ? LIMIT 1",
       [nisn],
     );
-
     if (existing.length > 0) {
-      return res.status(409).json({
-        success: false,
-        message: `NISN ${nisn} sudah terdaftar di sistem.`,
-      });
+      return res
+        .status(409)
+        .json({
+          success: false,
+          message: `NISN ${nisn} sudah terdaftar di sistem.`,
+        });
     }
 
-    // Insert siswa baru
     const [result] = await db.query(
       `INSERT INTO students
-     (nisn, nama_siswa, kelas, gender, school_type,
-      distance_from_home, parental_education_level, learning_disabilities, user_id)
-   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+       (nisn, nama_siswa, kelas, gender, school_type,
+        distance_from_home, parental_education_level, learning_disabilities, user_id)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         nisn,
         nama_siswa,
@@ -196,10 +174,6 @@ const createStudent = async (req, res) => {
   }
 };
 
-// ─────────────────────────────────────────────────────────
-//  PUT /api/guru/students/:id
-//  Edit data statis siswa
-// ─────────────────────────────────────────────────────────
 const updateStudent = async (req, res) => {
   const { id } = req.params;
   const {
@@ -223,36 +197,33 @@ const updateStudent = async (req, res) => {
     !parental_education_level ||
     !learning_disabilities
   ) {
-    return res.status(400).json({
-      success: false,
-      message: "Semua field wajib diisi.",
-    });
+    return res
+      .status(400)
+      .json({ success: false, message: "Semua field wajib diisi." });
   }
 
   try {
-    // Cek siswa ada
     const [existing] = await db.query(
       "SELECT id FROM students WHERE id = ? LIMIT 1",
       [id],
     );
-
     if (existing.length === 0) {
       return res
         .status(404)
         .json({ success: false, message: "Siswa tidak ditemukan." });
     }
 
-    // Cek NISN tidak bentrok dengan siswa lain
     const [nisnCheck] = await db.query(
       "SELECT id FROM students WHERE nisn = ? AND id != ? LIMIT 1",
       [nisn, id],
     );
-
     if (nisnCheck.length > 0) {
-      return res.status(409).json({
-        success: false,
-        message: `NISN ${nisn} sudah digunakan siswa lain.`,
-      });
+      return res
+        .status(409)
+        .json({
+          success: false,
+          message: `NISN ${nisn} sudah digunakan siswa lain.`,
+        });
     }
 
     await db.query(
@@ -274,10 +245,12 @@ const updateStudent = async (req, res) => {
       ],
     );
 
-    res.status(200).json({
-      success: true,
-      message: `Data siswa ${nama_siswa} berhasil diperbarui.`,
-    });
+    res
+      .status(200)
+      .json({
+        success: true,
+        message: `Data siswa ${nama_siswa} berhasil diperbarui.`,
+      });
   } catch (err) {
     console.error("updateStudent error:", err);
     res
@@ -286,19 +259,13 @@ const updateStudent = async (req, res) => {
   }
 };
 
-// ─────────────────────────────────────────────────────────
-//  DELETE /api/guru/students/:id
-//  Hapus siswa (cascade → academic_records & predictions ikut terhapus)
-// ─────────────────────────────────────────────────────────
 const deleteStudent = async (req, res) => {
   const { id } = req.params;
-
   try {
     const [existing] = await db.query(
       "SELECT id, nama_siswa FROM students WHERE id = ? LIMIT 1",
       [id],
     );
-
     if (existing.length === 0) {
       return res
         .status(404)
@@ -306,8 +273,6 @@ const deleteStudent = async (req, res) => {
     }
 
     const nama = existing[0].nama_siswa;
-
-    // DELETE CASCADE sudah diset di schema → academic_records & predictions ikut terhapus
     await db.query("DELETE FROM students WHERE id = ?", [id]);
 
     res.status(200).json({
@@ -322,10 +287,44 @@ const deleteStudent = async (req, res) => {
   }
 };
 
+const getStudentsReport = async (req, res) => {
+  try {
+    const [rows] = await db.query(
+      `SELECT
+         s.id, s.nisn, s.nama_siswa, s.kelas, s.gender,
+         ar.attendance,
+         ar.hours_studied,
+         ar.previous_scores,
+         p.risk_category,
+         p.confidence,
+         p.risk_factors
+       FROM students s
+       LEFT JOIN academic_records ar ON ar.student_id = s.id
+         AND ar.recorded_at = (
+           SELECT MAX(ar2.recorded_at) FROM academic_records ar2
+           WHERE ar2.student_id = s.id
+         )
+       LEFT JOIN predictions p ON p.academic_record_id = ar.id
+       WHERE s.user_id = ?
+       ORDER BY
+         FIELD(p.risk_category, 'High', 'Medium', 'Low'),
+         s.nama_siswa ASC`,
+      [req.user.id],
+    );
+    res.status(200).json({ success: true, total: rows.length, data: rows });
+  } catch (err) {
+    console.error("getStudentsReport error:", err);
+    res
+      .status(500)
+      .json({ success: false, message: "Terjadi kesalahan pada server." });
+  }
+};
+
 module.exports = {
   getAllStudents,
   getStudentById,
   createStudent,
   updateStudent,
   deleteStudent,
+  getStudentsReport,
 };
