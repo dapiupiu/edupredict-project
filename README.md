@@ -76,19 +76,16 @@ Swagger Documentation:
 http://localhost:8000/docs
 ```
 
-## Sample Prediction Request
+For detailed API specifications, request/response schemas, and endpoint testing, please refer to the Swagger Docs interface available at:
 
-```json
-{
-  "student_meta": {
-    "student_id": "S001"
-  },
-  "student_features": {
-    "attendance_rate": 85,
-    "assignment_score": 78,
-    "exam_score": 80
-  }
-}
+```text
+http://localhost:8000/docs
+```
+
+OpenAPI JSON specification is also available at:
+
+```text
+http://localhost:8000/openapi.json
 ```
 
 ## Project Objective
