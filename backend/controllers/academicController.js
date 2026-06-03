@@ -4,7 +4,6 @@ const {
   analyzeDominantFactors,
   analyzeRecommendations,
 } = require("../services/aiService");
-const { validateAndClamp } = require("../utils/validateInput");
 
 // ─────────────────────────────────────────────────────────
 //  HARDCODE AI RESPONSE / FALLBACK
@@ -220,31 +219,26 @@ const inputAcademic = async (req, res) => {
       Parental_Education_Level: siswa.parental_education_level,
     };
 
-    // ── STEP 4a: Clamp input ke training bounds (OOD protection) ──
-    const { clampedInput, oodWarnings } = validateAndClamp(rawInput);
-
-    if (oodWarnings.length > 0) {
-      console.log("OOD warnings untuk siswa", studentId, ":", oodWarnings);
-    }
-
+    // ── STEP 4a: Gunakan input asli yang sudah divalidasi ──
+    const inputForAI = rawInput;
     // ── STEP 4b: Prediksi via AI service + fallback hardcode ──
     let prediksi;
 
     try {
-      prediksi = await predictRiskWithAI(clampedInput);
+      prediksi = await predictRiskWithAI(inputForAI);
     } catch (aiError) {
       console.error(
         "AI service error, fallback to hardcoded prediction:",
         aiError.message,
       );
 
-      prediksi = getHardcodedPrediction(clampedInput);
+      prediksi = getHardcodedPrediction(inputForAI);
     }
 
     // ── STEP 4c: Ambil dominant factors & recommendations dari AI ──
     const analyzePayload = {
       student_id: `STU-${studentId}`,
-      features: clampedInput,
+      features: inputForAI,
       prediction: {
         risk_category: prediksi.risk_category,
         confidence: prediksi.confidence,
@@ -271,7 +265,7 @@ const inputAcademic = async (req, res) => {
         JSON.stringify(prediksi.probabilities || {}),
         JSON.stringify(dominantFactors), // [{factor, value, status, note}]
         JSON.stringify(recommendations), // [{title, description, action}] — disimpan ke DB
-        JSON.stringify(clampedInput),
+        JSON.stringify(inputForAI),
       ],
     );
 
@@ -323,9 +317,9 @@ const inputAcademic = async (req, res) => {
           recommendations: recommendations,
           source: prediksi.source || "ai",
         },
-        ood_warnings: oodWarnings,
-        is_ood: oodWarnings.length > 0,
-        input_used: clampedInput,
+        ood_warnings: [],
+        is_ood: false,
+        input_used: inputForAI,
       },
     });
   } catch (err) {
