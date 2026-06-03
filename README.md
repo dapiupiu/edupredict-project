@@ -60,7 +60,7 @@ Selain menampilkan status risiko, aplikasi juga menyediakan **analisis faktor do
 |---|---|
 | AI API Framework | FastAPI |
 | Deployment | Railway |
-| Model Runtime | Python |
+| Programming Language | Python |
 | Deep Learning / Machine Learning | TensorFlow |
 | AI Recommendation Service | Groq / Generative AI |
 | API Documentation | Swagger / OpenAPI |
