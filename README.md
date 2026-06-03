@@ -238,6 +238,7 @@ EduPredict menggunakan AI Service eksternal yang dideploy secara terpisah.
 
 - Swagger Documentation: `https://edupredictaimlproduction.up.railway.app/docs`
 - OpenAPI JSON: `https://edupredictaimlproduction.up.railway.app/openapi.json`
+- Google Drive: `https://drive.google.com/drive/folders/1AHwpqqGlxZEDhhTH8b1munbLXpte0DWc?usp=sharing`
 
 Endpoint AI yang digunakan backend:
 
@@ -333,10 +334,10 @@ Dokumen pendukung project dapat diakses melalui link berikut.
 
 | Document | Link |
 |---|---|
-| Jobdesk Team | `PASTE_LINK_JOBDESK_DI_SINI` |
-| AI Documentation | `PASTE_LINK_DOKUMENTASI_AI_DI_SINI` |
+| Jobdesk Team | `https://docs.google.com/spreadsheets/d/1LfxJzDSZo-KgMOR8QWNe5e8gSqJ5g1H-Cd8L2UvsEiA/edit?pli=1&gid=0#gid=0` |
+| AI Documentation | `https://github.com/raelkertiaa/edupredict/tree/ai-engineer` |
 | Data Science Documentation | `PASTE_LINK_DOKUMENTASI_DATA_SCIENCE_DI_SINI` |
-| Capstone Playbook | `PASTE_LINK_CAPSTONE_PLAYBOOK_DI_SINI` |
+| Capstone Playbook | `https://docs.google.com/document/d/12y12GzyuqR9LWbym_Zx2GKJaBAv2gh-LHZBwHN8nCDk/edit?pli=1&tab=t.0#heading=h.kfx0o3hg27op` |
 
 ---
 
