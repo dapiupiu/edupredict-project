@@ -102,6 +102,56 @@ http://localhost:8000/openapi.json
 }
 ```
 
+## Deployment di Railway
+
+Project ini dapat di-deploy menggunakan Railway sebagai platform hosting backend FastAPI.
+
+### Environment Variables
+
+Pastikan environment variables berikut telah ditambahkan pada Railway:
+
+| Variable | Deskripsi |
+|-----------|-----------|
+| `GROQ_API_KEY` | API Key untuk mengakses layanan Groq |
+| `GROQ_MODEL` | Nama model Groq yang digunakan (contoh: `llama-3.3-70b-versatile`) |
+| `MISE_PYTHON_GITHUB_ATTESTATIONS` | Set ke `false` untuk menghindari kendala instalasi Python pada Railway |
+
+### Konfigurasi Railway
+
+Tambahkan variabel berikut pada menu **Variables** di Railway:
+
+```env
+GROQ_API_KEY=your_groq_api_key
+GROQ_MODEL=llama-3.3-70b-versatile
+MISE_PYTHON_GITHUB_ATTESTATIONS=false
+```
+
+### Deploy
+
+1. Push project ke GitHub.
+2. Buat project baru di Railway.
+3. Hubungkan repository GitHub.
+4. Tambahkan seluruh environment variables yang diperlukan.
+5. Railway akan melakukan build dan deploy secara otomatis.
+
+Setelah deployment berhasil, API dapat diakses melalui domain Railway yang diberikan, misalnya:
+
+```text
+https://your-project.up.railway.app
+```
+
+Dokumentasi Swagger juga dapat diakses melalui:
+
+```text
+https://your-project.up.railway.app/docs
+```
+
+Sementara spesifikasi OpenAPI tersedia pada:
+
+```text
+https://your-project.up.railway.app/openapi.json
+```
+
 ## Tujuan Project
 
 EduPredict AI membantu institusi pendidikan dalam mengidentifikasi siswa yang berisiko mengalami penurunan performa akademik sejak dini sehingga tindakan pencegahan dan intervensi dapat dilakukan lebih cepat dan tepat sasaran.
