@@ -145,4 +145,5 @@ edupredict-ai/
 ## Author
 
 **Kaka Davi Dharmawan & Dwi Shugita Syaka Dewi**
+
 **Data Scientist at CC26-PSU080 | Coding Camp Powered by DBS Foundation 2026**
