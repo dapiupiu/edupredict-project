@@ -35,6 +35,7 @@ Selain menampilkan status risiko, aplikasi juga menyediakan **analisis faktor do
 - Monitoring siswa dan export laporan.
 - Reset password sederhana untuk kebutuhan demo aplikasi.
 - Validasi input akademik pada frontend dan backend.
+- Export informasi daftar siswa oleh guru atau berdasarkan NISN sebagai bahan laporan.
 
 ---
 
