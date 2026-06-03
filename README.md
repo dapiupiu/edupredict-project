@@ -1,49 +1,89 @@
 # EduPredict AI
 
-EduPredict AI adalah aplikasi web full-stack untuk membantu guru melakukan deteksi dini risiko akademik siswa. Sistem mengelola data siswa, mencatat data akademik dan perilaku belajar, mengirim data ke layanan AI, lalu menampilkan hasil prediksi risiko dalam kategori **Low**, **Medium**, atau **High** beserta faktor dominan dan rekomendasi intervensi.
+<p align="center">
+  <img src="./frontend/src/assets/logo-edupredict.png" alt="EduPredict Logo" width="180"/>
+</p>
 
-Proyek ini dibuat untuk Capstone Project Coding Camp 2026 powered by DBS Foundation.
+<h3 align="center">Academic Risk Prediction System for Early Student Intervention</h3>
+
+<p align="center">
+  Capstone Project Coding Camp 2026 powered by DBS Foundation<br/>
+  Team ID: <strong>CC26-PSU080</strong>
+</p>
 
 ---
 
-## Ringkasan Fitur
+## Deskripsi Singkat Proyek
 
-- Registrasi dan login guru berbasis JWT.
+**EduPredict AI** adalah aplikasi web full-stack yang membantu guru melakukan deteksi dini risiko akademik siswa berbasis Artificial Intelligence. Sistem ini mengelola data siswa, mencatat data akademik dan perilaku belajar, mengirimkan data ke layanan AI, lalu menampilkan hasil prediksi risiko dalam kategori **Low**, **Medium**, atau **High**.
+
+Selain menampilkan status risiko, aplikasi juga menyediakan **analisis faktor dominan** dan **rekomendasi intervensi AI** agar guru dapat mengambil keputusan lebih cepat, terarah, dan berbasis data.
+
+---
+
+## Fitur Utama
+
+- Registrasi dan login guru.
 - Profil guru lengkap, termasuk data sekolah, wali kelas, dan foto profil.
-- Manajemen data siswa: tambah, lihat, edit, hapus.
+- Manajemen data siswa: tambah, lihat, edit, dan hapus.
 - Input data akademik dan perilaku belajar siswa.
-- Prediksi risiko akademik menggunakan layanan AI eksternal.
-- Analisis faktor dominan dari AI dengan status `good`, `warning`, dan `danger`.
+- Prediksi risiko akademik berbasis AI.
+- Analisis faktor dominan dengan status `good`, `warning`, dan `danger`.
 - Rekomendasi AI dengan format `title`, `description`, dan `action`.
-- Dashboard guru dengan statistik kelas dan notifikasi siswa berisiko.
-- Portal siswa untuk mengecek perkembangan melalui NISN.
-- Monitoring siswa dan export laporan monitoring.
+- Dashboard guru untuk monitoring performa kelas.
+- Portal siswa untuk melihat hasil prediksi berdasarkan NISN.
+- Monitoring siswa dan export laporan.
 - Reset password sederhana untuk kebutuhan demo aplikasi.
+- Validasi input akademik pada frontend dan backend.
 
 ---
 
 ## Tech Stack
 
-| Bagian | Teknologi |
+### Web Application
+
+| Area | Technology |
 |---|---|
 | Frontend | React, Vite, Tailwind CSS |
 | Backend | Node.js, Express.js |
 | Database | MySQL / MariaDB |
-| Autentikasi | JWT, bcrypt |
-| Upload file | Multer |
-| AI Service | FastAPI AI Service di Railway |
-| Deployment | Vercel dan Railway |
+| Authentication | JWT, bcrypt |
+| File Upload | Multer |
+| API Communication | Fetch API, Axios |
+| Deployment | Vercel, Railway |
+| Development Tools | Visual Studio Code, Postman, GitHub |
+
+### Artificial Intelligence
+
+| Area | Technology |
+|---|---|
+| AI API Framework | FastAPI |
+| Deployment | Railway |
+| Model Runtime | Python |
+| Deep Learning / Machine Learning | TensorFlow |
+| AI Recommendation Service | Groq / Generative AI |
+| API Documentation | Swagger / OpenAPI |
+
+### Data Science
+
+| Area | Technology |
+|---|---|
+| Notebook Environment | Google Colab |
+| Programming Language | Python |
+| Data Processing | Pandas, NumPy |
+| Data Visualization | Matplotlib, Seaborn, Plotly |
+| Exploration / Experiment | Google Colab Notebook |
 
 ---
 
-## Struktur Folder
+## Struktur Proyek
 
 ```txt
 edupredict-main/
 ├── backend/
 │   ├── config/                 # Konfigurasi database dan batas input AI
 │   ├── controllers/            # Logic utama API
-│   ├── middleware/             # Middleware auth dan upload
+│   ├── middleware/             # Middleware autentikasi dan upload
 │   ├── routes/                 # Definisi endpoint Express
 │   ├── services/               # Integrasi ke AI service
 │   ├── utils/                  # Utility validasi input
@@ -54,45 +94,69 @@ edupredict-main/
 │   └── server.js               # Entry point backend
 │
 ├── frontend/
-│   ├── public/                 # Asset publik
+│   ├── public/
 │   ├── src/
-│   │   ├── assets/             # Logo dan gambar UI
+│   │   ├── assets/             # Logo dan asset aplikasi
 │   │   ├── components/         # Komponen reusable
 │   │   ├── pages/              # Halaman aplikasi
-│   │   └── utils/              # Konfigurasi base URL API
+│   │   └── utils/              # Konfigurasi API frontend
 │   ├── .env.example            # Template environment frontend
-│   ├── .env.production         # Environment production frontend
 │   ├── package.json            # Dependensi frontend
 │   ├── vercel.json             # Konfigurasi deploy Vercel
 │   └── vite.config.js          # Konfigurasi Vite
 │
 ├── edupredict_schema.sql       # Schema database MySQL/MariaDB
 ├── README.md                   # Dokumentasi utama proyek
-└── SUBMISSION_CHECKLIST.md     # Checklist berkas submission
+└── SUBMISSION_CHECKLIST.md     # Checklist kelengkapan submission
 ```
 
 ---
 
-## Environment Variables
+## System Flow
 
-### Backend
+```txt
+Guru login
+↓
+Guru mengisi atau mengelola data siswa
+↓
+Guru menginput data akademik siswa
+↓
+Backend melakukan validasi data
+↓
+Backend mengirim data ke AI Service
+↓
+AI menghasilkan prediksi risiko akademik
+↓
+AI menghasilkan analisis faktor dominan dan rekomendasi
+↓
+Frontend menampilkan hasil prediksi, analisis, dan rekomendasi kepada guru/siswa
+```
 
-Buat file `.env` di folder `backend/` berdasarkan `backend/.env.example`.
+---
+
+## Petunjuk Setup Environment
+
+### Backend Environment
+
+Buat file `.env` di dalam folder `backend/` berdasarkan file `backend/.env.example`.
 
 ```env
 PORT=5000
+
 DB_HOST=localhost
 DB_USER=root
 DB_PASS=
 DB_NAME=edupredict
+
 JWT_SECRET=your_jwt_secret_key
 JWT_EXPIRES_IN=8h
+
 AI_SERVICE_URL=https://edupredictaimlproduction.up.railway.app
 ```
 
-### Frontend
+### Frontend Environment
 
-Buat file `.env` di folder `frontend/` berdasarkan `frontend/.env.example`.
+Buat file `.env` di dalam folder `frontend/` berdasarkan file `frontend/.env.example`.
 
 ```env
 VITE_API_URL=http://localhost:5000
@@ -105,7 +169,12 @@ Untuk production, arahkan `VITE_API_URL` ke URL backend Railway.
 ## Setup Database
 
 1. Buat database baru bernama `edupredict`.
-2. Import schema:
+
+```sql
+CREATE DATABASE edupredict;
+```
+
+2. Import schema database.
 
 ```bash
 mysql -u root -p edupredict < edupredict_schema.sql
@@ -125,7 +194,7 @@ Tabel utama yang digunakan:
 
 ## Cara Menjalankan Aplikasi
 
-### 1. Jalankan Backend
+### 1. Menjalankan Backend
 
 ```bash
 cd backend
@@ -140,13 +209,13 @@ Backend berjalan di:
 http://localhost:5000
 ```
 
-Untuk mode production/local tanpa nodemon:
+Untuk menjalankan backend tanpa mode development:
 
 ```bash
 npm run start
 ```
 
-### 2. Jalankan Frontend
+### 2. Menjalankan Frontend
 
 ```bash
 cd frontend
@@ -163,28 +232,32 @@ http://localhost:5173
 
 ---
 
-## Layanan AI / Model ML
+## Tautan Model ML / AI Service
 
-Aplikasi ini menggunakan AI Service eksternal yang dikelola terpisah dari repository web app.
+EduPredict menggunakan AI Service eksternal yang dideploy secara terpisah.
 
-- Swagger AI Service: `https://edupredictaimlproduction.up.railway.app/docs`
+- Swagger Documentation: `https://edupredictaimlproduction.up.railway.app/docs`
 - OpenAPI JSON: `https://edupredictaimlproduction.up.railway.app/openapi.json`
 
 Endpoint AI yang digunakan backend:
 
-| Method | Endpoint | Fungsi |
+| Method | Endpoint | Description |
 |---|---|---|
-| POST | `/api/v1/predict` | Prediksi risiko siswa |
-| POST | `/api/v1/analyze/dominant-factors` | Analisis faktor dominan |
-| POST | `/api/v1/analyze/recommendations` | Rekomendasi intervensi |
+| POST | `/api/v1/predict` | Predict student academic risk |
+| POST | `/api/v1/analyze/dominant-factors` | Generate dominant factor analysis |
+| POST | `/api/v1/analyze/recommendations` | Generate AI intervention recommendations |
 
-Catatan: Model ML tidak disertakan langsung di repository ini karena dipanggil melalui AI Service eksternal.
+Catatan:
+
+- Model ML tidak disimpan langsung di repository web app.
+- Backend mengakses model melalui AI Service eksternal menggunakan `AI_SERVICE_URL`.
+- Untuk detail implementasi model dan eksperimen data science, lihat dokumen pendukung pada bagian **Supporting Documents**.
 
 ---
 
-## Format Output AI yang Dipakai Aplikasi
+## Format Response AI
 
-### Faktor Dominan
+### Dominant Factors
 
 ```json
 {
@@ -195,15 +268,15 @@ Catatan: Model ML tidak disertakan langsung di repository ini karena dipanggil m
 }
 ```
 
-Status digunakan untuk warna UI:
+Status digunakan untuk menentukan warna tampilan pada frontend:
 
-| Status | Warna |
+| Status | UI Color |
 |---|---|
-| `good` | Hijau |
-| `warning` | Oranye |
-| `danger` | Merah |
+| `good` | Green |
+| `warning` | Orange |
+| `danger` | Red |
 
-### Rekomendasi AI
+### Recommendations
 
 ```json
 {
@@ -213,15 +286,15 @@ Status digunakan untuk warna UI:
 }
 ```
 
-Frontend sudah menampilkan schema rekomendasi baru berupa `title`, `description`, dan `action`.
+Frontend sudah mendukung schema rekomendasi terbaru dengan field `title`, `description`, dan `action`.
 
 ---
 
-## Validasi Input AI
+## Validasi Input Akademik
 
-Rentang validasi yang digunakan aplikasi:
+Validasi dilakukan pada frontend dan backend agar data yang dikirim ke AI tetap aman dan konsisten.
 
-| Field | Rentang |
+| Field | Valid Range |
 |---|---|
 | `hours_studied` | 0 - 36 |
 | `attendance` | 0 - 100 |
@@ -230,13 +303,13 @@ Rentang validasi yang digunakan aplikasi:
 | `tutoring_sessions` | 0 - 7 |
 | `physical_activity` | 0 - 6 |
 
-Validasi dilakukan di frontend dan backend agar data invalid tidak masuk ke database atau AI service.
+Backend tetap menjaga input agar tidak merusak proses prediksi model. Untuk menjaga akurasi model, logic clamping dapat digunakan pada proses prediksi, sedangkan analisis faktor dan rekomendasi dapat menyesuaikan input asli pengguna agar hasil saran tetap sinkron dengan tampilan data.
 
 ---
 
 ## Dokumentasi API
 
-Dokumentasi endpoint backend tersedia di:
+Dokumentasi endpoint backend tersedia pada file:
 
 ```txt
 backend/ENDPOINTS.md
@@ -248,31 +321,178 @@ Base URL lokal:
 http://localhost:5000
 ```
 
-Base URL production disesuaikan dengan URL Railway backend.
+Base URL production mengikuti deployment backend di Railway.
+
+---
+
+## Supporting Documents
+
+Dokumen pendukung project dapat diakses melalui link berikut.
+
+> Ganti placeholder berikut dengan link Google Drive / dokumen asli tim.
+
+| Document | Link |
+|---|---|
+| Jobdesk Team | `PASTE_LINK_JOBDESK_DI_SINI` |
+| AI Documentation | `PASTE_LINK_DOKUMENTASI_AI_DI_SINI` |
+| Data Science Documentation | `PASTE_LINK_DOKUMENTASI_DATA_SCIENCE_DI_SINI` |
+| Capstone Playbook | `PASTE_LINK_CAPSTONE_PLAYBOOK_DI_SINI` |
+
+---
+
+## Deployment
+
+### Frontend
+
+Frontend dideploy menggunakan Vercel.
+
+Pastikan environment variable berikut sudah diset di Vercel:
+
+```env
+VITE_API_URL=https://your-backend-url.up.railway.app
+```
+
+### Backend
+
+Backend dideploy menggunakan Railway.
+
+Pastikan environment variable backend sudah diset di Railway:
+
+```env
+PORT=5000
+DB_HOST=your_database_host
+DB_USER=your_database_user
+DB_PASS=your_database_password
+DB_NAME=your_database_name
+JWT_SECRET=your_jwt_secret
+JWT_EXPIRES_IN=8h
+AI_SERVICE_URL=https://edupredictaimlproduction.up.railway.app
+```
 
 ---
 
 ## Catatan Keamanan
 
-- File `.env` tidak disertakan dalam repository.
+- File `.env` asli tidak disertakan dalam repository.
 - Gunakan `.env.example` sebagai template environment.
-- Jangan menyimpan kredensial database asli atau secret JWT asli di GitHub.
-- Folder `uploads/` dibuat otomatis saat fitur upload foto profil digunakan.
+- Jangan menyimpan credential database asli atau JWT secret asli di GitHub.
+- Folder `uploads/` digunakan untuk menyimpan foto profil dan tidak perlu diikutsertakan jika berisi file user.
+- Password user disimpan dalam bentuk hash menggunakan bcrypt.
 
 ---
 
 ## Saran Pengembangan
 
-- Import data siswa melalui Excel.
-- Export PDF per siswa.
-- Reset password berbasis email token dan masa kedaluwarsa.
-- Validasi perpindahan kelas guru jika sudah memiliki siswa aktif.
-- Batch prediction untuk import data akademik banyak siswa.
+Beberapa pengembangan yang dapat dilakukan pada versi berikutnya:
+
+1. **Import Data Siswa melalui Excel**  
+   Menambahkan fitur import data siswa menggunakan file Excel. Jika file hanya berisi data dasar seperti nama, NISN, gender, dan pendidikan orang tua, sistem dapat menyimpan data sebagai draft/belum lengkap. Jika file berisi data akademik lengkap, sistem dapat dikembangkan untuk langsung memproses prediksi AI.
+
+2. **Integrasi Database dengan Sistem Informasi Akademik (SIAKAD)**  
+   Menghubungkan dashboard EduPredict dengan Sistem Informasi Akademik agar data siswa dan nilai akademik dapat diperbarui secara real-time.
+
+3. **Model Advanced**  
+   Mengembangkan eksperimen model lanjutan menggunakan Deep Learning atau Ensemble Methods seperti XGBoost dan LightGBM untuk meningkatkan presisi, terutama pada kelas minoritas seperti High Risk.
+
+4. **Sistem Notifikasi Otomatis**  
+   Mengintegrasikan sistem dengan Email atau WhatsApp Gateway untuk mengirim peringatan otomatis kepada wali kelas, guru BK, atau orang tua.
+
+5. **Prediksi Nilai Ujian**  
+   Menambahkan fitur prediksi nilai ujian untuk memberikan gambaran performa akademik siswa secara lebih informatif.
+
+6. **Multilingual Support**  
+   Menambahkan dukungan bahasa tambahan agar dashboard dan rekomendasi AI dapat digunakan oleh pengguna yang lebih luas.
+
+7. **Export Laporan Per Siswa**  
+   Menambahkan fitur export laporan individual untuk setiap siswa dalam format PDF.
+
+8. **Reset Password Berbasis Email Token**  
+   Mengembangkan fitur reset password yang lebih aman menggunakan token email dan masa kedaluwarsa.
+
+9. **Validasi Perpindahan Kelas Guru**  
+   Menambahkan aturan validasi jika wali kelas berpindah kelas tetapi masih memiliki siswa aktif pada kelas sebelumnya.
+
+10. **Batch Prediction**  
+    Mengembangkan fitur prediksi massal untuk mendukung proses analisis banyak siswa sekaligus.
 
 ---
 
-## Author / Team
+## Submission Requirements
 
-Capstone Project Coding Camp 2026 powered by DBS Foundation  
-Team: CC26-PSU080  
-Project: EduPredict AI
+Project ZIP sebaiknya mencakup item berikut:
+
+### 1. Source Code
+
+Berkas kode aplikasi dan kode yang digunakan untuk pelatihan model Machine Learning jika ada.
+
+Dalam repository ini tersedia:
+
+- `backend/` — source code backend Node.js + Express.js.
+- `frontend/` — source code frontend React + Vite.
+- `edupredict_schema.sql` — schema database MySQL/MariaDB.
+
+Catatan: kode model Machine Learning berada pada repository/dokumentasi AI terpisah dan diakses melalui AI Service eksternal.
+
+### 2. Template Environment
+
+Jika aplikasi menggunakan berkas environment untuk kredensial, sertakan template environment tanpa nilai sensitif.
+
+File yang disertakan:
+
+- `backend/.env.example`
+- `frontend/.env.example`
+
+File `.env` asli tidak disertakan karena dapat berisi credential dan secret key.
+
+### 3. Dependensi
+
+Daftar atau berkas dependensi project disertakan melalui:
+
+- `backend/package.json`
+- `backend/package-lock.json`
+- `frontend/package.json`
+- `frontend/package-lock.json`
+
+### 4. Konfigurasi Pendukung
+
+Berkas konfigurasi lain yang relevan disertakan, seperti:
+
+- `.gitignore`
+- `frontend/vite.config.js`
+- `frontend/vercel.json`
+- `frontend/eslint.config.js`
+- `backend/config/db.js`
+- `backend/config/trainingBounds.js`
+
+### 5. README
+
+README ini telah memuat informasi berikut:
+
+- Deskripsi singkat proyek.
+- Petunjuk setup environment.
+- Tautan model ML / AI Service.
+- Cara menjalankan aplikasi.
+- Tech stack.
+- Dokumentasi endpoint pendukung.
+- Saran pengembangan.
+
+Detail checklist tambahan tersedia pada file:
+
+```txt
+SUBMISSION_CHECKLIST.md
+```
+
+---
+
+## Team
+
+**Capstone Project Coding Camp 2026 powered by DBS Foundation**
+
+Team ID: **CC26-PSU080**  
+Project Name: **EduPredict AI**
+
+---
+
+## Author
+
+Developed by Team CC26-PSU080.
