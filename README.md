@@ -52,7 +52,7 @@ Selain menampilkan status risiko, aplikasi juga menyediakan **analisis faktor do
 | File Upload | Multer |
 | API Communication | Fetch API, Axios |
 | Deployment | Vercel, Railway |
-| Development Tools | Visual Studio Code, Postman, GitHub |
+| Development Tools | Visual Studio Code, Postman, GitHub, TablePlus |
 
 ### Artificial Intelligence
 
