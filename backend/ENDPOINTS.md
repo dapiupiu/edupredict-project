@@ -1,29 +1,44 @@
-# EduPredict API — Dokumentasi Endpoint
+# EduPredict Backend API Endpoints
 
-**Base URL:** `https://edupredict-production-429f.up.railway.app`
+Dokumentasi ini menjelaskan endpoint utama backend EduPredict AI.
 
-Semua endpoint yang memerlukan autentikasi harus menyertakan header:
+Base URL lokal:
+
+```txt
+http://localhost:5000
 ```
-Authorization: Bearer <token>
-```
+
+Untuk production, base URL disesuaikan dengan URL backend Railway.
 
 ---
 
-## Auth
+## Auth Endpoints
 
-### POST /api/auth/register
-Registrasi akun guru baru.
+Base path:
 
-**Request Body:**
+```txt
+/api/auth
+```
+
+### Register Guru
+
+```http
+POST /api/auth/register
+```
+
+Request body:
+
 ```json
 {
   "namaLengkap": "Budi Santoso",
-  "email": "budi@sekolah.com",
-  "password": "password123"
+  "email": "budi@example.com",
+  "password": "password123",
+  "kelas": "12 IPA 2"
 }
 ```
 
-**Response 201:**
+Response sukses:
+
 ```json
 {
   "success": true,
@@ -31,7 +46,47 @@ Registrasi akun guru baru.
   "data": {
     "id": 1,
     "nama": "Budi Santoso",
-    "email": "budi@sekolah.com",
+    "email": "budi@example.com",
+    "role": "guru",
+    "kelas": "12 IPA 2"
+  }
+}
+```
+
+Catatan:
+
+- Password minimal 8 karakter.
+- Password wajib mengandung kombinasi huruf dan angka.
+- `kelas` digunakan sebagai data wali kelas guru.
+
+---
+
+### Login Guru
+
+```http
+POST /api/auth/login
+```
+
+Request body:
+
+```json
+{
+  "email": "budi@example.com",
+  "password": "password123"
+}
+```
+
+Response sukses:
+
+```json
+{
+  "success": true,
+  "message": "Login berhasil.",
+  "token": "jwt_token",
+  "user": {
+    "id": 1,
+    "nama": "Budi Santoso",
+    "email": "budi@example.com",
     "role": "guru"
   }
 }
@@ -39,79 +94,131 @@ Registrasi akun guru baru.
 
 ---
 
-### POST /api/auth/login
-Login guru.
+### Profil Guru Login
 
-**Request Body:**
-```json
-{
-  "email": "budi@sekolah.com",
-  "password": "password123"
-}
+```http
+GET /api/auth/me
 ```
 
-**Response 200:**
-```json
-{
-  "success": true,
-  "data": {
-    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-    "user": {
-      "id": 1,
-      "nama": "Budi Santoso",
-      "email": "budi@sekolah.com",
-      "role": "guru"
-    }
-  }
-}
+Headers:
+
+```txt
+Authorization: Bearer <token>
 ```
 
----
+Response sukses:
 
-### GET /api/auth/me
-Ambil profil guru yang sedang login. *(Perlu token)*
-
-**Response 200:**
 ```json
 {
   "success": true,
   "data": {
     "id": 1,
     "nama": "Budi Santoso",
-    "email": "budi@sekolah.com",
-    "role": "guru"
+    "email": "budi@example.com",
+    "role": "guru",
+    "nip": "123456",
+    "nuptk": "987654",
+    "ttl": "Jakarta, 1 Januari 1990",
+    "pendidikan_terakhir": "S1",
+    "no_hp": "08123456789",
+    "alamat": "Jakarta",
+    "nama_sekolah": "SMA Contoh",
+    "school_type": "Public",
+    "kelas": "12 IPA 2",
+    "jenjang": "SMA",
+    "foto_profil": "foto_1_123456789.png"
   }
 }
 ```
 
 ---
 
-### PUT /api/auth/profile
-Update profil guru. *(Perlu token)*
+### Update Profil Guru
 
-**Request Body:**
-```json
-{
-  "nama": "Budi S.",
-  "password_lama": "password123",
-  "password_baru": "newpassword456"
-}
+```http
+PUT /api/auth/profile
 ```
 
-**Response 200:**
-```json
-{
-  "success": true,
-  "message": "Profil berhasil diperbarui."
-}
+Headers:
+
+```txt
+Authorization: Bearer <token>
+Content-Type: multipart/form-data
 ```
+
+Form data yang dapat dikirim:
+
+```txt
+nama
+nip
+nuptk
+ttl
+pendidikan_terakhir
+no_hp
+alamat
+nama_sekolah
+school_type
+kelas
+jenjang
+foto_profil
+password_lama
+password_baru
+```
+
+Catatan:
+
+- `foto_profil` dikirim sebagai file.
+- Jika mengganti password, `password_lama` wajib diisi.
+- Password baru wajib minimal 8 karakter dan mengandung huruf serta angka.
 
 ---
 
-### POST /api/auth/logout
-Logout guru. *(Perlu token)*
+### Forgot Password
 
-**Response 200:**
+```http
+POST /api/auth/forgot-password
+```
+
+Request body:
+
+```json
+{
+  "email": "budi@example.com",
+  "password_baru": "password123",
+  "confirm_password": "password123"
+}
+```
+
+Response sukses:
+
+```json
+{
+  "success": true,
+  "message": "Password berhasil direset. Silakan login menggunakan password baru."
+}
+```
+
+Catatan:
+
+- Endpoint ini adalah reset password sederhana untuk kebutuhan demo.
+- Belum menggunakan email token.
+
+---
+
+### Logout
+
+```http
+POST /api/auth/logout
+```
+
+Headers:
+
+```txt
+Authorization: Bearer <token>
+```
+
+Response sukses:
+
 ```json
 {
   "success": true,
@@ -121,66 +228,42 @@ Logout guru. *(Perlu token)*
 
 ---
 
-### POST /api/auth/forgot-password
-Request reset password. *(Placeholder — belum kirim email)*
+## Guru Endpoints
 
-**Request Body:**
-```json
-{
-  "email": "budi@sekolah.com"
-}
+Base path:
+
+```txt
+/api/guru
+```
+
+Semua endpoint guru membutuhkan header:
+
+```txt
+Authorization: Bearer <token>
 ```
 
 ---
 
-## Portal Siswa
+### Ambil Semua Siswa Guru
 
-### POST /api/student/check
-Cek status risiko siswa via NISN. **Tidak perlu token.**
-
-**Request Body:**
-```json
-{
-  "nisn": "12345678"
-}
+```http
+GET /api/guru/students
 ```
 
-**Response 200:**
-```json
-{
-  "success": true,
-  "data": {
-    "nama_siswa": "Ahmad Fauzi",
-    "kelas": "X IPA 1",
-    "risk_category": "Medium",
-    "confidence": 86.34,
-    "last_recorded": "2026-05-28T10:00:00.000Z"
-  }
-}
-```
+Response sukses:
 
----
-
-## Guru — Siswa
-
-### GET /api/guru/students
-Ambil semua siswa milik guru yang login beserta prediksi terbaru. *(Perlu token)*
-
-**Response 200:**
 ```json
 {
   "success": true,
   "data": [
     {
       "id": 1,
-      "nisn": "12345678",
-      "nama_siswa": "Ahmad Fauzi",
-      "kelas": "X IPA 1",
+      "nama_siswa": "Andi Saputra",
+      "nisn": "1234567890",
+      "kelas": "12 IPA 2",
       "gender": "Male",
-      "parental_education_level": "College",
       "risk_category": "Medium",
-      "confidence": "86.34",
-      "last_recorded": "2026-05-28T10:00:00.000Z"
+      "confidence": 99.2
     }
   ]
 }
@@ -188,36 +271,68 @@ Ambil semua siswa milik guru yang login beserta prediksi terbaru. *(Perlu token)
 
 ---
 
-### GET /api/guru/students/:id
-Ambil detail siswa beserta histori prediksi. *(Perlu token)*
+### Laporan Semua Siswa
 
-**Response 200:**
+```http
+GET /api/guru/students/report
+```
+
+Digunakan untuk export/print laporan monitoring semua siswa.
+
+Response sukses:
+
+```json
+{
+  "success": true,
+  "data": [
+    {
+      "nama_siswa": "Andi Saputra",
+      "nisn": "1234567890",
+      "kelas": "12 IPA 2",
+      "risk_category": "Medium",
+      "confidence": 99.2
+    }
+  ]
+}
+```
+
+Catatan penting:
+
+Route `/students/report` harus didefinisikan sebelum `/students/:id` pada file route Express agar tidak terbaca sebagai parameter `id`.
+
+---
+
+### Detail Siswa
+
+```http
+GET /api/guru/students/:id
+```
+
+Response sukses:
+
 ```json
 {
   "success": true,
   "data": {
     "siswa": {
       "id": 1,
-      "nisn": "12345678",
-      "nama_siswa": "Ahmad Fauzi",
-      "kelas": "X IPA 1",
+      "nama_siswa": "Andi Saputra",
+      "nisn": "1234567890",
+      "kelas": "12 IPA 2",
       "gender": "Male",
-      "school_type": "Public",
-      "distance_from_home": "Moderate",
-      "parental_education_level": "College",
-      "learning_disabilities": "No"
+      "parental_education_level": "High School"
     },
     "histori": [
       {
         "record_id": 1,
-        "hours_studied": 20,
-        "attendance": 80,
-        "previous_scores": 70,
+        "hours_studied": 14,
+        "attendance": 78,
+        "previous_scores": 72,
+        "sleep_hours": 7,
         "risk_category": "Medium",
-        "confidence": "86.34",
-        "probabilities": "{\"Low\":5,\"Medium\":86,\"High\":9}",
-        "risk_factors": "[...]",
-        "recorded_at": "2026-05-28T10:00:00.000Z"
+        "confidence": 99.2,
+        "risk_factors": [],
+        "recommendations": []
       }
     ]
   }
@@ -226,53 +341,69 @@ Ambil detail siswa beserta histori prediksi. *(Perlu token)*
 
 ---
 
-### POST /api/guru/students
-Tambah siswa baru. *(Perlu token)*
+### Tambah Siswa
 
-**Request Body:**
+```http
+POST /api/guru/students
+```
+
+Request body:
+
 ```json
 {
-  "nisn": "12345678",
-  "nama_siswa": "Ahmad Fauzi",
-  "kelas": "X IPA 1",
+  "nama_siswa": "Andi Saputra",
+  "nisn": "1234567890",
+  "kelas": "12 IPA 2",
   "gender": "Male",
+  "parental_education_level": "High School",
   "school_type": "Public",
   "distance_from_home": "Moderate",
-  "parental_education_level": "College",
   "learning_disabilities": "No"
 }
 ```
 
-**Response 201:**
+Response sukses:
+
 ```json
 {
   "success": true,
   "message": "Siswa berhasil ditambahkan.",
-  "data": { "id": 1 }
+  "data": {
+    "id": 1
+  }
 }
 ```
 
 ---
 
-### PUT /api/guru/students/:id
-Update data siswa. *(Perlu token)*
+### Update Siswa
 
-**Request Body:** sama dengan POST students.
+```http
+PUT /api/guru/students/:id
+```
 
-**Response 200:**
+Request body:
+
 ```json
 {
-  "success": true,
-  "message": "Data siswa berhasil diperbarui."
+  "nama_siswa": "Andi Saputra",
+  "nisn": "1234567890",
+  "kelas": "12 IPA 2",
+  "gender": "Male",
+  "parental_education_level": "College"
 }
 ```
 
 ---
 
-### DELETE /api/guru/students/:id
-Hapus siswa beserta semua data akademik dan prediksinya. *(Perlu token)*
+### Hapus Siswa
 
-**Response 200:**
+```http
+DELETE /api/guru/students/:id
+```
+
+Response sukses:
+
 ```json
 {
   "success": true,
@@ -282,143 +413,217 @@ Hapus siswa beserta semua data akademik dan prediksinya. *(Perlu token)*
 
 ---
 
-## Guru — Akademik
+## Academic Endpoints
 
-### POST /api/guru/academic/:studentId
-Input data akademik siswa dan jalankan prediksi AI. *(Perlu token)*
+Base path:
 
-**Request Body (13 fitur — `parental_education_level` diambil dari data siswa):**
+```txt
+/api/guru
+```
+
+---
+
+### Input Data Akademik dan Prediksi AI
+
+```http
+POST /api/guru/academic/:studentId
+```
+
+Request body:
+
 ```json
 {
-  "hours_studied": 20,
-  "attendance": 80,
+  "hours_studied": 14,
+  "attendance": 78,
   "sleep_hours": 7,
-  "previous_scores": 70,
-  "tutoring_sessions": 2,
-  "physical_activity": 3,
+  "previous_scores": 72,
+  "tutoring_sessions": 1,
+  "physical_activity": 2,
   "parental_involvement": "Medium",
-  "access_to_resources": "High",
+  "access_to_resources": "Medium",
   "motivation_level": "Medium",
   "internet_access": "Yes",
   "family_income": "Medium",
-  "teacher_quality": "High",
-  "peer_influence": "Positive"
+  "teacher_quality": "Medium",
+  "peer_influence": "Neutral"
 }
 ```
 
-**Response 201:**
+Response sukses:
+
 ```json
 {
   "success": true,
   "message": "Data akademik berhasil disimpan dan prediksi telah dilakukan.",
   "data": {
-    "academic_record_id": 5,
-    "prediction_id": 3,
-    "siswa": "Ahmad Fauzi",
+    "academic_record_id": 1,
+    "prediction_id": 1,
+    "siswa": "Andi Saputra",
     "prediksi": {
       "risk_category": "Medium",
-      "confidence": 86.34,
+      "confidence": 99.2,
       "probabilities": {
-        "Low": 5.0,
-        "Medium": 86.34,
-        "High": 8.66
+        "Low": 0.5,
+        "Medium": 99.2,
+        "High": 0.3
       },
       "risk_factors": [
-        { "factor": "Attendance", "value": "80", "status": "warning", "note": "..." }
+        {
+          "factor": "Kehadiran",
+          "value": "78%",
+          "status": "warning",
+          "note": "Kehadiran masih perlu perhatian."
+        }
       ],
       "recommendations": [
-        { "text": "Tingkatkan frekuensi monitoring mingguan." }
+        {
+          "title": "Tingkatkan Kehadiran",
+          "description": "Pantau absensi siswa secara rutin.",
+          "action": "Hubungi orang tua dan buat target kehadiran mingguan."
+        }
       ],
       "source": "ai"
     },
     "ood_warnings": [],
     "is_ood": false,
-    "input_used": { "Hours_Studied": 20, "Attendance": 80, "..." : "..." }
+    "input_used": {}
   }
 }
 ```
 
-> **Catatan OOD:** Jika ada nilai numerik di luar batas data training, nilai tersebut otomatis di-clamp dan `is_ood` akan `true` dengan detail di `ood_warnings`.
+Validasi angka:
+
+| Field | Rentang |
+|---|---|
+| `hours_studied` | 0 - 36 |
+| `attendance` | 0 - 100 |
+| `previous_scores` | 0 - 100 |
+| `sleep_hours` | 0 - 10 |
+| `tutoring_sessions` | 0 - 7 |
+| `physical_activity` | 0 - 6 |
 
 ---
 
-### GET /api/guru/academic/:studentId
-Ambil histori akademik dan prediksi siswa. *(Perlu token)*
+### Ambil Histori Akademik Siswa
 
-**Response 200:** sama dengan struktur `histori` di `GET /api/guru/students/:id`.
+```http
+GET /api/guru/academic/:studentId
+```
 
----
+Response sukses:
 
-## Guru — Dashboard
-
-### GET /api/guru/dashboard
-Ambil data ringkasan dashboard guru. *(Perlu token)*
-
-**Response 200:**
 ```json
 {
   "success": true,
   "data": {
-    "ringkasan": {
-      "total_siswa": 30,
-      "risiko_tinggi": 3,
-      "risiko_sedang": 8,
-      "risiko_rendah": 15,
-      "belum_diprediksi": 4
+    "siswa": {
+      "id": 1,
+      "nama_siswa": "Andi Saputra",
+      "nisn": "1234567890",
+      "kelas": "12 IPA 2"
     },
-    "siswa_berisiko": [
+    "total": 1,
+    "histori": [
       {
-        "id": 1,
-        "nama_siswa": "Ahmad Fauzi",
-        "kelas": "X IPA 1",
-        "risk_category": "High",
-        "confidence": "99.51",
-        "last_recorded": "2026-05-28T10:00:00.000Z"
+        "record_id": 1,
+        "hours_studied": 14,
+        "attendance": 78,
+        "sleep_hours": 7,
+        "previous_scores": 72,
+        "risk_category": "Medium",
+        "confidence": 99.2,
+        "probabilities": {},
+        "risk_factors": []
       }
-    ],
-    "notifikasi": {
-      "unread": 2,
-      "terbaru": [
-        {
-          "id": 1,
-          "message": "Ahmad Fauzi terdeteksi berisiko tinggi.",
-          "is_read": false,
-          "created_at": "2026-05-28T10:00:00.000Z"
-        }
-      ]
-    }
+    ]
   }
 }
 ```
 
 ---
 
-### PUT /api/guru/notifications/:id/read
-Tandai notifikasi sebagai sudah dibaca. *(Perlu token)*
+## Student Endpoints
 
-**Response 200:**
+Base path:
+
+```txt
+/api/student
+```
+
+Endpoint ini digunakan siswa untuk melihat hasil prediksi menggunakan NISN.
+
+---
+
+### Cek Siswa Berdasarkan NISN
+
+```http
+POST /api/student/check
+```
+
+Request body:
+
+```json
+{
+  "nisn": "1234567890"
+}
+```
+
+Response sukses:
+
 ```json
 {
   "success": true,
-  "message": "Notifikasi ditandai sudah dibaca."
+  "data": {
+    "siswa": {
+      "nama_siswa": "Andi Saputra",
+      "nisn": "1234567890",
+      "kelas": "12 IPA 2"
+    },
+    "prediksi_terbaru": {
+      "attendance": 78,
+      "hours_studied": 14,
+      "previous_scores": 72,
+      "risk_category": "Medium",
+      "confidence": 99.2,
+      "probabilities": {},
+      "risk_factors": [],
+      "recommendations": []
+    },
+    "histori": []
+  }
 }
 ```
 
 ---
 
-## Training Bounds (OOD Protection)
+## Error Response Umum
 
-Input numerik di luar batas berikut akan otomatis di-clamp sebelum dikirim ke model AI:
+### Unauthorized
 
-| Fitur | Minimum | Maksimum |
-|-------|---------|----------|
-| Attendance | 60 | 100 |
-| Hours_Studied | 4 | 36 |
-| Previous_Scores | 50 | 100 |
-| Sleep_Hours | 4 | 10 |
-| Tutoring_Sessions | 0 | 7 |
-| Physical_Activity | 0 | 6 |
+```json
+{
+  "success": false,
+  "message": "Token tidak valid atau tidak tersedia."
+}
+```
 
----
+### Validation Error
 
-**CC26-PSU080 · EduPredict AI · Capstone 2026**
+```json
+{
+  "success": false,
+  "message": "Data akademik tidak valid.",
+  "errors": {
+    "sleep_hours": "Jam tidur harus berada pada rentang 0 - 10."
+  }
+}
+```
+
+### Server Error
+
+```json
+{
+  "success": false,
+  "message": "Terjadi kesalahan pada server."
+}
+```

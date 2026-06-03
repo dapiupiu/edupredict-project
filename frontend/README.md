@@ -1,113 +1,228 @@
-# 🎨 EduPredict AI: Frontend Application
+# EduPredict Frontend
 
-![Vite](https://img.shields.io/badge/Vite-B73BFE?style=for-the-badge&logo=vite&logoColor=FFD62E)
-![React](https://img.shields.io/badge/React-18-61DAFB?style=for-the-badge&logo=react&logoColor=black)
-![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
-![Recharts](https://img.shields.io/badge/Recharts-22b5bf?style=for-the-badge&logo=recharts&logoColor=white)
-![SweetAlert2](https://img.shields.io/badge/SweetAlert2-FF3E00?style=for-the-badge&logo=sweetalert2&logoColor=white)
-
-**Frontend EduPredict** adalah antarmuka pengguna berbasis web yang responsif, dirancang khusus untuk membantu tenaga pendidik memantau performa akademik siswa secara visual. Aplikasi ini dibangun sebagai *Single Page Application* (SPA) yang cepat, interaktif, dan mudah digunakan untuk manajemen data serta interpretasi hasil prediksi AI.
+Frontend EduPredict AI adalah aplikasi web berbasis React dan Vite yang digunakan oleh guru dan siswa untuk mengakses fitur prediksi risiko akademik, monitoring siswa, dashboard, profil guru, serta hasil rekomendasi AI.
 
 ---
 
-## 📌 Deskripsi Proyek
+## Tech Stack
 
-Layer frontend ini bertanggung jawab untuk menangani seluruh interaksi pengguna, mulai dari manajemen autentikasi guru, penginputan parameter siswa, hingga visualisasi hasil klasifikasi risiko (**Low**, **Medium**, **High**) menggunakan grafik yang informatif.
-
-Fokus utama pengembangan frontend:
-- **Data Visualization:** Mengubah data numerik kompleks dari model AI menjadi grafik bar dan statistik yang mudah dipahami.
-- **Responsive Design:** Memastikan dashboard dapat diakses dengan nyaman melalui perangkat mobile maupun desktop.
-- **User Experience (UX):** Memberikan *feedback* instan melalui notifikasi dan pop-up interaktif untuk setiap aksi pengguna.
-- **Client-side Validation:** Mencegah kesalahan input data sebelum dikirim ke server.
-
----
-
-## 🚀 Fitur Utama (UI/UX)
-
-- **Dashboard Interaktif** — Ringkasan statistik siswa dalam bentuk kartu skor (StatCard) dan grafik tren risiko.
-- **Form Input Akademik** — Validasi input 14 parameter secara real-time dengan alur *step-by-step*.
-- **Visualisasi Prediksi AI** — Penampilan skor kepercayaan (*confidence score*), faktor risiko dominan, dan rekomendasi intervensi otomatis.
-- **Manajemen Profil & Foto** — Pengaturan data diri guru, ganti password, serta fitur upload dan hapus foto profil.
-- **Monitoring Siswa** — Fitur pencarian dan filter cepat berdasarkan nama, NISN, atau kategori risiko.
-- **Portal Siswa (Public)** — Halaman pengecekan progres belajar mandiri bagi siswa hanya dengan memasukkan NISN.
-- **Laporan Cetak** — Optimalisasi tampilan cetak (print-friendly) untuk laporan dashboard siswa.
+- React
+- Vite
+- Tailwind CSS
+- React Router DOM
+- Remix Icon
+- Fetch API
 
 ---
 
-## 🛠️ Tech Stack
+## Struktur Folder Frontend
 
-| Layer | Teknologi |
-|-------|-----------|
-| Core Framework | React 18 (Hooks) |
-| Build Tool | Vite |
-| Styling | Tailwind CSS |
-| Icons | Remix Icon, Lucide React, React Icons |
-| Charts | Recharts |
-| Notifications | SweetAlert2 (Swal) |
-| Routing | React Router DOM v6 |
-| API Client | Fetch API (dengan konfigurasi base URL) |
-
----
-
-## 📂 Struktur Proyek Frontend
-
-```
+```txt
 frontend/
-├── public/                 # Aset publik statis
+├── public/
 ├── src/
-│   ├── assets/             # Gambar, logo, dan file ilustrasi
-│   ├── components/         # Komponen UI yang reusable
-│   │   ├── Sidebar.jsx     # Navigasi utama samping
-│   │   ├── TopBar.jsx      # Header bar dengan info user & notif
-│   │   ├── PrediksiAI.jsx  # Komponen utama penampilan hasil AI
-│   │   └── ...             # Komponen pendukung lainnya (Badge, Table, Form)
-│   ├── pages/              # Halaman utama (Views)
-│   │   ├── LoginGuruPage.jsx
-│   │   ├── DashboardGuruPage.jsx
-│   │   ├── ProfilGuruPage.jsx
-│   │   ├── TambahSiswaPage.jsx
-│   │   └── DashboardSiswaPage.jsx
-│   ├── utils/              # Konfigurasi dan helper fungsi
-│   │   └── api.js          # Pengaturan endpoint koneksi backend
-│   ├── App.jsx             # Root component dan konfigurasi routing
-│   └── main.jsx            # Entry point aplikasi
-├── .env                    # Konfigurasi variabel lingkungan (local)
-├── tailwind.config.js      # Konfigurasi kustomisasi Tailwind CSS
-└── vite.config.js          # Konfigurasi bundler Vite
+│   ├── assets/
+│   ├── components/
+│   ├── pages/
+│   ├── utils/
+│   │   └── api.js
+│   ├── App.jsx
+│   ├── main.jsx
+│   └── index.css
+├── .env.example
+├── .env.production
+├── package.json
+├── vercel.json
+└── vite.config.js
 ```
 
 ---
 
-## ⚙️ Cara Menjalankan Lokal
+## Environment Setup
 
-### Prasyarat
-- Node.js v18 atau v22+
-- npm atau yarn
+Buat file `.env` di folder `frontend/` berdasarkan `.env.example`.
 
-### Langkah Instalasi
+```env
+VITE_API_URL=http://localhost:5000
+```
 
-1. **Masuk ke direktori frontend:**
-   ```bash
-   cd frontend
-   ```
+Untuk production, arahkan ke URL backend Railway:
 
-2. **Instal dependensi:**
-   ```bash
-   npm install
-   ```
-
-3. **Konfigurasi Environment:**
-   Buat file `.env` di root folder frontend dan tentukan URL API backend:
-   ```env
-   VITE_API_URL=http://localhost:5000
-   ```
-
-4. **Jalankan aplikasi dalam mode pengembangan:**
-   ```bash
-   npm run dev
-   ```
-   Aplikasi akan berjalan di `http://localhost:5173` secara default.
+```env
+VITE_API_URL=https://your-backend-url.up.railway.app
+```
 
 ---
 
-**© 2026 EduPredict AI Project | CC26-PSU080 | Coding Camp 2026 powered by DBS Foundation**
+## Instalasi
+
+```bash
+cd frontend
+npm install
+```
+
+---
+
+## Menjalankan Frontend
+
+```bash
+npm run dev
+```
+
+Default frontend berjalan di:
+
+```txt
+http://localhost:5173
+```
+
+---
+
+## Build Production
+
+```bash
+npm run build
+```
+
+Preview hasil build:
+
+```bash
+npm run preview
+```
+
+---
+
+## Halaman Utama
+
+### Public
+
+- Landing Page
+- Login Guru
+- Register Guru
+- Lupa Password
+- Login Siswa
+
+### Guru
+
+- Dashboard Guru
+- Daftar Siswa
+- Tambah Siswa
+- Monitoring Siswa
+- Profil Guru
+- Progress Siswa
+
+### Siswa
+
+- Dashboard Siswa berdasarkan NISN
+
+---
+
+## Komponen Penting
+
+- `PrediksiAI.jsx`  
+  Menampilkan hasil prediksi, probabilitas, faktor dominan, dan rekomendasi AI.
+
+- `DataSiswaInput.jsx`  
+  Form input data siswa dan data akademik.
+
+- `LaporanMonitoring.jsx`  
+  Komponen export/print laporan monitoring siswa.
+
+- `RisikoBadge.jsx`  
+  Badge status risiko siswa.
+
+- `Sidebar.jsx`  
+  Navigasi dashboard guru.
+
+- `TabRingkasan.jsx` dan `TabEditProfil.jsx`  
+  Komponen halaman profil guru.
+
+---
+
+## Integrasi Backend
+
+Konfigurasi base URL API berada di:
+
+```txt
+src/utils/api.js
+```
+
+File tersebut membaca environment variable:
+
+```env
+VITE_API_URL
+```
+
+---
+
+## Format Rekomendasi AI
+
+Frontend mendukung format rekomendasi AI terbaru:
+
+```json
+{
+  "title": "Tingkatkan Kehadiran",
+  "description": "Pantau absensi siswa secara berkala.",
+  "action": "Hubungi orang tua dan buat target kehadiran mingguan."
+}
+```
+
+Frontend juga tetap mendukung format lama:
+
+```json
+{
+  "text": "Tingkatkan konsistensi belajar siswa."
+}
+```
+
+---
+
+## Warna Faktor Dominan
+
+Warna faktor dominan mengikuti field `status` dari AI.
+
+| Status | Warna |
+|---|---|
+| `good` | Hijau |
+| `warning` | Oranye |
+| `danger` | Merah |
+
+---
+
+## Validasi Input Akademik
+
+Validasi dilakukan pada form tambah siswa:
+
+| Field | Rentang |
+|---|---|
+| Jam belajar/minggu | 0 - 36 |
+| Kehadiran | 0 - 100 |
+| Nilai rapor sebelumnya | 0 - 100 |
+| Jam tidur/malam | 0 - 10 |
+| Sesi bimbingan belajar/bulan | 0 - 7 |
+| Aktivitas fisik/minggu | 0 - 6 |
+
+---
+
+## Deployment
+
+Frontend dapat dideploy ke Vercel.
+
+Pastikan environment variable berikut sudah diset di Vercel:
+
+```env
+VITE_API_URL=https://your-backend-url.up.railway.app
+```
+
+File konfigurasi Vercel:
+
+```txt
+vercel.json
+```
+
+---
+
+## Catatan
+
+- Pastikan backend aktif sebelum menjalankan frontend.
+- Pastikan `VITE_API_URL` sudah mengarah ke backend yang benar.
+- Jangan menyimpan credential sensitif di frontend.
