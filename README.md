@@ -74,6 +74,7 @@ Selain menampilkan status risiko, aplikasi juga menyediakan **analisis faktor do
 | Data Processing | Pandas, NumPy |
 | Data Visualization | Matplotlib, Seaborn, Plotly |
 | Exploration / Experiment | Google Colab Notebook |
+| Dashboard Deployment | Streamlit |
 
 ---
 
@@ -239,7 +240,7 @@ EduPredict menggunakan AI Service eksternal yang dideploy secara terpisah.
 
 - Swagger Documentation: `https://edupredictaimlproduction.up.railway.app/docs`
 - OpenAPI JSON: `https://edupredictaimlproduction.up.railway.app/openapi.json`
-- Google Drive: `https://drive.google.com/drive/folders/1AHwpqqGlxZEDhhTH8b1munbLXpte0DWc?usp=sharing`
+- Google Drive (.keras, .pkl): `https://drive.google.com/drive/folders/1AHwpqqGlxZEDhhTH8b1munbLXpte0DWc?usp=sharing`
 
 Endpoint AI yang digunakan backend:
 
