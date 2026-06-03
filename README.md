@@ -1,5 +1,8 @@
 # EduPredict AI
-
+![FastAPI](https://img.shields.io/badge/FastAPI-Backend-green)
+![Python](https://img.shields.io/badge/Python-3.11-blue)
+![Railway](https://img.shields.io/badge/Deploy-Railway-purple)
+![TensorFlow](https://img.shields.io/badge/Deep%20Learning-TensorFlow-orange)
 EduPredict AI adalah API berbasis Deep Learning yang dirancang untuk memprediksi tingkat risiko akademik siswa serta memberikan rekomendasi intervensi yang dapat membantu meningkatkan performa dan retensi siswa.
 
 ## Fitur Utama
