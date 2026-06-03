@@ -104,18 +104,6 @@ Aplikasi akan terbuka secara otomatis di browser Anda di alamat `http://localhos
 
 ---
 
-## 📈 Saran Pengembangan Kedepan
-
-Untuk meningkatkan akurasi dan kegunaan sistem, beberapa aspek berikut dapat dikembangkan lebih lanjut:
-
-- **Integrasi Database:** Menghubungkan dashboard langsung ke Sistem Informasi Akademik (SIAKAD) untuk data *real-time*.
-- **Model Advanced:** Eksperimen dengan algoritma Deep Learning atau Ensemble Methods (XGBoost/LightGBM) untuk meningkatkan presisi pada kelas minoritas (*High Risk*).
-- **Sistem Notifikasi:** Integrasi dengan Email atau WhatsApp Gateway untuk mengirim peringatan (alert) otomatis kepada wali kelas atau orang tua.
-- **Fitur Prediksi Nilai Ujian:** Menambahkan prediksi nilai ujian kemudian mengelompokkan jenis risikonya agar sistem lebih informatif dan mendukung pengambilan keputusan yang lebih akurat.
-- **Multilingual Support:** Dukungan bahasa tambahan untuk dashboard dan intervensi AI.
-
----
-
 ## 📝 Catatan Tambahan
 *Dataset yang digunakan dalam demo ini telah dienkripsi atau menggunakan dummy data jika file `.csv` asli tidak ditemukan di folder `data/processed/`, untuk menjaga privasi informasi siswa.*
 
