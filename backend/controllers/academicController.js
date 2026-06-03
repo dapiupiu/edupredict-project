@@ -270,7 +270,7 @@ const inputAcademic = async (req, res) => {
         prediksi.confidence,
         JSON.stringify(prediksi.probabilities || {}),
         JSON.stringify(dominantFactors), // [{factor, value, status, note}]
-        JSON.stringify(recommendations), // [{text}] — disimpan ke DB
+        JSON.stringify(recommendations), // [{title, description, action}] — disimpan ke DB
         JSON.stringify(clampedInput),
       ],
     );

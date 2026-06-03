@@ -712,7 +712,8 @@ function PrediksiAI({
           <div className="space-y-3">
             {recommendations && recommendations.length > 0 ? (
               recommendations.map((rec, index) => {
-                const text = typeof rec === "string" ? rec : rec.text || "";
+                const text = getRecommendationText(rec);
+
                 return (
                   <div
                     key={index}
