@@ -73,7 +73,8 @@ function TopBar() {
     };
 
     return (
-        <div className="bg-white border-b border-gray-100 h-12 flex items-center justify-end px-6 sticky top-0 z-40">
+        <div className="bg-white border-b border-gray-100 h-12 flex items-center justify-end px-4 md:px-6 sticky top-0 z-40">
+            {/* Judul halaman - tampil di mobile */}
             <div className="flex items-center gap-5">
                 {/* Notifikasi */}
                 <button 

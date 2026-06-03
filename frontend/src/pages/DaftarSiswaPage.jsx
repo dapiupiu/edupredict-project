@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import BottomNav from '../components/BottomNav';
 import BASE_URL from '../utils/api';
 import Sidebar from '../components/Sidebar';
 import DaftarSiswa from "../components/DaftarSiswa";
 import SearchFilter from "../components/SearchFilter";
 import PageNavigation from "../components/PageNavigation";
 import TopBar from '../components/TopBar';
+import { useLocation } from 'react-router-dom'; // Pastikan useLocation tetap diimport jika digunakan di tempat lain
 
 function DaftarSiswaPage() {
     const [open, setOpen] = useState(() => {
@@ -200,9 +202,9 @@ function DaftarSiswaPage() {
                 open={open}
                 setOpen={setOpen}
             />
-            <div className={`flex-1 transition-all duration-500 ${open ? "md:ml-64" : "md:ml-16"} ml-16 min-h-screen flex flex-col`}>
+            <div className={`flex-1 transition-all duration-500 ${open ? "md:ml-64" : "md:ml-16"} min-h-screen flex flex-col`}>
                 <TopBar />
-                <div className="p-3 sm:p-6 md:p-8">
+                <div className="p-3 sm:p-6 md:p-8 pb-20 md:pb-8">
                 <h1 className="text-3xl font-bold">
                     Daftar Siswa
                 </h1>
@@ -255,6 +257,7 @@ function DaftarSiswaPage() {
 
             </div>
 
+        <BottomNav />
         </div>
     );
 }

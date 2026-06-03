@@ -155,8 +155,8 @@ function DashboardSiswaPage() {
             {/* Header Navbar */}
             <nav className="bg-white border-b border-blue-100 p-4 px-6 sm:px-12 flex justify-between items-center sticky top-0 z-50 print:hidden">
                 <div className="flex items-center gap-3">
-                    <img src={logoEdupredict} alt="logo" className="w-16 h-16 object-contain flex-shrink-0" />
-                    <h1 className="text-2xl font-black text-blue-900 tracking-tight">EduPredict</h1>
+                    <img src={logoEdupredict} alt="logo" className="w-10 h-10 sm:w-16 sm:h-16 object-contain flex-shrink-0" />
+                    <h1 className="text-lg sm:text-2xl font-black text-blue-900 tracking-tight">EduPredict</h1>
                 </div>
                 <div className="flex items-center gap-3">
                     {hasPrediksi && (
@@ -200,7 +200,7 @@ function DashboardSiswaPage() {
                             <div className="bg-white/10 backdrop-blur-md p-5 rounded-2xl border border-white/20 flex items-center gap-4 sm:gap-6">
                                 <div className="text-right">
                                     <p className={`text-xs font-bold ${currentTheme.subText} uppercase mb-1`}>Status Risiko</p>
-                                    <p className="text-2xl font-black">{translate(data.risk_category)}</p>
+                                    <p className="text-xl sm:text-2xl font-black">{translate(data.risk_category)}</p>
                                 </div>
                                 <div className="h-12 w-px bg-white/20"></div>
                                 <div className="text-center">

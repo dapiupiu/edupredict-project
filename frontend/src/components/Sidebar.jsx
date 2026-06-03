@@ -32,7 +32,7 @@ function Sidebar({ open, setOpen }) {
     const inactiveClass = "text-gray-600 hover:bg-white hover:text-blue-700";
 
     return (
-        <div className={`bg-blue-100 shadow-md h-screen fixed left-0 top-0 duration-500 z-50 ${open ? 'w-64' : 'w-16'}`}>
+        <div className={`bg-blue-100 shadow-md h-screen fixed left-0 top-0 duration-500 z-50 hidden md:block ${open ? 'w-64' : 'w-16'}`}>
             {/* header sidebar */}
             <div className={`flex items-center mt-8 ${open ? 'justify-between px-5' : 'justify-center'}`}>
                 <div className={`flex items-center gap-2 transition-all duration-300 ${!open && 'hidden'}`}>

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import BottomNav from '../components/BottomNav';
 import { useLocation } from 'react-router-dom';
 import BASE_URL from '../utils/api';
 import Sidebar from '../components/Sidebar';
@@ -322,9 +323,9 @@ function ProfilGuruPage() {
     return (
         <div className="flex min-h-screen bg-blue-50">
             <Sidebar open={open} setOpen={setOpen} />
-            <div className={`flex-1 transition-all duration-500 ${open ? 'md:ml-64' : 'md:ml-16'} ml-16 min-h-screen flex flex-col`}>
+            <div className={`flex-1 transition-all duration-500 ${open ? 'md:ml-64' : 'md:ml-16'} min-h-screen flex flex-col`}>
                 <TopBar />
-                <div className="p-4 sm:p-6 md:p-8">
+                <div className="p-4 sm:p-6 md:p-8 pb-20 md:pb-8">
                 {/* Header */}
                 <h1 className="text-2xl font-bold text-gray-900">Profil Guru</h1>
                 <p className="mt-1 text-sm text-gray-500">Kelola informasi akun, data wali kelas, dan pengaturan sistem</p>
@@ -385,6 +386,7 @@ function ProfilGuruPage() {
                 </div>
                 </div>
             </div>
+        <BottomNav />
         </div>
     );
 }

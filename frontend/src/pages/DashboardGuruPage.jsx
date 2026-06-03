@@ -6,6 +6,7 @@ import StatCard from "../components/StatCard";
 import InsightAI from "../components/InsightAI";
 import DaftarSiswa from "../components/DaftarSiswa";
 import GrafikRisiko from "../components/GrafikRisiko";
+import BottomNav from '../components/BottomNav';
 import Swal from 'sweetalert2';
 import TopBar from '../components/TopBar';
 
@@ -126,11 +127,11 @@ function DashboardGuruPage() {
     return (
         <div className="flex min-h-screen bg-blue-50">
             <Sidebar open={open} setOpen={setOpen} />
-            <div className={`flex-1 transition-all duration-500 ${open ? 'md:ml-64' : 'md:ml-16'} ml-16 min-h-screen flex flex-col`}>
+            <div className={`flex-1 transition-all duration-500 ${open ? 'md:ml-64' : 'md:ml-16'} min-h-screen flex flex-col`}>
                 <TopBar />
-                <div className="p-3 sm:p-6 md:p-8">
-                <h1 className="text-3xl font-bold">Dashboard Guru</h1>
-                <p className="mt-2">Selamat datang di dashboard guru</p>
+                <div className="p-3 sm:p-6 md:p-8 pb-20 md:pb-8">
+                <h1 className="md:block text-3xl font-bold">Dashboard Guru</h1>
+                <p className="md:block mt-2">Selamat datang di dashboard guru</p>
 
                 {loading && (
                     <div className="flex justify-center items-center h-64 text-blue-600 font-medium">
@@ -189,6 +190,7 @@ function DashboardGuruPage() {
                 )}
                 </div>
             </div>
+            <BottomNav />
         </div>
     )
 }

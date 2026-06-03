@@ -71,6 +71,17 @@ function PrediksiAI({
     Parental_Education_Level: "Pendidikan Orang Tua",
   };
 
+  const valueTranslation = {
+    High: "Tinggi",
+    Medium: "Sedang",
+    Low: "Rendah",
+    Positive: "Positif",
+    Neutral: "Netral",
+    Negative: "Negatif",
+    Yes: "Ada",
+    No: "Tidak",
+  };
+
   const riskLabel =
     risk_category === "High"
       ? "Tinggi"
@@ -541,7 +552,7 @@ function PrediksiAI({
             factor.value !== undefined &&
             factor.value !== null &&
             String(factor.value).trim() !== ""
-              ? `Nilai: ${factor.value}`
+              ? `Nilai: ${valueTranslation[factor.value] || factor.value}`
               : null;
 
           return {

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import BottomNav from '../components/BottomNav';
 import BASE_URL from "../utils/api";
 import { useLocation } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
@@ -129,10 +130,10 @@ function MonitoringPage() {
     <div className="flex min-h-screen bg-blue-50">
       <Sidebar open={open} setOpen={setOpen} />
       <div
-        className={`flex-1 transition-all duration-500 ${open ? "md:ml-64" : "md:ml-16"} ml-16 min-h-screen flex flex-col`}
+        className={`flex-1 transition-all duration-500 ${open ? "md:ml-64" : "md:ml-16"} min-h-screen flex flex-col`}
       >
         <TopBar />
-        <div className="p-3 sm:p-6 md:p-8">
+        <div className="p-3 sm:p-6 md:p-8 pb-20 md:pb-8">
           <div className="flex items-start justify-between gap-4 flex-wrap">
             <div>
               <h1 className="text-3xl font-bold">Monitoring Siswa</h1>
@@ -315,6 +316,7 @@ function MonitoringPage() {
           )}
         </div>
       </div>
+    <BottomNav />
     </div>
   );
 }
