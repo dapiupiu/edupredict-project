@@ -4,6 +4,7 @@ const {
   analyzeDominantFactors,
   analyzeRecommendations,
 } = require("../services/aiService");
+const { validateAndClamp } = require("../utils/validateInput");
 
 // ─────────────────────────────────────────────────────────
 //  HARDCODE AI RESPONSE / FALLBACK
@@ -219,26 +220,39 @@ const inputAcademic = async (req, res) => {
       Parental_Education_Level: siswa.parental_education_level,
     };
 
-    // ── STEP 4a: Gunakan input asli yang sudah divalidasi ──
-    const inputForAI = rawInput;
+    // ── STEP 4a: Clamp hanya untuk prediksi model ─────────
+    // Model ML dilatih pada rentang tertentu. Jika nilai ekstrem seperti
+    // attendance 12 atau previous_scores 12 langsung dikirim ke /predict,
+    // hasil model bisa OOD dan menjadi tidak masuk akal.
+    // Namun analisis faktor dan rekomendasi tetap memakai rawInput agar
+    // note/value yang tampil di UI sesuai dengan data asli yang guru input.
+    const { clampedInput, oodWarnings } = validateAndClamp(rawInput);
+
+    if (oodWarnings.length > 0) {
+      console.log("OOD warnings untuk siswa", studentId, ":", oodWarnings);
+    }
+
+    const predictionInput = clampedInput;
+    const analysisInput = rawInput;
+
     // ── STEP 4b: Prediksi via AI service + fallback hardcode ──
     let prediksi;
 
     try {
-      prediksi = await predictRiskWithAI(inputForAI);
+      prediksi = await predictRiskWithAI(predictionInput);
     } catch (aiError) {
       console.error(
         "AI service error, fallback to hardcoded prediction:",
         aiError.message,
       );
 
-      prediksi = getHardcodedPrediction(inputForAI);
+      prediksi = getHardcodedPrediction(predictionInput);
     }
 
     // ── STEP 4c: Ambil dominant factors & recommendations dari AI ──
     const analyzePayload = {
       student_id: `STU-${studentId}`,
-      features: inputForAI,
+      features: analysisInput,
       prediction: {
         risk_category: prediksi.risk_category,
         confidence: prediksi.confidence,
@@ -265,7 +279,7 @@ const inputAcademic = async (req, res) => {
         JSON.stringify(prediksi.probabilities || {}),
         JSON.stringify(dominantFactors), // [{factor, value, status, note}]
         JSON.stringify(recommendations), // [{title, description, action}] — disimpan ke DB
-        JSON.stringify(inputForAI),
+        JSON.stringify(analysisInput),
       ],
     );
 
@@ -317,9 +331,10 @@ const inputAcademic = async (req, res) => {
           recommendations: recommendations,
           source: prediksi.source || "ai",
         },
-        ood_warnings: [],
-        is_ood: false,
-        input_used: inputForAI,
+        ood_warnings: oodWarnings,
+        is_ood: oodWarnings.length > 0,
+        input_used: analysisInput,
+        prediction_input_used: predictionInput,
       },
     });
   } catch (err) {
