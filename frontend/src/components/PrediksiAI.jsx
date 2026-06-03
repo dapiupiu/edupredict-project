@@ -712,6 +712,39 @@ function PrediksiAI({
           <div className="space-y-3">
             {recommendations && recommendations.length > 0 ? (
               recommendations.map((rec, index) => {
+                const isObject =
+                  rec && typeof rec === "object" && !Array.isArray(rec);
+
+                if (isObject && (rec.title || rec.description || rec.action)) {
+                  return (
+                    <div
+                      key={index}
+                      className="bg-blue-50 rounded-xl p-4 flex gap-3"
+                    >
+                      <span className="flex-shrink-0">💡</span>
+
+                      <div className="text-sm text-gray-700">
+                        {rec.title && (
+                          <h3 className="font-bold text-blue-900 mb-1">
+                            {rec.title}
+                          </h3>
+                        )}
+
+                        {rec.description && (
+                          <p className="leading-relaxed">{rec.description}</p>
+                        )}
+
+                        {rec.action && (
+                          <p className="mt-2 leading-relaxed">
+                            <span className="font-semibold">Aksi:</span>{" "}
+                            {rec.action}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                  );
+                }
+
                 const text = getRecommendationText(rec);
 
                 return (
@@ -720,7 +753,9 @@ function PrediksiAI({
                     className="bg-blue-50 rounded-xl p-4 flex gap-3"
                   >
                     <span className="flex-shrink-0">💡</span>
-                    <p className="text-gray-700 text-sm">{text}</p>
+                    <p className="text-gray-700 text-sm leading-relaxed">
+                      {text}
+                    </p>
                   </div>
                 );
               })
