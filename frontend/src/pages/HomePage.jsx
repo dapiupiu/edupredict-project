@@ -164,7 +164,7 @@ function HomePage() {
                     </div>
                     <div className="grid md:grid-cols-3 grid-cols-1 gap-8 items-center">
                         <div className="bg-white p-8 rounded-2xl border border-blue-100 transition-all duration-300 hover:-translate-y-2 hover:shadow-xl cursor-pointer flex flex-col items-center text-center">
-                            <div className="bg-blue-100 w-24 h-24 rounded-2xl flex items-center justify-center mb-6 overflow-hidden border-2 border-blue-200 shadow-sm">
+                            <div className="bg-blue-100 w-20 h-20 rounded-2xl flex items-center justify-center mb-6 overflow-hidden border-2 border-blue-200 shadow-sm">
                                 <img src={profilKdavi} alt="profil-Kdavi" className="w-full h-full object-cover object-center" />
                             </div>
                             <h3 className="text-xl font-bold mb-1">Kaka Davi Dharmawan</h3>
@@ -182,7 +182,7 @@ function HomePage() {
                             </div>
                         </div>
                         <div className="bg-white p-8 rounded-2xl border border-blue-100 transition-all duration-300 hover:-translate-y-2 hover:shadow-xl cursor-pointer flex flex-col items-center text-center">
-                            <div className="bg-blue-100 w-24 h-24 rounded-2xl flex items-center justify-center mb-6 overflow-hidden border-2 border-blue-200 shadow-sm">
+                            <div className="bg-blue-100 w-20 h-20 rounded-2xl flex items-center justify-center mb-6 overflow-hidden border-2 border-blue-200 shadow-sm">
                                 <img src={profilKsandi} alt="profil-ksandi" className="w-full h-full object-cover object-center" />
                             </div>
                             <h3 className="text-xl font-bold mb-1">Sandi Maulana</h3>
@@ -200,7 +200,7 @@ function HomePage() {
                             </div>
                         </div>
                         <div className="bg-white p-8 rounded-2xl border border-blue-100 transition-all duration-300 hover:-translate-y-2 hover:shadow-xl cursor-pointer flex flex-col items-center text-center">
-                            <div className="bg-blue-100 w-24 h-24 rounded-2xl flex items-center justify-center mb-6 overflow-hidden border-2 border-blue-200 shadow-sm">
+                            <div className="bg-blue-100 w-20 h-20 rounded-2xl flex items-center justify-center mb-6 overflow-hidden border-2 border-blue-200 shadow-sm">
                                 <img src={profilKdika} alt="profil-kdhika" className="w-full h-full object-cover object-top" />
                             </div>
                             <h3 className="text-xl font-bold mb-1">Andhika Firmansyah</h3>
@@ -218,7 +218,7 @@ function HomePage() {
                             </div>
                         </div>
                         <div className="bg-white p-8 rounded-2xl border border-blue-100 transition-all duration-300 hover:-translate-y-2 hover:shadow-xl cursor-pointer flex flex-col items-center text-center">
-                            <div className="bg-blue-100 w-24 h-24 rounded-2xl flex items-center justify-center mb-6 overflow-hidden border-2 border-blue-200 shadow-sm">
+                            <div className="bg-blue-100 w-20 h-20 rounded-2xl flex items-center justify-center mb-6 overflow-hidden border-2 border-blue-200 shadow-sm">
                                 <img src={profilKgita} alt="profil-kgita" className="w-full h-full object-cover object-top" />
                             </div>
                             <h3 className="text-xl font-bold mb-1">Dwi Shugita Syaka Dewi</h3>
@@ -236,7 +236,7 @@ function HomePage() {
                             </div>
                         </div>
                         <div className="bg-white p-8 rounded-2xl border border-blue-100 transition-all duration-300 hover:-translate-y-2 hover:shadow-xl cursor-pointer flex flex-col items-center text-center">
-                            <div className="bg-blue-100 w-24 h-24 rounded-2xl flex items-center justify-center mb-6 overflow-hidden border-2 border-blue-200 shadow-sm">
+                            <div className="bg-blue-100 w-20 h-20 rounded-2xl flex items-center justify-center mb-6 overflow-hidden border-2 border-blue-200 shadow-sm">
                                 <img src={profilKarin} alt="profil-karin" className="w-full h-full object-cover object-top" />
                             </div>
                             <h3 className="text-xl font-bold mb-1">Rintami Salsabila</h3>
@@ -254,7 +254,7 @@ function HomePage() {
                             </div>
                         </div>
                         <div className="bg-white p-8 rounded-2xl border border-blue-100 transition-all duration-300 hover:-translate-y-2 hover:shadow-xl cursor-pointer flex flex-col items-center text-center">
-                                <div className="bg-blue-100 w-24 h-24 rounded-2xl flex items-center justify-center mb-6 overflow-hidden border-2 border-blue-200 shadow-sm">
+                                <div className="bg-blue-100 w-20 h-20 rounded-2xl flex items-center justify-center mb-6 overflow-hidden border-2 border-blue-200 shadow-sm">
                                     <img src={profilAyu} alt="profil-ayu" className="w-full h-full object-cover object-top" />
                             </div>
                             <h3 className="text-xl font-bold mb-1">Nur Ayu Aini Amalia</h3>
