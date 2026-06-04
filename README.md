@@ -7,9 +7,51 @@
 <h3 align="center">Academic Risk Prediction System for Early Student Intervention</h3>
 
 <p align="center">
+
+<img src="https://img.shields.io/badge/Frontend-React-blue" />
+<img src="https://img.shields.io/badge/Backend-Node.js-green" />
+<img src="https://img.shields.io/badge/Database-MySQL-orange" />
+<img src="https://img.shields.io/badge/AI-FastAPI-red" />
+<img src="https://img.shields.io/badge/ML-TensorFlow-ff6f00" />
+
+</p>
+
+<p align="center">
   Capstone Project Coding Camp 2026 powered by DBS Foundation<br/>
   Team ID: <strong>CC26-PSU080</strong>
 </p>
+
+<p align="center">
+
+<a href="https://edupredictaimlproduction.up.railway.app/docs">Swagger Documentation</a> •
+<a href="https://edupredictaimlproduction.up.railway.app/openapi.json">OpenAPI Specification</a> •
+<a href="https://drive.google.com/drive/folders/1AHwpqqGlxZEDhhTH8b1munbLXpte0DWc?usp=sharing">Model Files</a>
+
+</p>
+
+---
+
+## Table of Contents
+
+- [Deskripsi Singkat Proyek](#deskripsi-singkat-proyek)
+- [Fitur Utama](#fitur-utama)
+- [Tech Stack](#tech-stack)
+- [Struktur Proyek](#struktur-proyek)
+- [System Flow](#system-flow)
+- [Petunjuk Setup Environment](#petunjuk-setup-environment)
+- [Setup Database](#setup-database)
+- [Cara Menjalankan Aplikasi](#cara-menjalankan-aplikasi)
+- [Tautan Model ML / AI Service](#tautan-model-ml--ai-service)
+- [Format Response AI](#format-response-ai)
+- [Validasi Input Akademik](#validasi-input-akademik)
+- [Dokumentasi API](#dokumentasi-api)
+- [Supporting Documents](#supporting-documents)
+- [Deployment](#deployment)
+- [Catatan Keamanan](#catatan-keamanan)
+- [Saran Pengembangan](#saran-pengembangan)
+- [Submission Requirements](#submission-requirements)
+- [Team](#team)
+- [Author](#author)
 
 ---
 
@@ -40,6 +82,26 @@ Selain menampilkan status risiko, aplikasi juga menyediakan **analisis faktor do
 ---
 
 ## Tech Stack
+
+## Architecture Overview
+
+```text
+Frontend (React + Vite)
+          │
+          ▼
+Backend API (Node.js + Express)
+          │
+          ▼
+AI Service (FastAPI)
+          │
+          ▼
+TensorFlow Model
+          │
+          ▼
+Risk Prediction + Recommendations
+```
+
+---
 
 ### Web Application
 
@@ -238,7 +300,7 @@ http://localhost:5173
 
 EduPredict menggunakan AI Service eksternal yang dideploy secara terpisah.
 
-- Swagger Documentation: `https://edupredictaimlproduction.up.railway.app/docs`
+- Swagger Documentation: [Open Swagger Docs](https://edupredictaimlproduction.up.railway.app/docs)
 - OpenAPI JSON: `https://edupredictaimlproduction.up.railway.app/openapi.json`
 - Google Drive (.keras, .pkl): `https://drive.google.com/drive/folders/1AHwpqqGlxZEDhhTH8b1munbLXpte0DWc?usp=sharing`
 
@@ -332,13 +394,12 @@ Base URL production mengikuti deployment backend di Railway.
 
 Dokumen pendukung project dapat diakses melalui link berikut.
 
-
-| Document | Link |
-|---|---|
-| Jobdesk Team | `https://docs.google.com/spreadsheets/d/1LfxJzDSZo-KgMOR8QWNe5e8gSqJ5g1H-Cd8L2UvsEiA/edit?pli=1&gid=0#gid=0` |
-| AI Documentation | `https://github.com/raelkertiaa/edupredict/tree/ai-engineer` |
-| Data Science Documentation | `https://github.com/raelkertiaa/edupredict/tree/data-science` |
-| Capstone Playbook | `https://docs.google.com/document/d/12y12GzyuqR9LWbym_Zx2GKJaBAv2gh-LHZBwHN8nCDk/edit?pli=1&tab=t.0#heading=h.kfx0o3hg27op` |
+| Document | Access |
+|----------|----------|
+| Jobdesk Team | [Open Document](https://docs.google.com/spreadsheets/d/1LfxJzDSZo-KgMOR8QWNe5e8gSqJ5g1H-Cd8L2UvsEiA/edit?pli=1&gid=0#gid=0) |
+| AI Documentation | [Open Repository](https://github.com/raelkertiaa/edupredict/tree/ai-engineer) |
+| Data Science Documentation | [Open Repository](https://github.com/raelkertiaa/edupredict/tree/data-science) |
+| Capstone Playbook | [Open Document](https://docs.google.com/document/d/12y12GzyuqR9LWbym_Zx2GKJaBAv2gh-LHZBwHN8nCDk/edit?pli=1&tab=t.0#heading=h.kfx0o3hg27op) |
 
 ---
 
@@ -483,6 +544,19 @@ Detail checklist tambahan tersedia pada file:
 ```txt
 SUBMISSION_CHECKLIST.md
 ```
+---
+
+## Deliverables
+
+| Component | Status |
+|------------|------------|
+| Frontend Application | Available |
+| Backend API | Available |
+| AI Service | Available |
+| Database Schema | Available |
+| Technical Documentation | Available |
+| Deployment Configuration | Available |
+| Submission Checklist | Available |
 
 ---
 
@@ -498,3 +572,10 @@ Project Name: **EduPredict AI**
 ## Author
 
 Developed by Team CC26-PSU080.
+
+---
+
+<p align="center">
+Developed by Team CC26-PSU080<br/>
+Capstone Project Coding Camp 2026 powered by DBS Foundation
+</p>
