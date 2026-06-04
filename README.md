@@ -34,6 +34,8 @@
 ## Table of Contents
 
 - [Deskripsi Singkat Proyek](#deskripsi-singkat-proyek)
+- [Project Components](#project-components)
+- [Live Demo](#live-demo)
 - [Fitur Utama](#fitur-utama)
 - [Tech Stack](#tech-stack)
 - [Struktur Proyek](#struktur-proyek)
