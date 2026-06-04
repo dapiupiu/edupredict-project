@@ -127,7 +127,7 @@ function DashboardGuruPage() {
     return (
         <div className="flex min-h-screen bg-blue-50">
             <Sidebar open={open} setOpen={setOpen} />
-            <div className={`flex-1 transition-all duration-500 ${open ? 'md:ml-64' : 'md:ml-16'} min-h-screen flex flex-col bg-blue-50`}>
+            <div className={`flex-1 transition-all duration-500 ${open ? 'md:ml-64' : 'md:ml-16'} min-h-screen flex flex-col`}>
                 <TopBar />
                 <div className="p-3 sm:p-6 md:p-8 pb-20 md:pb-8">
                 <h1 className="md:block text-3xl font-bold">Dashboard Guru</h1>
@@ -170,16 +170,21 @@ function DashboardGuruPage() {
                         type="tinggi"
                     />
                 </div>
-                <div className="mt-8 space-y-8">
-                    <InsightAI 
-                        ringkasan={data.ringkasan} 
-                        siswaBerisiko={data.siswa_berisiko} 
-                    />
-                    <GrafikRisiko data={data.tren || []} />
-                    <DaftarSiswa 
-                        isDashboard={true} 
-                        dataSiswa={data.siswa_berisiko} 
-                    />
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 mt-8">
+                    <div className="lg:col-span-2 space-y-5">
+                         <InsightAI 
+                            ringkasan={data.ringkasan} 
+                            siswaBerisiko={data.siswa_berisiko} 
+                        />
+                        <GrafikRisiko data={data.tren || []} />
+                    </div>
+                    <div className="lg:col-span-1 h-full flex flex-col min-w-0">
+                        <DaftarSiswa 
+                            className="h-full w-full overflow-x-auto" 
+                            isDashboard={true} 
+                            dataSiswa={data.siswa_berisiko} 
+                        />
+                    </div>
                 </div>
                     </>
                 )}
