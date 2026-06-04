@@ -476,7 +476,7 @@ Beberapa pengembangan yang dapat dilakukan pada versi berikutnya:
    Menambahkan fitur import data siswa menggunakan file Excel. Jika file hanya berisi data dasar seperti nama, NISN, gender, dan pendidikan orang tua, sistem dapat menyimpan data sebagai draft/belum lengkap. Jika file berisi data akademik lengkap, sistem dapat dikembangkan untuk langsung memproses prediksi AI.
 
 2. **Integrasi Database dengan Sistem Informasi Akademik (SIAKAD)**  
-   Menghubungkan dashboard EduPredict dengan Sistem Informasi Akademik agar data siswa dan nilai akademik dapat diperbarui secara real-time.
+   Menghubungkan dashboard EduPredict dengan Sistem Informasi Akademik seperti Dapodik atau LMS agar data siswa dan nilai akademik dapat diperbarui secara real-time dan tidak perlu input data dua kali.
 
 3. **Model Advanced**  
    Mengembangkan eksperimen model lanjutan menggunakan Deep Learning atau Ensemble Methods seperti XGBoost dan LightGBM untuk meningkatkan presisi, terutama pada kelas minoritas seperti High Risk.
