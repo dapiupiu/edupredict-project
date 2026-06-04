@@ -121,6 +121,9 @@ function DaftarSiswa({ className, isDashboard, isDaftarSiswa = false, dataSiswa 
                                         <th className="border border-gray-200 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No</th>
                                     )}
                                     <th className="border border-gray-200 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama Lengkap</th>
+                                    {!isDashboard && (
+                                    <th className="border border-gray-200 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nisn</th>
+                                    )}
                                     <th className="border border-gray-200 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kelas</th>
                                     {!isDashboard && (
                                         <>
