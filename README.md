@@ -293,8 +293,8 @@ http://localhost:5173
 EduPredict menggunakan AI Service eksternal yang dideploy secara terpisah.
 
 - Swagger Documentation: [Open Swagger Docs](https://edupredictaimlproduction.up.railway.app/docs)
-- OpenAPI JSON: `https://edupredictaimlproduction.up.railway.app/openapi.json`
-- Google Drive (.keras, .pkl): `https://drive.google.com/drive/folders/1AHwpqqGlxZEDhhTH8b1munbLXpte0DWc?usp=sharing`
+- OpenAPI JSON: https://edupredictaimlproduction.up.railway.app/openapi.json
+- Google Drive (.keras, .pkl): https://drive.google.com/drive/folders/1AHwpqqGlxZEDhhTH8b1munbLXpte0DWc?usp=sharing
 
 Endpoint AI yang digunakan backend:
 
