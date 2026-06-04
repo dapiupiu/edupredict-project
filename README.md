@@ -419,6 +419,7 @@ Dokumen pendukung project dapat diakses melalui link berikut.
 | Data Science Documentation | [Open Repository](https://github.com/raelkertiaa/edupredict/tree/data-science) |
 | Capstone Playbook | [Open Document](https://docs.google.com/document/d/12y12GzyuqR9LWbym_Zx2GKJaBAv2gh-LHZBwHN8nCDk/edit?pli=1&tab=t.0#heading=h.kfx0o3hg27op) |
 | Live Dashboard | [Open Dashboard](https://edupredict-dashboard-cc26psu080.streamlit.app) |
+| Model Assets | [Open Google Drive](https://drive.google.com/drive/folders/1AHwpqqGlxZEDhhTH8b1munbLXpte0DWc?usp=sharing) |
 
 ---
 
