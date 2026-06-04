@@ -1,4 +1,4 @@
-<img width="960" height="600" alt="image" src="https://github.com/user-attachments/assets/00e1b24a-a144-4c03-9293-855b0fb34770" /># 🎓 EduPredict AI
+# 🎓 EduPredict AI
 
 ## Overview
 
