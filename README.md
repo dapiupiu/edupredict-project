@@ -12,6 +12,8 @@
 <img src="https://img.shields.io/badge/Database-MySQL-orange" />
 <img src="https://img.shields.io/badge/AI-FastAPI-red" />
 <img src="https://img.shields.io/badge/ML-TensorFlow-ff6f00" />
+<img src="https://img.shields.io/badge/Dashboard-Streamlit-ff4b4b" />
+<img src="https://img.shields.io/badge/Data%20Science-Google%20Colab-f9ab00" />
 </p>
 
 <p align="center">
