@@ -1,4 +1,4 @@
-# 🎓 EduPredict AI
+<img width="960" height="600" alt="image" src="https://github.com/user-attachments/assets/00e1b24a-a144-4c03-9293-855b0fb34770" /># 🎓 EduPredict AI
 
 ## Overview
 
@@ -112,24 +112,10 @@ Menyusun laporan teknis komprehensif yang mendokumentasikan seluruh tahapan proy
 * Streamlit
 * SciPy
 
-## Project Structure
+## Link Dashboard
 
-```text
-edupredict-ai/
-│
-├── notebooks/
-│   └── Data Science Workflow.ipynb
-│
-├── dashboard/
-│   └── Streamlit Application
-│
-├── reports/
-│   └── Technical Report.pdf
-│
-├── dataset/
-│
-└── README.md
-```
+*https://edupredict-dashboard-cc26psu080.streamlit.app/*
+
 
 ## Deliverables
 
