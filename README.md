@@ -21,6 +21,16 @@
   Team ID: <strong>CC26-PSU080</strong>
 </p>
 
+<p align="center">
+
+<a href="https://edupredict-dashboard-cc26psu080.streamlit.app">Dashboard</a> •
+<a href="https://your-frontend.vercel.app">Web Application</a> •
+<a href="https://edupredictaimlproduction.up.railway.app/docs">Swagger</a> •
+<a href="https://edupredictaimlproduction.up.railway.app/openapi.json">OpenAPI</a> •
+<a href="https://drive.google.com/drive/folders/1AHwpqqGlxZEDhhTH8b1munbLXpte0DWc?usp=sharing">Model Files</a>
+
+</p>
+
 ---
 
 ## Table of Contents
