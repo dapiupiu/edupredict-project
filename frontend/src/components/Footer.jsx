@@ -10,7 +10,7 @@ function Footer() {
                     <div className="flex-1 max-w-sm">
                         <div className='mb-2 flex items-center gap-3'>
                             <img src={logoEdupredict} alt="logo" className="w-12 h-12 object-contain" />
-                            <h2 className='text-2xl font-bold tracking-tight'>EduPredict</h2>
+                            <h2 className='text-2xl font-bold tracking-tight'>EduPredict <span className="text-xl text-white">AI</span></h2>
                         </div>
                         <p className='text-sm max-w-xs text-blue-100 leading-relaxed'>
                             Sistem cerdas berbasis AI yang dirancang untuk membantu tenaga pendidik dalam mendeteksi risiko akademik siswa secara proaktif dan akurat.

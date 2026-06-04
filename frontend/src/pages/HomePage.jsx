@@ -84,7 +84,7 @@ function HomePage() {
                                     <div className="w-2 h-2 rounded-full bg-amber-500"></div>
                                     <div className="w-2 h-2 rounded-full bg-green-500"></div>
                                 </div>
-                                <img src={guruPreview} alt="Dashboard Guru" className="w-full aspect-video object-cover object-top block cursor-pointer" />
+                                <img src={guruPreview} alt="Dashboard Guru" className="w-full aspect-video object-contain object-center block cursor-pointer" />
                             </div>
                             <div className="mt-8 text-center md:text-left">
                                 <h3 className="text-2xl font-bold text-blue-900">Dashboard Guru</h3>

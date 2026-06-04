@@ -156,7 +156,7 @@ function DashboardSiswaPage() {
             <nav className="bg-white border-b border-blue-100 p-4 px-6 sm:px-12 flex justify-between items-center sticky top-0 z-50 print:hidden">
                 <div className="flex items-center gap-3">
                     <img src={logoEdupredict} alt="logo" className="w-10 h-10 sm:w-16 sm:h-16 object-contain flex-shrink-0" />
-                    <h1 className="text-lg sm:text-2xl font-black text-blue-900 tracking-tight">EduPredict</h1>
+                    <h1 className="text-base font-bold bg-gradient-to-r from-blue-800 to-blue-500 bg-clip-text text-transparent leading-none">EduPredict <span className="text-sm">AI</span></h1>
                 </div>
                 <div className="flex items-center gap-3">
                     {hasPrediksi && (

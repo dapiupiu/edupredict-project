@@ -61,7 +61,7 @@ function InsightAI({ ringkasan, siswaBerisiko }) {
       </div>
       <div className="mt-5 space-y-4">
         <div className="flex items-start gap-3">
-          <div className="w-2 h-2 mt-2 rounded-full bg-blue-500 flex-shrink-0"></div>
+          <div className="w-2 h-2 mt-2 rounded-full bg-red-500 flex-shrink-0"></div>
           <p className="text-gray-700">
             {totalAtRisk > 0
               ? `${totalAtRisk} siswa memiliki risiko akademik yang memerlukan perhatian segera.`

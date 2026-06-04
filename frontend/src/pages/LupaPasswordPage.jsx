@@ -125,7 +125,7 @@ function LupaPasswordPage() {
               className="w-16 h-16 object-contain flex-shrink-0"
             />
           </Link>
-          <h1 className="text-3xl font-semibold text-blue-800">EduPredict</h1>
+          <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-800 to-blue-500 bg-clip-text text-transparent leading-none">EduPredict <span className="text-2xl">AI</span></h1>
         </div>
 
         <h1 className="text-3xl sm:text-4xl font-semibold mt-4">

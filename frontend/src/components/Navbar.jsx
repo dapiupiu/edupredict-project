@@ -81,7 +81,7 @@ function Navbar() {
                 <div className="navbar-box flex items-center justify-between py-0">
                     <div className="logo-box flex items-center gap-3 cursor-pointer" onClick={() => scrollTo('beranda')}>
                         <img src={logoEdupredict} alt="logo" className="w-16 h-16 object-contain flex-shrink-0" />
-                        <h1 className="text-2xl font-bold text-blue-900">Edu Predict</h1>
+                        <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-800 to-blue-500 bg-clip-text text-transparent leading-none">EduPredict <span className="text-xl">AI</span></h1>
                     </div>
                     <div className={`Nav-items flex lg:gap-12 gap-8 absolute md:static left-1/2 -translate-x-1/2 md:left-0 md:-translate-x-0 flex-col md:flex-row w-full text-center ${menuActive ? "top-16 opacity-100" : "-top-72 opacity-0"} md:w-auto py-10 md:py-0 transition-all md:transition-none bg-blue-100 md:opacity-100 items-center`}>
                         <button onClick={() => scrollTo('beranda')} className={getNavClass('beranda')}>Beranda</button>

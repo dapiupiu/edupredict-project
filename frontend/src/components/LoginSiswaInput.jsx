@@ -8,7 +8,7 @@ function LoginSiswaInput({ NISN, errors, apiError, apiSuccess, isLoading, onNISN
         <div className="mx-auto w-full max-w-xl my-10 px-6 py-10 sm:px-8 bg-white rounded-3xl border-2 border-gray-100 shadow-lg">
             <div className="flex items-center gap-3">
                 <Link to="/"><img src={logoEdupredict} alt="logo" className="w-16 h-16 object-contain flex-shrink-0" /> </Link> 
-                <h1 className="text-3xl font-semibold text-blue-800">EduPredict</h1>
+                <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-800 to-blue-500 bg-clip-text text-transparent leading-none">EduPredict <span className="text-2xl">AI</span></h1>
             </div>
             <div className="mt-4 flex p-2 font-medium text-blue-800 bg-blue-100 w-fit px-4 rounded-3xl gap-2">
             <i className="ri-user-line"></i>

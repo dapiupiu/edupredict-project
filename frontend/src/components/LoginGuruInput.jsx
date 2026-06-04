@@ -11,7 +11,7 @@ function LoginGuruInput({ email, password, errors, apiError, isLoading, remember
             {/* logo edupredict */}
             <div className="flex items-center gap-3">
                 <Link to="/"> <img src={logoEdupredict} alt="logo" className="w-16 h-16 object-contain flex-shrink-0" /> </Link> 
-                <h1 className="text-3xl font-semibold text-blue-800">EduPredict</h1>
+                <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-800 to-blue-500 bg-clip-text text-transparent leading-none">EduPredict <span className="text-2xl">AI</span></h1>
             </div>
             {/* logo edupredict */}
 

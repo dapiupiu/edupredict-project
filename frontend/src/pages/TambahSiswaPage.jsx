@@ -369,7 +369,7 @@ function TambahSiswaPage() {
               alt="logo"
               className="w-16 h-16 object-contain flex-shrink-0"
             />
-            <h1 className="text-2xl font-bold text-blue-900">EduPredict</h1>
+            <h1 className="text-base font-bold bg-gradient-to-r from-blue-800 to-blue-500 bg-clip-text text-transparent leading-none">EduPredict <span className="text-sm">AI</span></h1>
           </div>
         </div>
       </div>

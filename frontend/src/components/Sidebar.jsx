@@ -37,7 +37,7 @@ function Sidebar({ open, setOpen }) {
             <div className={`flex items-center mt-8 ${open ? 'justify-between px-5' : 'justify-center'}`}>
                 <div className={`flex items-center gap-2 transition-all duration-300 ${!open && 'hidden'}`}>
                     <img src={logoEdupredict} alt="logo" className="w-12 h-12 object-contain flex-shrink-0" />
-                    <h1 className="text-2xl font-bold text-blue-900">EduPredict</h1>
+                    <h1 className="text-base font-bold bg-gradient-to-r from-blue-800 to-blue-500 bg-clip-text text-transparent leading-none">EduPredict <span className="text-sm">AI</span></h1>
                 </div>
                 <MdMenuOpen size={30} className={`cursor-pointer transition-transform duration-300 ${!open && 'rotate-180'}`} onClick={() => setOpen(!open)}/>
             </div>
