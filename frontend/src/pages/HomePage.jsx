@@ -104,7 +104,7 @@ function HomePage() {
                                 <img src={siswaPreview} alt="Portal Siswa" className="w-full aspect-video object-cover object-top block cursor-pointer" />
                             </div>
                             <div className="mt-8 text-center md:text-left">
-                                <h3 className="text-2xl font-bold text-blue-900">Portal Siswa</h3>
+                                <h3 className="text-2xl font-bold text-blue-900">Dashboard Siswa</h3>
                                 <p className="text-slate-600 mt-2">Siswa dapat memantau progres belajar mereka sendiri, melihat faktor pendukung keberhasilan, dan menerima saran motivasi.</p>
                             </div>
                         </div>
