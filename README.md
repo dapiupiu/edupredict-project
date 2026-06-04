@@ -42,8 +42,6 @@
 - [Catatan Keamanan](#catatan-keamanan)
 - [Saran Pengembangan](#saran-pengembangan)
 - [Submission Requirements](#submission-requirements)
-- [Team](#team)
-- [Author](#author)
 
 ---
 
@@ -552,22 +550,7 @@ SUBMISSION_CHECKLIST.md
 
 ---
 
-## Team
-
-**Capstone Project Coding Camp 2026 powered by DBS Foundation**
-
-Team ID: **CC26-PSU080**  
-Project Name: **EduPredict AI**
-
----
-
-## Author
-
-Developed by Team CC26-PSU080.
-
----
-
 <p align="center">
 Developed by Team CC26-PSU080<br/>
-Capstone Project Coding Camp 2026 powered by DBS Foundation
+<b>Capstone Project Coding Camp 2026 powered by DBS Foundation</b>
 </p>
