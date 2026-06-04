@@ -332,13 +332,12 @@ Base URL production mengikuti deployment backend di Railway.
 
 Dokumen pendukung project dapat diakses melalui link berikut.
 
-> Ganti placeholder berikut dengan link Google Drive / dokumen asli tim.
 
 | Document | Link |
 |---|---|
 | Jobdesk Team | `https://docs.google.com/spreadsheets/d/1LfxJzDSZo-KgMOR8QWNe5e8gSqJ5g1H-Cd8L2UvsEiA/edit?pli=1&gid=0#gid=0` |
 | AI Documentation | `https://github.com/raelkertiaa/edupredict/tree/ai-engineer` |
-| Data Science Documentation | `PASTE_LINK_DOKUMENTASI_DATA_SCIENCE_DI_SINI` |
+| Data Science Documentation | `https://github.com/raelkertiaa/edupredict/tree/data-science` |
 | Capstone Playbook | `https://docs.google.com/document/d/12y12GzyuqR9LWbym_Zx2GKJaBAv2gh-LHZBwHN8nCDk/edit?pli=1&tab=t.0#heading=h.kfx0o3hg27op` |
 
 ---
