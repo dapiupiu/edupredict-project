@@ -2,6 +2,13 @@ import heroImg from '../assets/hero.png';
 import guruPreview from '../assets/dashboard-guru.png';
 import siswaPreview from '../assets/dashboard-siswa.png';
 import { Link } from 'react-router-dom';
+import profilKdavi from '../assets/profil-kdavi.png';
+import profilKsandi from '../assets/profil-ksandi.png';
+import profilKdika from '../assets/profil-kdika.png';
+import profilKgita from '../assets/profil-kgita.png';
+import profilKarin from '../assets/profil-karin.png';
+import profilAyu from '../assets/profil-ayu.png';
+
 
 function HomePage() {
     return (
@@ -33,21 +40,21 @@ function HomePage() {
                         <p className="text-slate-500">Berikut adalah beberapa fitur utama dari Edu Predict yang akan membantu proses deteksi dini akademik siswa.</p>
                     </div>
                     <div className="grid md:grid-cols-3 grid-cols-1 gap-8">
-                        <div className="bg-blue-50 p-8 rounded-2xl border border-blue-100 transition-all duration-300 hover:-translate-y-2 hover:shadow-xl cursor-pointer">
+                        <div className="bg-blue-50 p-8 rounded-2xl border border-blue-100 transition-all duration-300 hover:-translate-y-2 hover:shadow-xl cursor-pointer flex flex-col items-center text-center md:items-start md:text-left">
                             <div className="bg-blue-900 w-14 h-14 rounded-xl flex items-center justify-center mb-6">
                                 <i className="ri-search-ai-line text-2xl text-white"></i>
                             </div>
                             <h3 className="text-xl font-bold mb-3">Deteksi Dini</h3>
                             <p className="text-slate-500 text-sm leading-relaxed">Mendeteksi potensi keberhasilan akademik siswa sejak dini dengan menganalisis data historis dan faktor risiko.</p>
                         </div>
-                        <div className="bg-blue-50 p-8 rounded-2xl border border-blue-100 transition-all duration-300 hover:-translate-y-2 hover:shadow-xl cursor-pointer">
+                        <div className="bg-blue-50 p-8 rounded-2xl border border-blue-100 transition-all duration-300 hover:-translate-y-2 hover:shadow-xl cursor-pointer flex flex-col items-center text-center md:items-start md:text-left">
                             <div className="bg-blue-900 w-14 h-14 rounded-xl flex items-center justify-center mb-6">
                                 <i className="ri-bar-chart-2-line text-2xl text-white"></i>
                             </div>
                             <h3 className="text-xl font-bold mb-3">Analisis Data</h3>
                             <p className="text-slate-500 text-sm leading-relaxed">Menganalisis data akademik siswa secara mendalam untuk mengidentifikasi pola dan tren dengan klasifikasi risiko: rendah, sedang, dan tinggi.</p>
                         </div>
-                        <div className="bg-blue-50 p-8 rounded-2xl border border-blue-100 transition-all duration-300 hover:-translate-y-2 hover:shadow-xl cursor-pointer">
+                        <div className="bg-blue-50 p-8 rounded-2xl border border-blue-100 transition-all duration-300 hover:-translate-y-2 hover:shadow-xl cursor-pointer flex flex-col items-center text-center md:items-start md:text-left">
                             <div className="bg-blue-900 w-14 h-14 rounded-xl flex items-center justify-center mb-6">
                                 <i className="ri-lightbulb-line text-2xl text-white"></i>
                             </div>
@@ -106,25 +113,36 @@ function HomePage() {
             </div>
 
             {/* panduan */}
-            <div className="bg-white" id="panduan">
-                <div className="container mx-auto px-8 py-20">
+            <div className="bg-white py-20" id="panduan">
+                <div className="container mx-auto px-4">
                     <div className="text-center max-w-2xl mx-auto mb-5">
                         <span className="text-blue-800 font-semibold text-sm uppercase tracking-widest">Cara Penggunaan</span>
                         <h2 className="text-4xl font-bold mt-2 mb-4">Alur Penggunaan Sistem</h2>
                         <p className="mt-5 text-slate-500">Empat langkah mudah untuk mulai menggunakan sistem Edu Predict.</p>
                     </div>
-                    <div className="w-full max-w-5xl mx-auto py-10">
-                        <div className="relative flex justify-between items-start">
-                            <div className="absolute top-5 left-[12%] right-[12%] border-t-2 border-dashed border-blue-200 z-0"></div>
+                    <div className="w-full max-w-6xl mx-auto py-10">
+                        {/* Menggunakan grid: 1 kolom di mobile (default), 4 kolom di desktop (md) */}
+                        <div className="relative grid grid-cols-1 md:grid-cols-4 gap-12 md:gap-6">
+                            {/* Garis dashed hanya muncul di desktop/tablet, disesuaikan posisinya ke tengah icon container (100px) */}
+                            <div className="hidden md:block absolute top-[100px] left-[12%] right-[12%] border-t-2 border-dashed border-blue-200 z-0"></div>
                             {[
                                 { num: 1, icon: 'ri-user-add-line', title: 'Buat Akun', desc: 'Daftar dan login ke sistem menggunakan akun guru.' },
                                 { num: 2, icon: 'ri-database-2-line', title: 'Input Data Siswa', desc: 'Masukkan data akademik dan informasi siswa.' },
                                 { num: 3, icon: 'ri-bar-chart-line', title: 'Analisis Risiko', desc: 'Sistem menganalisis data dan mendeteksi potensi risiko akademik siswa.' },
                                 { num: 4, icon: 'ri-checkbox-circle-line', title: 'Selesai', desc: 'Dapatkan rekomendasi tindak lanjut untuk setiap siswa.' },
                             ].map((step) => (
-                                <div key={step.num} className="relative z-10 flex flex-col items-center text-center w-52 transition-all duration-300 hover:-translate-y-1 cursor-pointer">
-                                    <div className="w-10 h-10 rounded-full bg-blue-900 text-white flex items-center justify-center font-bold mb-5">{step.num}</div>
-                                    <div className="mt-4 w-20 h-20 rounded-full bg-blue-50 shadow-md flex items-center justify-center">
+                                <div key={step.num} className="group relative z-10 flex flex-col items-center text-center transition-all duration-300 hover:-translate-y-1 cursor-pointer">
+                                    {/* Angka terpisah - Muncul di Desktop & Tablet (md ke atas) */}
+                                    <div className="hidden md:flex w-10 h-10 rounded-full bg-blue-900 text-white items-center justify-center font-bold mb-5 shadow-sm">
+                                        {step.num}
+                                    </div>
+
+                                    {/* Ikon Container dengan Badge Angka */}
+                                    <div className="relative w-20 h-20 rounded-full bg-blue-50 shadow-md flex items-center justify-center transition-transform duration-300 group-hover:scale-110 mb-2">
+                                        {/* Badge Angka - Hanya muncul di Mobile (hidden di md ke atas) */}
+                                        <div className="md:hidden absolute -top-3 left-1/2 -translate-x-1/2 w-7 h-7 rounded-full bg-blue-900 text-white flex items-center justify-center text-xs font-bold border-2 border-white shadow-sm z-20">
+                                            {step.num}
+                                        </div>
                                         <i className={`${step.icon} text-4xl text-blue-900`}></i>
                                     </div>
                                     <h3 className="mt-4 font-bold">{step.title}</h3>
@@ -146,8 +164,8 @@ function HomePage() {
                     </div>
                     <div className="grid md:grid-cols-3 grid-cols-1 gap-8 items-center">
                         <div className="bg-white p-8 rounded-2xl border border-blue-100 transition-all duration-300 hover:-translate-y-2 hover:shadow-xl cursor-pointer flex flex-col items-center text-center">
-                            <div className="bg-blue-900 w-14 h-14 rounded-xl flex items-center justify-center mb-6">
-                                <i className="ri-user-line text-2xl text-white"></i>
+                            <div className="bg-blue-100 w-24 h-24 rounded-2xl flex items-center justify-center mb-6 overflow-hidden border-2 border-blue-200 shadow-sm">
+                                <img src={profilKdavi} alt="profil-Kdavi" className="w-full h-full object-cover object-center" />
                             </div>
                             <h3 className="text-xl font-bold mb-1">Kaka Davi Dharmawan</h3>
                             <p className="text-slate-500 text-sm font-medium mb-2">Data Scientist</p>
@@ -164,8 +182,8 @@ function HomePage() {
                             </div>
                         </div>
                         <div className="bg-white p-8 rounded-2xl border border-blue-100 transition-all duration-300 hover:-translate-y-2 hover:shadow-xl cursor-pointer flex flex-col items-center text-center">
-                            <div className="bg-blue-900 w-14 h-14 rounded-xl flex items-center justify-center mb-6">
-                                <i className="ri-user-line text-2xl text-white"></i>
+                            <div className="bg-blue-100 w-24 h-24 rounded-2xl flex items-center justify-center mb-6 overflow-hidden border-2 border-blue-200 shadow-sm">
+                                <img src={profilKsandi} alt="profil-ksandi" className="w-full h-full object-cover object-center" />
                             </div>
                             <h3 className="text-xl font-bold mb-1">Sandi Maulana</h3>
                             <p className="text-slate-500 text-sm font-medium mb-2">AI Engineer</p>
@@ -182,8 +200,8 @@ function HomePage() {
                             </div>
                         </div>
                         <div className="bg-white p-8 rounded-2xl border border-blue-100 transition-all duration-300 hover:-translate-y-2 hover:shadow-xl cursor-pointer flex flex-col items-center text-center">
-                            <div className="bg-blue-900 w-14 h-14 rounded-xl flex items-center justify-center mb-6">
-                                <i className="ri-user-line text-2xl text-white"></i>
+                            <div className="bg-blue-100 w-24 h-24 rounded-2xl flex items-center justify-center mb-6 overflow-hidden border-2 border-blue-200 shadow-sm">
+                                <img src={profilKdika} alt="profil-kdhika" className="w-full h-full object-cover object-top" />
                             </div>
                             <h3 className="text-xl font-bold mb-1">Andhika Firmansyah</h3>
                             <p className="text-slate-500 text-sm font-medium mb-2">Full-Stack Web</p>
@@ -200,8 +218,8 @@ function HomePage() {
                             </div>
                         </div>
                         <div className="bg-white p-8 rounded-2xl border border-blue-100 transition-all duration-300 hover:-translate-y-2 hover:shadow-xl cursor-pointer flex flex-col items-center text-center">
-                            <div className="bg-blue-900 w-14 h-14 rounded-xl flex items-center justify-center mb-6">
-                                <i className="ri-user-line text-2xl text-white"></i>
+                            <div className="bg-blue-100 w-24 h-24 rounded-2xl flex items-center justify-center mb-6 overflow-hidden border-2 border-blue-200 shadow-sm">
+                                <img src={profilKgita} alt="profil-kgita" className="w-full h-full object-cover object-top" />
                             </div>
                             <h3 className="text-xl font-bold mb-1">Dwi Shugita Syaka Dewi</h3>
                             <p className="text-slate-500 text-sm font-medium mb-2">Data Scientist</p>
@@ -218,8 +236,8 @@ function HomePage() {
                             </div>
                         </div>
                         <div className="bg-white p-8 rounded-2xl border border-blue-100 transition-all duration-300 hover:-translate-y-2 hover:shadow-xl cursor-pointer flex flex-col items-center text-center">
-                            <div className="bg-blue-900 w-14 h-14 rounded-xl flex items-center justify-center mb-6">
-                                <i className="ri-user-line text-2xl text-white"></i>
+                            <div className="bg-blue-100 w-24 h-24 rounded-2xl flex items-center justify-center mb-6 overflow-hidden border-2 border-blue-200 shadow-sm">
+                                <img src={profilKarin} alt="profil-karin" className="w-full h-full object-cover object-top" />
                             </div>
                             <h3 className="text-xl font-bold mb-1">Rintami Salsabila</h3>
                             <p className="text-slate-500 text-sm font-medium mb-2">AI Engineer</p>
@@ -236,8 +254,8 @@ function HomePage() {
                             </div>
                         </div>
                         <div className="bg-white p-8 rounded-2xl border border-blue-100 transition-all duration-300 hover:-translate-y-2 hover:shadow-xl cursor-pointer flex flex-col items-center text-center">
-                            <div className="bg-blue-900 w-14 h-14 rounded-xl flex items-center justify-center mb-6">
-                                <i className="ri-user-line text-2xl text-white"></i>
+                                <div className="bg-blue-100 w-24 h-24 rounded-2xl flex items-center justify-center mb-6 overflow-hidden border-2 border-blue-200 shadow-sm">
+                                    <img src={profilAyu} alt="profil-ayu" className="w-full h-full object-cover object-top" />
                             </div>
                             <h3 className="text-xl font-bold mb-1">Nur Ayu Aini Amalia</h3>
                             <p className="text-slate-500 text-sm font-medium mb-2">Full-Stack Web</p>

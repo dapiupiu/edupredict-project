@@ -202,7 +202,7 @@ function DaftarSiswaPage() {
                 open={open}
                 setOpen={setOpen}
             />
-            <div className={`flex-1 transition-all duration-500 ${open ? "md:ml-64" : "md:ml-16"} min-h-screen flex flex-col`}>
+            <div className={`flex-1 transition-all duration-500 ${open ? "md:ml-64" : "md:ml-16"} min-h-screen flex flex-col bg-blue-50`}>
                 <TopBar />
                 <div className="p-3 sm:p-6 md:p-8 pb-20 md:pb-8">
                 <h1 className="text-3xl font-bold">

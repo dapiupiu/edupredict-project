@@ -61,7 +61,7 @@ function DaftarSiswa({ className, isDashboard, isDaftarSiswa = false, dataSiswa 
                                                 </p>
                                             </div>
                                             <div className="flex flex-wrap items-center gap-x-3 gap-y-0.5 mt-0.5">
-                                                {!isDashboard && (
+                                                {!isDaftarSiswa && (
                                                     <p className="text-xs text-gray-400">NISN: {item.nisn || item.Nisn}</p>
                                                 )}
                                                 <p className="text-xs text-gray-400">{item.kelas}</p>
@@ -121,9 +121,7 @@ function DaftarSiswa({ className, isDashboard, isDaftarSiswa = false, dataSiswa 
                                         <th className="border border-gray-200 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No</th>
                                     )}
                                     <th className="border border-gray-200 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama Lengkap</th>
-                                    {!isDashboard && (
-                                        <th className="border border-gray-200 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">NISN</th>
-                                    )}
+                                    <th className="border border-gray-200 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">NISN</th>
                                     <th className="border border-gray-200 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kelas</th>
                                     {!isDashboard && (
                                         <>
@@ -150,11 +148,9 @@ function DaftarSiswa({ className, isDashboard, isDaftarSiswa = false, dataSiswa 
                                                 <span>{item.nama_siswa || item.nama}</span>
                                             </div>
                                         </td>
-                                        {!isDashboard && (
-                                            <td className="border border-gray-200 px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                                {item.nisn || item.Nisn}
-                                            </td>
-                                        )}
+                                        <td className="border border-gray-200 px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                            {item.nisn || item.Nisn}
+                                        </td>
                                         <td className="border border-gray-200 px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                                             {item.kelas}
                                         </td>
