@@ -21,8 +21,8 @@
 
 <p align="center">
 <a href="https://edupredict-dashboard-cc26psu080.streamlit.app">Dashboard</a> •
-<a href="https://your-frontend.vercel.app">Web Application</a> •
-<a href="https://edupredictaimlproduction.up.railway.app/docs">Swagger</a> •
+<a href="https://edupredict-cc26-psu080.vercel.app/">Web Application</a> •
+<a href="https://edupredictaimlproduction.up.railway.app/docs">API Docs</a> •
 <a href="https://edupredictaimlproduction.up.railway.app/openapi.json">OpenAPI</a> •
 <a href="https://drive.google.com/drive/folders/1AHwpqqGlxZEDhhTH8b1munbLXpte0DWc?usp=sharing">Model Files</a>
 </p>
@@ -48,6 +48,7 @@
 - [Catatan Keamanan](#catatan-keamanan)
 - [Saran Pengembangan](#saran-pengembangan)
 - [Submission Requirements](#submission-requirements)
+- [Deliverables](#deliverables)
 
 ---
 
@@ -56,6 +57,28 @@
 **EduPredict AI** adalah aplikasi web full-stack yang membantu guru melakukan deteksi dini risiko akademik siswa berbasis Artificial Intelligence. Sistem ini mengelola data siswa, mencatat data akademik dan perilaku belajar, mengirimkan data ke layanan AI, lalu menampilkan hasil prediksi risiko dalam kategori **Low**, **Medium**, atau **High**.
 
 Selain menampilkan status risiko, aplikasi juga menyediakan **analisis faktor dominan** dan **rekomendasi intervensi AI** agar guru dapat mengambil keputusan lebih cepat, terarah, dan berbasis data.
+
+---
+
+## Project Components
+
+| Component | Description |
+|------------|------------|
+| Frontend | Interface for teachers and students |
+| Backend | Authentication, student management, API gateway |
+| AI Service | Risk prediction and recommendation engine |
+| Dashboard | Data science visualization and analytics |
+| Database | Storage for users, students, predictions |
+
+---
+
+## Live Demo
+
+| Service | URL |
+|----------|----------|
+| Dashboard Streamlit | [Open Dashboard](https://edupredict-dashboard-cc26psu080.streamlit.app/) |
+| AI Swagger | [Open Swagger](https://edupredictaimlproduction.up.railway.app/docs) |
+| OpenAPI | [Open OpenAPI](https://edupredictaimlproduction.up.railway.app/openapi.json) |
 
 ---
 
@@ -85,16 +108,16 @@ Selain menampilkan status risiko, aplikasi juga menyediakan **analisis faktor do
 Frontend (React + Vite)
           │
           ▼
-Backend API (Node.js + Express)
-          │
-          ▼
-AI Service (FastAPI)
-          │
-          ▼
-TensorFlow Model
-          │
-          ▼
-Risk Prediction + Recommendations
+Backend API (Express.js)
+      ┌───┴───┐
+      ▼       ▼
+MySQL     AI Service
+              │
+              ▼
+       TensorFlow Model
+              │
+              ▼
+ Prediction & Recommendation
 ```
 
 ---
@@ -396,6 +419,7 @@ Dokumen pendukung project dapat diakses melalui link berikut.
 | AI Documentation | [Open Repository](https://github.com/raelkertiaa/edupredict/tree/ai-engineer) |
 | Data Science Documentation | [Open Repository](https://github.com/raelkertiaa/edupredict/tree/data-science) |
 | Capstone Playbook | [Open Document](https://docs.google.com/document/d/12y12GzyuqR9LWbym_Zx2GKJaBAv2gh-LHZBwHN8nCDk/edit?pli=1&tab=t.0#heading=h.kfx0o3hg27op) |
+| Live Dashboard | [Open Dashboard](https://edupredict-dashboard-cc26psu080.streamlit.app) |
 
 ---
 
