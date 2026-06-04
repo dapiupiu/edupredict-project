@@ -112,24 +112,10 @@ Menyusun laporan teknis komprehensif yang mendokumentasikan seluruh tahapan proy
 * Streamlit
 * SciPy
 
-## Project Structure
+## Link Dashboard
 
-```text
-edupredict-ai/
-│
-├── notebooks/
-│   └── Data Science Workflow.ipynb
-│
-├── dashboard/
-│   └── Streamlit Application
-│
-├── reports/
-│   └── Technical Report.pdf
-│
-├── dataset/
-│
-└── README.md
-```
+*https://edupredict-dashboard-cc26psu080.streamlit.app/*
+
 
 ## Deliverables
 
