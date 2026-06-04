@@ -24,7 +24,7 @@
 <p align="center">
 <a href="https://edupredict-dashboard-cc26psu080.streamlit.app">Dashboard</a> •
 <a href="https://edupredict-cc26-psu080.vercel.app/">Web Application</a> •
-<a href="https://edupredictaimlproduction.up.railway.app/docs">API Docs</a> •
+<a href="https://edupredictaiprod.up.railway.app/docs">API Docs</a> •
 <a href="https://edupredictaimlproduction.up.railway.app/openapi.json">OpenAPI</a> •
 <a href="https://drive.google.com/drive/folders/1AHwpqqGlxZEDhhTH8b1munbLXpte0DWc?usp=sharing">Model Files</a>
 </p>
@@ -81,7 +81,7 @@ Selain menampilkan status risiko, aplikasi juga menyediakan **analisis faktor do
 | Service | URL |
 |----------|----------|
 | Dashboard Streamlit | [Open Dashboard](https://edupredict-dashboard-cc26psu080.streamlit.app/) |
-| AI Swagger | [Open Swagger](https://edupredictaimlproduction.up.railway.app/docs) |
+| AI Swagger | [Open Swagger](https://edupredictaiprod.up.railway.app/docs) |
 | OpenAPI | [Open OpenAPI](https://edupredictaimlproduction.up.railway.app/openapi.json) |
 
 ---
@@ -323,7 +323,7 @@ http://localhost:5173
 
 EduPredict menggunakan AI Service eksternal yang dideploy secara terpisah.
 
-- Swagger Documentation: https://edupredictaimlproduction.up.railway.app/docs
+- Swagger Documentation: https://edupredictaiprod.up.railway.app/docs
 - OpenAPI JSON: https://edupredictaimlproduction.up.railway.app/openapi.json
 
 Endpoint AI yang digunakan backend:
