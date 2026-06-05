@@ -22,7 +22,7 @@
 </p>
 
 <p align="center">
-<a href="https://edupredict-dashboard-cc26psu080.streamlit.app">Dashboard</a> •
+<a href="https://edupredict-dashboard-cc26psu080.streamlit.app">Streamlit Dashboard</a> •
 <a href="https://edupredict-cc26-psu080.vercel.app/">Web Application</a> •
 <a href="https://edupredictaiprod.up.railway.app/docs">API Docs</a> •
 <a href="https://edupredictaimlproduction.up.railway.app/openapi.json">OpenAPI</a> •
