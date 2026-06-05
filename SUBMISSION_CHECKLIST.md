@@ -58,8 +58,8 @@ Model ML tidak disimpan di repository ini karena digunakan melalui AI Service ek
 
 Dokumentasi layanan AI:
 
-- Swagger: `https://edupredictaimlproduction.up.railway.app/docs`
-- OpenAPI JSON: `https://edupredictaimlproduction.up.railway.app/openapi.json`
+- Swagger: `https://edupredictaiprod.up.railway.app`
+- OpenAPI JSON: `https://edupredictaiprod.up.railway.app`
 
 Endpoint AI yang digunakan:
 

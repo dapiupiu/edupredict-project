@@ -62,7 +62,7 @@ DB_PASS=
 DB_NAME=edupredict
 JWT_SECRET=your_jwt_secret_key
 JWT_EXPIRES_IN=8h
-AI_SERVICE_URL=https://edupredictaimlproduction.up.railway.app
+AI_SERVICE_URL=https://edupredictaiprod.up.railway.app
 ```
 
 ---
@@ -134,7 +134,7 @@ Tabel utama:
 Backend mengakses AI Service eksternal melalui environment variable:
 
 ```env
-AI_SERVICE_URL=https://edupredictaimlproduction.up.railway.app
+AI_SERVICE_URL=https://edupredictaiprod.up.railway.app
 ```
 
 Endpoint AI yang digunakan:
@@ -148,7 +148,7 @@ Endpoint AI yang digunakan:
 Dokumentasi AI:
 
 ```txt
-https://edupredictaimlproduction.up.railway.app/docs
+https://edupredictaiprod.up.railway.app/docs
 ```
 
 ---
